@@ -1,0 +1,26 @@
+# Archivos de XAMPP
+.htaccess
+.htpasswd
+/xampp/
+
+# Archivos de log
+*.log
+logs/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de sesión PHP (si los hay)
+sess_*
