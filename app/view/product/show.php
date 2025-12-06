@@ -18,7 +18,11 @@
                 <!-- Image Section -->
                 <div class="product-image-section">
                     <?php if ($product->getImgDir()): ?>
-                        <img src="<?= htmlspecialchars($product->getImgDir()) ?>" 
+                        <?php
+                            $imgDir = $product->getImgDir();
+                            $imgSrc = is_array($imgDir) ? ($imgDir[0] ?? '') : $imgDir;
+                        ?>
+                        <img src="<?= htmlspecialchars($imgSrc) ?>" 
                              alt="<?= htmlspecialchars($product->getName()) ?>"
                              class="product-main-image">
                     <?php else: ?>
@@ -33,7 +37,7 @@
                     <div class="product-meta">
                         <span class="badge badge-type"><?= htmlspecialchars($product->getDishType()) ?></span>
                         
-                        <?php if ($product->getAvaliable()): ?>
+                        <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : (method_exists($product, 'getAvaliable') ? $product->getAvaliable() : false)): ?>
                             <span class="badge badge-available">Disponible</span>
                         <?php else: ?>
                             <span class="badge badge-unavailable">No disponible</span>
@@ -76,7 +80,7 @@
                     <?php endif; ?>
 
                     <!-- Add to Cart Section -->
-                    <?php if ($product->getAvaliable()): ?>
+                    <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : (method_exists($product, 'getAvaliable') ? $product->getAvaliable() : false)): ?>
                         <div class="product-actions-section">
                             <form class="add-to-cart-form" data-product-id="<?= $product->getId() ?>">
                                 <div class="quantity-selector">

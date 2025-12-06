@@ -19,7 +19,15 @@
                     <article class="product-card">
                         <div class="product-image">
                             <?php if ($product->getImgDir()): ?>
-                                <img src="<?= htmlspecialchars($product->getImgDir()) ?>" 
+                                <?php
+                                    $imgDir = $product->getImgDir();
+                                    if (is_array($imgDir)) {
+                                        $imgSrc = $imgDir[0] ?? '';
+                                    } else {
+                                        $imgSrc = $imgDir;
+                                    }
+                                ?>
+                                <img src="<?= htmlspecialchars($imgSrc) ?>" 
                                      alt="<?= htmlspecialchars($product->getName()) ?>">
                             <?php else: ?>
                                 <div class="no-image">Sense imatge</div>
@@ -52,7 +60,7 @@
                                         Veure detalls
                                     </a>
                                     
-                                    <?php if ($product->getAvaliable()): ?>
+                                    <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : (method_exists($product, 'getAvaliable') ? $product->getAvaliable() : false)): ?>
                                         <button class="btn btn-add-cart" 
                                                 data-product-id="<?= $product->getId() ?>">
                                             Afegir al carret
