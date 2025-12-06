@@ -80,7 +80,7 @@
                     <?php endif; ?>
 
                     <!-- Add to Cart Section -->
-                    <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : (method_exists($product, 'getAvaliable') ? $product->getAvaliable() : false)): ?>
+                    <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : false): ?>
                         <div class="product-actions-section">
                             <form class="add-to-cart-form" data-product-id="<?= $product->getId() ?>">
                                 <div class="quantity-selector">
