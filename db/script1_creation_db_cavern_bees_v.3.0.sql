@@ -47,7 +47,7 @@ CREATE TABLE product (
   id_product        BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   name              VARCHAR(120) NOT NULL,
   description       TEXT NULL,
-  dish_type         ENUM('appetiser','main','dessert') NOT NULL, -- ("appetiser" -> entrante, "main" -> principal, "dessert" -> postre)
+  dish_type         ENUM('appetiser','main','dessert','drink') NOT NULL, -- ("appetiser" -> entrante, "main" -> principal, "dessert" -> postre)
   min_price         DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- preu minim del plat. mirar de fer el calcul del preu amb els ingredients que el composen desde un trigger
   img_dir           JSON NOT NULL,
   available         TINYINT(1) NOT NULL DEFAULT 1,
@@ -60,7 +60,7 @@ CREATE TABLE product (
 CREATE TABLE ingredient (
   id_ingredient   BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   name            VARCHAR(120) NOT NULL,
-  category        VARCHAR(60) NOT NULL,
+  category        ENUM('vegetable','fruit','meat','fish','seafood','animal_derivative','tree_nut','spice','sweetener','condiment','natural_fat','drink') NOT NULL,
   description     VARCHAR(255) NULL,
   price_per_100g  DECIMAL(10,2) NOT NULL,
   kcal_per_100g   DECIMAL(10,2) NOT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE product_ingredient (
 CREATE TABLE order_line_ingredient (
   id_line           BIGINT UNSIGNED NOT NULL,
   id_ingredient     BIGINT UNSIGNED NOT NULL,
-  num_portions      DECIMAL(5,2) NOT NULL,  -- o INT UNSIGNED si al final vull enters
+  num_portions      TINYINT UNSIGNED NOT NULL,  
   ingredient_price  DECIMAL(12,4) NOT NULL,
   grams             DECIMAL(10,2) NOT NULL,   -- Grams calculats per trigger: racions × grams per ració
   kcal_component    DECIMAL(12,2) NOT NULL,

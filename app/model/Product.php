@@ -2,30 +2,49 @@
 
 class Product
 {
-    private $id_product;
-    private $name;
-    private $description;
-    private $dish_type;
-    private $price;
-    private $img_dir;
-    private $avaliable;
-    private $created_at;
-    private $updated_at;
-    private $ingredients = []; // array of ProductIngredient
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_product;
+    
+    /** VARCHAR(120) NOT NULL */
+    private string $name;
+    
+    /** TEXT NULL */
+    private ?string $description = null;
+    
+    /** ENUM('appetiser','main','dessert','drink') NOT NULL */
+    private string $dish_type;
+    
+    /** DECIMAL(10,2) NOT NULL DEFAULT 0.00 - min_price in DB */
+    private float $price;
+    
+    /** JSON NOT NULL - can be string (JSON) or array (decoded) */
+    private array $img_dir;
+    
+    /** TINYINT(1) NOT NULL DEFAULT 1 - available in DB */
+    private bool $available;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP */
+    private string $created_at;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE */
+    private string $updated_at;
+    
+    /** Array of ProductIngredient objects */
+    private array $ingredients = [];
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_product = $data['id_product'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->description = $data['description'] ?? null;
-            $this->dish_type = $data['dish_type'] ?? $data['dishType'] ?? null;
-            $this->price = $data['price'] ?? $data['price'] ?? null;
-            $this->img_dir = $data['img_dir'] ?? $data['imgDir'] ?? null;
-            $this->avaliable = $data['avaliable'] ?? $data['available'] ?? null;
-            $this->created_at = $data['created_at'] ?? null;
-            $this->updated_at = $data['updated_at'] ?? null;
-            // initialize ingredients as ProductIngredient objects when provided
+            $this->id_product = (int)($data['id_product'] ?? 0);
+            $this->name = (string)($data['name'] ?? '');
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
+            $this->dish_type = (string)($data['dish_type'] ?? '');
+            $this->price = (float)($data['price'] ?? 0.0);
+            $this->img_dir = isset($data['img_dir']) ? (is_string($data['img_dir']) ? json_decode($data['img_dir'], true) : $data['img_dir']) : [];
+            $this->available = (bool)($data['available'] ?? true);
+            $this->created_at = (string)($data['created_at'] ?? date('Y-m-d H:i:s'));
+            $this->updated_at = (string)($data['updated_at'] ?? date('Y-m-d H:i:s'));
+            
             if (isset($data['ingredients']) && is_array($data['ingredients'])) {
                 $this->setIngredients($data['ingredients']);
             }
@@ -97,14 +116,13 @@ class Product
         return $this;
     }
 
-    public function getAvaliable()
+    public function getAvailable()
     {
-        return $this->avaliable;
+        return $this->available;
     }
-    public function setAvaliable($avaliable)
+    public function setAvailable($available)
     {
-        $this->avaliable = $avaliable;
-
+        $this->available = $available;
         return $this;
     }
 
@@ -179,143 +197,148 @@ class Product
     }
 
     /**
-     * ------------------------ REVUISAR BE LA LLOGICA -------------------------------
-     * Remove an ingredient from the product's ingredients collection (in-memory).
-     * Accepts an ingredient id or a ProductIngredient/Ingredient instance.
+     * Remove an ingredient from the list by ingredient id. No-op if not found.
+     *
+     * @param int|string $ingredientId Ingredient identifier (numeric)
+     * @return self
      */
-    public function removeIngredient($ingredientIdentifier)
+    public function removeIngredient($ingredientId)
     {
-        /*
-         * Objetivo: eliminar de $this->ingredients el ingrediente identificado por
-         * $ingredientIdentifier. Se acepta como entrada:
-         * - un id (int o string numérico),
-         * - un objeto (ProductIngredient o Ingredient) con métodos getIngredientId()/getId(),
-         * - un array con estructura proveniente de un JOIN (p.ej. ['productIngredient'=>..., 'ingredient'=>...]).
-         *
-         * Estrategia:
-         * 1) Normalizar/extraer un identificador entero ($targetId) desde la entrada.
-         * 2) Recorrer $this->ingredients (que idealmente contiene ProductIngredient instances)
-         *    y comparar su id con $targetId.
-         * 3) Si hay coincidencia, eliminar el elemento y reindexar el array.
-         */
-
-        // 1) Extraer id objetivo de la entrada
-        $targetId = null;
-
-        // Si nos pasan un número o string numérico, lo tomamos como id directo
-        if (is_int($ingredientIdentifier) || (is_string($ingredientIdentifier) && ctype_digit($ingredientIdentifier))) {
-            $targetId = (int)$ingredientIdentifier;
-        } elseif (is_object($ingredientIdentifier)) {
-            // Si nos pasan un objeto, intentamos obtener su id mediante métodos conocidos
-            if (method_exists($ingredientIdentifier, 'getIngredientId')) {
-                $targetId = $ingredientIdentifier->getIngredientId();
-            } elseif (method_exists($ingredientIdentifier, 'getId')) {
-                $targetId = $ingredientIdentifier->getId();
-            } elseif (property_exists($ingredientIdentifier, 'id_ingredient')) {
-                // fallback si es un stdClass con propiedad pública
-                $targetId = (int)$ingredientIdentifier->id_ingredient;
-            }
-        } elseif (is_array($ingredientIdentifier)) {
-            // Si nos pasan un array (por ejemplo fila de JOIN), buscar claves comunes
-            if (isset($ingredientIdentifier['ingredient']['id_ingredient'])) {
-                $targetId = (int)$ingredientIdentifier['ingredient']['id_ingredient'];
-            } elseif (isset($ingredientIdentifier['ingredient']['id'])) {
-                $targetId = (int)$ingredientIdentifier['ingredient']['id'];
-            } elseif (isset($ingredientIdentifier['productIngredient']['ingredient_id'])) {
-                $targetId = (int)$ingredientIdentifier['productIngredient']['ingredient_id'];
-            } elseif (isset($ingredientIdentifier['productIngredient']['ingredientId'])) {
-                $targetId = (int)$ingredientIdentifier['productIngredient']['ingredientId'];
-            } elseif (isset($ingredientIdentifier['id_ingredient'])) {
-                $targetId = (int)$ingredientIdentifier['id_ingredient'];
-            }
-        }
-
-        // Si no pudimos extraer id, no hay nada que hacer
-        if ($targetId === null) {
+        if (!(is_int($ingredientId) || (is_string($ingredientId) && ctype_digit($ingredientId)))) {
             return $this;
         }
+        $targetId = (int)$ingredientId;
 
-        // 2) Recorrer la colección y comparar
         foreach ($this->ingredients as $k => $item) {
-            // Caso ideal: cada item es instancia de ProductIngredient (normalizado por setIngredients/addIngredient)
-            if ($item instanceof ProductIngredient) {
-                // Intentamos obtener el id desde métodos de la clase ProductIngredient
-                $id = null;
-                if (method_exists($item, 'getIngredientId')) {
-                    $id = $item->getIngredientId();
-                } elseif (method_exists($item, 'getId')) {
-                    $id = $item->getId();
-                }
-
-                if ($id !== null && (int)$id === $targetId) {
-                    unset($this->ingredients[$k]);
-                    // 3) Reindexar para mantener array numerado limpio
-                    $this->ingredients = array_values($this->ingredients);
-                    return $this;
-                }
-
-                // si no coincide con este item, seguir al siguiente
-                continue;
+            $id = null;
+            if ($item instanceof ProductIngredient && method_exists($item, 'getIngredientId')) {
+                $id = (int)$item->getIngredientId();
+            } elseif (is_array($item)) {
+                if (isset($item['ingredient_id'])) $id = (int)$item['ingredient_id'];
+                elseif (isset($item['id_ingredient'])) $id = (int)$item['id_ingredient'];
+            } elseif (is_object($item) && method_exists($item, 'getId')) {
+                $id = (int)$item->getId();
             }
 
-            // Si el elemento es un array (p. ej. estructura JOIN) comprobamos claves internas
-            if (is_array($item)) {
-                // chequeo 'productIngredient' primero
-                if (isset($item['productIngredient'])) {
-                    $pi = $item['productIngredient'];
-                    if (is_object($pi) && method_exists($pi, 'getIngredientId') && $pi->getIngredientId() == $targetId) {
-                        unset($this->ingredients[$k]);
-                        $this->ingredients = array_values($this->ingredients);
-                        return $this;
-                    }
-                    if (is_array($pi) && (isset($pi['ingredient_id']) || isset($pi['ingredientId']) || isset($pi['id_ingredient']))) {
-                        $pid = $pi['ingredient_id'] ?? $pi['ingredientId'] ?? $pi['id_ingredient'];
-                        if ((int)$pid === $targetId) {
-                            unset($this->ingredients[$k]);
-                            $this->ingredients = array_values($this->ingredients);
-                            return $this;
-                        }
-                    }
-                }
-
-                // chequeo 'ingredient' si existe
-                if (isset($item['ingredient'])) {
-                    $ing = $item['ingredient'];
-                    if (is_object($ing) && method_exists($ing, 'getId') && $ing->getId() == $targetId) {
-                        unset($this->ingredients[$k]);
-                        $this->ingredients = array_values($this->ingredients);
-                        return $this;
-                    }
-                    if (is_array($ing) && (isset($ing['id_ingredient']) || isset($ing['id']))) {
-                        $iid = $ing['id_ingredient'] ?? $ing['id'];
-                        if ((int)$iid === $targetId) {
-                            unset($this->ingredients[$k]);
-                            $this->ingredients = array_values($this->ingredients);
-                            return $this;
-                        }
-                    }
-                }
-
-                // si no coincidió, seguir
-                continue;
+            if ($id !== null && $id === $targetId) {
+                unset($this->ingredients[$k]);
+                $this->ingredients = array_values($this->ingredients);
+                break;
             }
+        }
+        return $this;
+    }
 
-            // Si el elemento es un objeto genérico (no ProductIngredient), intentamos métodos comunes
-            if (is_object($item)) {
-                if (method_exists($item, 'getIngredientId') && $item->getIngredientId() == $targetId) {
-                    unset($this->ingredients[$k]);
-                    $this->ingredients = array_values($this->ingredients);
-                    return $this;
+    /**
+     * Get ingredients that are default (is_default = true).
+     * @return array<ProductIngredient|array>
+     */
+    public function getDefaultIngredients(): array
+    {
+        $out = [];
+        foreach ($this->ingredients as $ing) {
+            if ($ing instanceof ProductIngredient) {
+                if (method_exists($ing, 'getIsDefault') && $ing->getIsDefault()) {
+                    $out[] = $ing;
                 }
-                if (method_exists($item, 'getId') && $item->getId() == $targetId) {
-                    unset($this->ingredients[$k]);
-                    $this->ingredients = array_values($this->ingredients);
-                    return $this;
+            } elseif (is_array($ing)) {
+                if (!empty($ing['is_default'])) {
+                    $out[] = $ing;
                 }
             }
         }
+        return $out;
+    }
 
-        // si no se encontró coincidencia, devolvemos el producto sin cambios
+    /**
+     * Get ingredients that are extras (is_default = false).
+     * @return array<ProductIngredient|array>
+     */
+    public function getExtraIngredients(): array
+    {
+        $out = [];
+        foreach ($this->ingredients as $ing) {
+            if ($ing instanceof ProductIngredient) {
+                if (method_exists($ing, 'getIsDefault') && !$ing->getIsDefault()) {
+                    $out[] = $ing;
+                }
+            } elseif (is_array($ing)) {
+                if (array_key_exists('is_default', $ing) && !$ing['is_default']) {
+                    $out[] = $ing;
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Get the final selected ingredients (is_in_final_product = true).
+     * Falls back to is_default when the runtime flag is not present.
+     * @return array<ProductIngredient|array>
+     */
+    public function getFinalIngredients(): array
+    {
+        $out = [];
+        foreach ($this->ingredients as $ing) {
+            if ($ing instanceof ProductIngredient) {
+                if (method_exists($ing, 'getIsInFinalProduct')) {
+                    if ($ing->getIsInFinalProduct()) $out[] = $ing;
+                } else {
+                    if (method_exists($ing, 'getIsDefault') && $ing->getIsDefault()) $out[] = $ing;
+                }
+            } elseif (is_array($ing)) {
+                $flag = $ing['is_in_final_product'] ?? $ing['isInFinalProduct'] ?? ($ing['is_default'] ?? false);
+                if ($flag) $out[] = $ing;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Reset runtime selection so each ingredient matches its is_default value.
+     * @return self
+     */
+    public function resetFinalSelection(): self
+    {
+        foreach ($this->ingredients as $ing) {
+            if ($ing instanceof ProductIngredient) {
+                if (method_exists($ing, 'setIsInFinalProduct')) {
+                    $base = method_exists($ing, 'getIsDefault') ? $ing->getIsDefault() : false;
+                    $ing->setIsInFinalProduct($base);
+                }
+            } elseif (is_array($ing)) {
+                $base = $ing['is_default'] ?? false;
+                $ing['is_in_final_product'] = $base;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Set the runtime final selection flag for a specific ingredient id.
+     * @param int|string $ingredientId
+     * @param bool $inFinal
+     * @return self
+     */
+    public function setIngredientFinalState($ingredientId, bool $inFinal): self
+    {
+        foreach ($this->ingredients as $idx => $ing) {
+            if ($ing instanceof ProductIngredient) {
+                $id = method_exists($ing, 'getIngredientId') ? $ing->getIngredientId() : null;
+                if ($id !== null && (int)$id === (int)$ingredientId) {
+                    if (method_exists($ing, 'setIsInFinalProduct')) {
+                        $ing->setIsInFinalProduct($inFinal);
+                    }
+                    break;
+                }
+            } elseif (is_array($ing)) {
+                $id = $ing['ingredient_id'] ?? $ing['id_ingredient'] ?? null;
+                if ($id !== null && (int)$id === (int)$ingredientId) {
+                    $this->ingredients[$idx]['is_in_final_product'] = $inFinal;
+                    break;
+                }
+            }
+        }
         return $this;
     }
 }

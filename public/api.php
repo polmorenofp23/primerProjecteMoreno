@@ -1,6 +1,6 @@
 <?php
 
-define('API_CONTROLLER_BASE_PATH', __DIR__ . '/../app/controller/API/');
+define('API_CONTROLLER_BASE_PATH', CONTROLLER_BASE_PATH . 'API/');
 
 // CORS y JSON headers
 header('Content-Type: application/json');
@@ -41,21 +41,17 @@ switch ($httpMethod) {
         die(json_encode(['error' => 'HTTP method not allowed']));
 }
 
-// Construir clase y archivo del controlador API
+// Build API controller class name and file path
 $controllerName = "API" . $resource . "Controller";
 $controllerFile  = API_CONTROLLER_BASE_PATH . $controllerName .".php";
 
-// Cargar controlador API
-if (file_exists($controllerFile)) {
-    
+if (file_exists($controllerFile)) { // Load controller file
     require_once $controllerFile;
     
-    // Instanciar y ejecutar método
-    if (class_exists($controllerName)) {
+    if (class_exists($controllerName)) { // Instantiate controller and execute method                     
         $controllerInstance = new $controllerName();
 
-        if (method_exists($controllerInstance, $method)) {
-            // Pasar ID si aplica
+        if (method_exists($controllerInstance, $method)) { // Pass ID if applicable
             if ($id && in_array($method, ['show', 'update', 'destroy'], true)) {
                 $controllerInstance->$method($id);
             } else {
@@ -73,7 +69,5 @@ if (file_exists($controllerFile)) {
     http_response_code(404);
     die(json_encode(['error' => "El controlador API '$controllerName' no existe"]));
 }
-
-
 
 exit;

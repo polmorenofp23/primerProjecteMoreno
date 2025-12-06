@@ -2,20 +2,29 @@
 
 class ProductRating
 {
-    private $id_user;
-    private $id_product;
-    private $rating;
-    private $comment;
-    private $created_at;
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_user;
+    
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_product;
+    
+    /** TINYINT UNSIGNED NOT NULL - CHECK (rating BETWEEN 1 AND 5) */
+    private int $rating;
+    
+    /** TEXT NULL */
+    private ?string $comment = null;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP */
+    private string $created_at;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_user = $data['id_user'] ?? null;
-            $this->id_product = $data['id_product'] ?? null;
-            $this->rating = $data['rating'] ?? null;
-            $this->comment = $data['comment'] ?? null;
-            $this->created_at = $data['created_at'] ?? null;
+            $this->id_user = (int)($data['id_user'] ?? 0);
+            $this->id_product = (int)($data['id_product'] ?? 0);
+            $this->rating = (int)($data['rating'] ?? 1);
+            $this->comment = isset($data['comment']) ? (string)$data['comment'] : null;
+            $this->created_at = (string)($data['created_at'] ?? date('Y-m-d H:i:s'));
         }
     }
 

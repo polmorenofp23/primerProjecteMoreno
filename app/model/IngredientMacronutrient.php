@@ -2,16 +2,21 @@
 
 class IngredientMacronutrient
 {
-    private $id_ingredient;
-    private $id_macronutrient;
-    private $grams_per_100g;
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_ingredient;
+    
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_macronutrient;
+    
+    /** DECIMAL(10,3) NOT NULL */
+    private float $grams_per_100g;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_ingredient = $data['id_ingredient'] ?? null;
-            $this->id_macronutrient = $data['id_macronutrient'] ?? null;
-            $this->grams_per_100g = $data['grams_per_100g'] ?? $data['gramsPer100g'] ?? null;
+            $this->id_ingredient = (int)($data['id_ingredient'] ?? 0);
+            $this->id_macronutrient = (int)($data['id_macronutrient'] ?? 0);
+            $this->grams_per_100g = (float)($data['grams_per_100g'] ?? 0.0);
         }
     }
 

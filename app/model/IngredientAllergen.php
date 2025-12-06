@@ -2,14 +2,18 @@
 
 class IngredientAllergen
 {
-    private $id_ingredient;
-    private $id_allergen;
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_ingredient;
+    
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_allergen;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_ingredient = $data['id_ingredient'] ?? $data['ingredient_id'] ?? null;
-            $this->id_allergen = $data['id_allergen'] ?? $data['allergen_id'] ?? null;
+            // PK composta - NOT NULL
+            $this->id_ingredient = (int)($data['id_ingredient'] ?? 0);
+            $this->id_allergen = (int)($data['id_allergen'] ?? 0);
         }
     }
 

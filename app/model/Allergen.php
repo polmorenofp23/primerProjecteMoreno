@@ -1,19 +1,25 @@
 <?php
 
 class Allergen{
-
-    private $id_allergen;
-    private $name;
-    private $description;
-    private $icon_dir; // JSON
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private ?int $id_allergen = null;
+    
+    /** VARCHAR(80) NOT NULL */
+    private string $name;
+    
+    /** VARCHAR(255) NULL */
+    private ?string $description = null;
+    
+    /** JSON NOT NULL - can be string (JSON) or array (decoded) */
+    private array $icon_dir;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_allergen = $data['id_allergen'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->description = $data['description'] ?? null;
-            $this->icon_dir = $data['icon_dir'] ?? $data['iconDir'] ?? null;
+            $this->id_allergen = isset($data['id_allergen']) ? (int)$data['id_allergen'] : null;
+            $this->name = (string)($data['name'] ?? '');
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
+            $this->icon_dir = isset($data['icon_dir']) ? (is_string($data['icon_dir']) ? json_decode($data['icon_dir'], true) : $data['icon_dir']) : [];
         }
     }
 
@@ -21,15 +27,15 @@ class Allergen{
     {
         return $this->id_allergen;
     }
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function setId($id)
     {
         $this->id_allergen = $id;
         return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
     public function setName($name)
     {

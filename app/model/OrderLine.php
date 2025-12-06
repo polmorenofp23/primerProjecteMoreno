@@ -2,20 +2,29 @@
 
 class OrderLine
 {
-    private $id_line;
-    private $id_order;
-    private $id_product;
-    private $quantity;
-    private $unit_price;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_line;
+    
+    /** BIGINT UNSIGNED NOT NULL */
+    private int $id_order;
+    
+    /** BIGINT UNSIGNED NOT NULL */
+    private int $id_product;
+    
+    /** INT UNSIGNED NOT NULL */
+    private int $quantity;
+    
+    /** DECIMAL(10,2) NOT NULL */
+    private float $unit_price;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_line = $data['id_line'] ?? $data['id'] ?? null;
-            $this->id_order = $data['id_order'] ?? null;
-            $this->id_product = $data['id_product'] ?? null;
-            $this->quantity = $data['quantity'] ?? null;
-            $this->unit_price = $data['unit_price'] ?? null;
+            $this->id_line = (int)($data['id_line'] ?? $data['id'] ?? 0);
+            $this->id_order = (int)($data['id_order'] ?? 0);
+            $this->id_product = (int)($data['id_product'] ?? 0);
+            $this->quantity = (int)($data['quantity'] ?? 0);
+            $this->unit_price = (float)($data['unit_price'] ?? 0.0);
         }
     }
 

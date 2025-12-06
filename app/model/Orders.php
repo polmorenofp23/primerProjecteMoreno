@@ -2,30 +2,49 @@
 
 class Orders
 {
-    private $id_order;
-    private $id_user;
-    private $id_discount;
-    private $total_amount;
-    private $discount_amount;
-    private $table_id;
-    private $order_status;
-    private $payment_status;
-    private $created_at;
-    private $updated_at;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_order;
+    
+    /** BIGINT UNSIGNED NOT NULL */
+    private int $id_user;
+    
+    /** BIGINT UNSIGNED NULL */
+    private ?int $id_discount = null;
+    
+    /** DECIMAL(10,2) NOT NULL DEFAULT 0.00 */
+    private float $total_amount;
+    
+    /** DECIMAL(10,2) NOT NULL DEFAULT 0.00 */
+    private float $discount_amount;
+    
+    /** INT UNSIGNED NULL */
+    private ?int $table_id = null;
+    
+    /** ENUM('pending','cancelled','confirmed','in-preparation','served') NOT NULL DEFAULT 'pending' */
+    private string $order_status;
+    
+    /** ENUM('pending','rejected','cancelled','paid') NOT NULL DEFAULT 'pending' */
+    private string $payment_status;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP */
+    private string $created_at;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE */
+    private string $updated_at;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_order = $data['id_order'] ?? $data['id'] ?? null;
-            $this->id_user = $data['id_user'] ?? null;
-            $this->id_discount = $data['id_discount'] ?? null;
-            $this->total_amount = $data['total_amount'] ?? null;
-            $this->discount_amount = $data['discount_amount'] ?? null;
-            $this->table_id = $data['table_id'] ?? null;
-            $this->order_status = $data['order_status'] ?? null;
-            $this->payment_status = $data['payment_status'] ?? null;
-            $this->created_at = $data['created_at'] ?? null;
-            $this->updated_at = $data['updated_at'] ?? null;
+            $this->id_order = (int)($data['id_order'] ?? 0);
+            $this->id_user = (int)($data['id_user'] ?? 0);
+            $this->id_discount = isset($data['id_discount']) ? (int)$data['id_discount'] : null;
+            $this->total_amount = (float)($data['total_amount'] ?? 0.0);
+            $this->discount_amount = (float)($data['discount_amount'] ?? 0.0);
+            $this->table_id = isset($data['table_id']) ? (int)$data['table_id'] : null;
+            $this->order_status = (string)($data['order_status'] ?? 'pending');
+            $this->payment_status = (string)($data['payment_status'] ?? 'pending');
+            $this->created_at = (string)($data['created_at'] ?? date('Y-m-d H:i:s'));
+            $this->updated_at = (string)($data['updated_at'] ?? date('Y-m-d H:i:s'));
         }
     }
 

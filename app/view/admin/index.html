@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bees Cavern</title>
+    <style>
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active-section {
+            display: block;
+        }
+    </style>
+</head>
+<body>        
+    <span>Admin</span>
+    <nav>
+        <button class="menu-btn" data-target="users">Users</button>
+        <button class="menu-btn" data-target="orders">Orders</button>
+        <button class="menu-btn" data-target="products">Products</button>
+        <button class="menu-btn" data-target="ingredients">Ingredients</button>
+        <button class="menu-btn" data-target="offers">Offers</button>
+        <button class="menu-btn" data-target="logs">Logs</button>
+    </nav>
+
+    <main class="main-content">
+        <section id="users" class="content-section active-section">
+            <h1>Users</h1>
+            <p>Users management section</p>
+            
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>User Type</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone</th>
+                        <th>Registered At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <!-- Data will be loaded via JavaScript -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="orders" class="content-section">
+            <h1>Orders</h1>
+            <p>Orders management section</p>
+        </section>
+        
+        <section id="products" class="content-section">
+            <h1>Products</h1>
+            <p>Products management section</p>
+        </section>
+        
+        <section id="ingredients" class="content-section">
+            <h1>Ingredients</h1>
+            <p>Ingredients management section</p>
+        </section>
+        
+        <section id="offers" class="content-section">
+            <h1>Offers</h1>
+            <p>Offers management section</p>
+        </section>
+        
+        <section id="logs" class="content-section">
+            <h1>Logs</h1>
+            <p>System logs section</p>
+        </section>
+    </main>
+</body>
+</html>
+
+<script>
+
+    // obtener botones del menu
+    const botonesMenu = document.querySelectorAll('.menu-btn');
+
+    // Obtenin seccions
+    const sections = document.querySelectorAll('.content-section');
+
+    botonesMenu.forEach( button => {
+        button.addEventListener('click', () => {
+            const target= button.getAttribute('data-target');
+            setActiveSection(target);
+        });
+    });
+
+    // Funcio per establir seccio activa
+    function setActiveSection(targetId) {
+        sections.forEach(section => {
+            section.classList.remove('active-section');
+        });
+        document.getElementById(targetId).classList.add('active-section');
+    }
+
+    const arrayUsers = [];
+    const users= fetch('http://localhost/primerProjecteMoreno/public/?controller=User&action=getAllUsers')
+        .then(response => response.json());
+
+    users.forEach(user => {
+        const newUser = new User(
+            user.id,
+            user.username,
+            user.email,
+            user.role,
+            user.userType,
+            user.firstName,
+            user.lastName,
+            user.phone,
+            user.registeredAt
+        );
+        arrayUsers.push(newUser);
+        console.log(newUser);
+    });
+
+    // Classe de JS para guardar los datos de usuario (FER CLASSE EN JS DE ORDER, PRODUCT, ETC) <similar als models de PHP>
+    class User{
+        constructor(id, username, email, role, userType, firstName, lastName, phone, registeredAt){
+            this.id = id;
+            this.username = username;
+            this.email = email;
+            this.role = role;
+            this.userType = userType;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.phone = phone;
+            this.registeredAt = registeredAt;
+        }
+    }
+
+</script>

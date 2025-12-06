@@ -1,207 +1,302 @@
 <?php
 
-require_once __DIR__ . "/../core/DatabasePDO.php";
-require_once __DIR__ . "/../models/Product.php";
+require_once UTIL_PATH . 'DatabasePDO.php';
+require_once MODEL_PATH . 'Product.php';
+require_once DAO_PATH . 'ProductIngredientDAO.php';
 
 class ProductDAO{
 
     private $db;
     private $conn;
-    private $tableName;
-    private $productsList = [];
 
     public function __construct(){
         $this->db = new DatabasePDO();
     }
 
     /**
-     * It returns a product by its id
-     */
-    public static function getProductById($id)
-    {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product WHERE id_product = :id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
-
-        if (!$result) return null;
-        //if (isset($result['min_price'])) $result['price'] = $result['min_price'];              // normalize column name
-        return new Product($result);
-    }
-
-    /**
      * It returns all products from the database
      */
-    public static function getAllProducts()
+    public function getAllProducts()
     {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
-
-        $productsList = [];
-        while ($product = $result->fetch_object('Product')) {
-            $productsList[] = $product;
-        }
-
-        return $productsList;
+        return $this->getProductsByFilter();
     }
 
     /**
-     * It returns products that match the given price
+     * General filtering function for products.
+     * Supported filters keys:
+     *  - id: int
+     *  - contains_allergen: int (allergen id) -> products that contain that allergen
+     *  - without_allergen: int (allergen id) -> products that do NOT contain that allergen
+     *  - dish_type: string
+     *  - price_range: [min, max]
+     *  - ingredient_category: string
+     *  - available: bool
+     * $orderBy: can be 'price_asc', 'price_desc', 'dish_type', 'name'
      */
-    public static function getProductsByPrice($price)
+    public function getProductsByFilter(array $filters = [], ?string $orderBy = null)
     {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product WHERE min_price = :price";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':price', $price);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
+        $this->conn = $this->db->connect();
 
-        $productsList = [];
-        while ($product = $results->fetch_object('Product')) {
-            $productsList[] = $product;
+        $params = [];
+        $joins = '';
+        $wheres = [];
+        $select = 'SELECT DISTINCT p.* FROM product p';
+
+        // by specific id (accepts single id or array of ids)
+        if (isset($filters['id'])) {
+            if (is_array($filters['id'])) {
+                $vals = $filters['id'];
+                $placeholders = [];
+                foreach ($vals as $i => $val) {
+                    $ph = ':id_product_' . $i;
+                    $placeholders[] = $ph;
+                    $params[$ph] = (int)$val;
+                }
+                $in = implode(',', $placeholders);
+                $wheres[] = "p.id_product IN ($in)";
+            } else {
+                $wheres[] = 'p.id_product = :id_product';
+                $params[':id_product'] = (int)$filters['id'];
+            }
         }
 
-        return $productsList;
-    }
-
-    /**
-     * It returns a list of the products between the price range
-     */
-    public static function getProductsByPriceRange($min_price, $max_price)
-    {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product WHERE min_price BETWEEN :min_price AND :max_price";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':min_price', $min_price);
-        $stmt->bindValue(':max_price', $max_price);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
-
-        $productsList = [];
-        foreach ($results as $result) {
-            if (isset($result['min_price'])) $result['price'] = $result['min_price'];
-            $productsList[] = new Product($result);
+        // by contains_allergen
+        if (isset($filters['contains_allergen'])) {
+            $vals = is_array($filters['contains_allergen']) ? $filters['contains_allergen'] : [$filters['contains_allergen']];
+            $placeholders = [];
+            foreach ($vals as $i => $val) {
+                $ph = ':contains_allergen_' . $i;
+                $placeholders[] = $ph;
+                $params[$ph] = (int)$val;
+            }
+            $in = implode(',', $placeholders);
+            $wheres[] = "p.id_product IN (
+                SELECT DISTINCT pi.id_product
+                FROM product_ingredient pi
+                JOIN ingredient_allergen ia ON ia.id_ingredient = pi.id_ingredient
+                WHERE ia.id_allergen IN ($in)
+            )";
         }
 
-        return $productsList;
-    }
-
-    /**
-     * It returns products that match the given dish type
-     */
-    public static function getProductsByDishType($dish_type)
-    {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product WHERE dish_type = :dish_type";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':dish_type', $dish_type);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
-
-        $productsList = [];
-        while ($product = $results->fetch_object('Product')) {
-            $productsList[] = $product;
+        // by without_allergen
+        if (isset($filters['without_allergen'])) {
+            $vals = is_array($filters['without_allergen']) ? $filters['without_allergen'] : [$filters['without_allergen']];
+            $placeholders = [];
+            foreach ($vals as $i => $val) {
+                $ph = ':without_allergen_' . $i;
+                $placeholders[] = $ph;
+                $params[$ph] = (int)$val;
+            }
+            $in = implode(',', $placeholders);
+            $wheres[] = "p.id_product NOT IN (
+                SELECT DISTINCT pi.id_product
+                FROM product_ingredient pi
+                JOIN ingredient_allergen ia ON ia.id_ingredient = pi.id_ingredient
+                WHERE ia.id_allergen IN ($in)
+            )";
         }
 
-        return $productsList;
-    }
-
-    /**
-     * Returns products that contain ingredients of a given category (ingredient class)
-     */
-    public static function getProductsByIngredientCategory(string $category)
-    {
-        $conn = DatabasePDO::connect();
-         // ---------- REVISAR QUERY -------------
-        $query = "SELECT DISTINCT p.id_product, p.name, p.description, p.dish_type, p.min_price, p.img_dir, p.available, p.created_at, p.updated_at
-                FROM product p
-                JOIN product_ingredient pi ON p.id_product = pi.id_product
+        // by ingredient category (accept string or array)
+        if (isset($filters['ingredient_category'])) {
+            $vals = is_array($filters['ingredient_category']) ? $filters['ingredient_category'] : [$filters['ingredient_category']];
+            $placeholders = [];
+            foreach ($vals as $i => $val) {
+                $ph = ':ingredient_category_' . $i;
+                $placeholders[] = $ph;
+                $params[$ph] = $val;
+            }
+            $in = implode(',', $placeholders);
+            $wheres[] = "p.id_product IN (
+                SELECT DISTINCT pi.id_product
+                FROM product_ingredient pi
                 JOIN ingredient i ON i.id_ingredient = pi.id_ingredient
-                WHERE i.category = :category";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':category', $category);
+                WHERE i.category IN ($in)
+            )";
+        }
+
+        // by dish_type (accept string or array)
+        if (isset($filters['dish_type'])) {
+            if (is_array($filters['dish_type'])) {
+                $vals = $filters['dish_type'];
+                $placeholders = [];
+                foreach ($vals as $i => $val) {
+                    $ph = ':dish_type_' . $i;
+                    $placeholders[] = $ph;
+                    $params[$ph] = $val;
+                }
+                $in = implode(',', $placeholders);
+                $wheres[] = "p.dish_type IN ($in)";
+            } else {
+                $wheres[] = 'p.dish_type = :dish_type';
+                $params[':dish_type'] = $filters['dish_type'];
+            }
+        }
+
+        // by price range
+        if (isset($filters['price_range']) && is_array($filters['price_range'])) {
+            $min = $filters['price_range'][0];
+            $max = $filters['price_range'][1];
+            $wheres[] = 'p.min_price BETWEEN :min_price AND :max_price';
+            $params[':min_price'] = $min;
+            $params[':max_price'] = $max;
+        }
+
+        // by availability
+        if (isset($filters['available'])) {
+            $wheres[] = 'p.available = :available';
+            $params[':available'] = (bool)$filters['available'];
+        }
+
+        // mount the SQL query
+        $sql = $select;
+        if ($joins) $sql .= ' ' . $joins;
+        if (!empty($wheres)) {
+            $sql .= ' WHERE ' . implode(' AND ', $wheres);
+        }
+
+        // ordering the query content
+        $orderByQuery = '';
+        if ($orderBy) {
+            switch ($orderBy) {
+                case 'price_asc':
+                    $orderByQuery = ' ORDER BY p.min_price ASC';
+                    break;
+                case 'price_desc':
+                    $orderByQuery = ' ORDER BY p.min_price DESC';
+                    break;
+                case 'dish_type':
+                    $orderByQuery = ' ORDER BY p.dish_type ASC';
+                    break;
+                case 'name':
+                    $orderByQuery = ' ORDER BY p.name ASC';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $sql .= $orderByQuery;
+
+        // bind all params
+        $stmt = $this->conn->prepare($sql);
+        foreach ($params as $k => $v) {
+            if (is_int($v)) {
+                $stmt->bindValue($k, $v, PDO::PARAM_INT);
+            } elseif (is_bool($v)) {
+                $stmt->bindValue($k, $v, PDO::PARAM_BOOL);
+            } elseif (is_float($v)) {
+                $stmt->bindValue($k, (string)$v);   // bind as string becose PDO has no native float param type
+            } else {
+                $stmt->bindValue($k, $v, PDO::PARAM_STR);
+            }
+        }
+
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
 
         $productsList = [];
-        while ($product = $results->fetch_object('Product')) {
+        $piDao = new ProductIngredientDAO();
+        foreach ($results as $result) {
+            $product = new Product($result);
+            $ingredients = $piDao->getIngredientsByProduct((int)$product->getId()); // Load and assign ProductIngredient list into the Product model
+            $product->setIngredients($ingredients);
             $productsList[] = $product;
         }
+
+        $this->db->disconnect();
+
         return $productsList;
     }
 
+    // ----------------- CREATE METHODS -----------------
     /**
-     * Returns products that DO NOT contain the given allergen (single allergen id)
+     * Create a new product in the database
+     * Returns the id of the created product, or false on failure
      */
-    public static function getProductsWithoutAllergen(int $allergenId)
+    public function createProduct(Product $product)
     {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product
-                WHERE id_product NOT IN (
-                    SELECT DISTINCT pi.id_product
-                    FROM product_ingredient pi
-                    JOIN ingredient_allergen ia ON ia.id_ingredient = pi.id_ingredient
-                    WHERE ia.id_allergen = :allergen
-                )";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':allergen', $allergenId, PDO::PARAM_INT);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
+        $this->conn = $this->db->connect();
 
-        $productsList = [];
-        while ($product = $results->fetch_object('Product')) {
-            $productsList[] = $product;
-        }
-        return $productsList;
+        $query = "INSERT INTO product (name, description, dish_type, min_price, img_dir, available) 
+                VALUES (:name, :description, :dish_type, :min_price, :img_dir, :available)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':name', $product->getName());
+        $stmt->bindValue(':description', $product->getDescription() ?? '');
+        $stmt->bindValue(':dish_type', $product->getDishType());
+        $stmt->bindValue(':min_price', $product->getPrice());
+        $stmt->bindValue(':img_dir', json_encode($product->getImgDir()));
+        $stmt->bindValue(':available', (bool)$product->getAvailable(), PDO::PARAM_BOOL);
+        $stmt->execute();
+
+        $id = $this->conn->lastInsertId();
+        $this->db->disconnect();
+
+        return $id ? (int)$id : false;
     }
 
+    // ----------------- UPDATE METHODS -----------------
     /**
-     * Returns products by availability status (1 = available, 0 = not available)
+     * Update a product's fields
+     * Returns true if updated, false otherwise
      */
-    public static function getProductsByAvailability(int $available = 1)
+    public function updateProduct(Product $product): bool
     {
-        $conn = DatabasePDO::connect();
-        $query = "SELECT * FROM product WHERE available = :available";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(':available', $available, PDO::PARAM_INT);
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        DatabasePDO::disconnect();
+        $this->conn = $this->db->connect();
 
-        $productsList = [];
-        while ($product = $results->fetch_object('Product')) {
-            $productsList[] = $product;
+        $productId = (int)$product->getId();
+
+        $fields = [];
+        $params = [':product_id' => $productId];
+
+        // Update standard product fields from model
+        $fields[] = "name = :name";
+        $params[':name'] = $product->getName();
+
+        $fields[] = "description = :description";
+        $params[':description'] = $product->getDescription();
+
+        $fields[] = "dish_type = :dish_type";
+        $params[':dish_type'] = $product->getDishType();
+
+        $fields[] = "min_price = :min_price";
+        $params[':min_price'] = $product->getPrice();
+
+        $fields[] = "img_dir = :img_dir";
+        $params[':img_dir'] = json_encode($product->getImgDir());
+
+        $fields[] = "available = :available";
+        $params[':available'] = (bool)$product->getAvailable();
+
+        $query = "UPDATE product SET " . implode(", ", $fields) . " WHERE id_product = :product_id";
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
         }
-        return $productsList;
+        $stmt->execute();
+        $updated = $stmt->rowCount() > 0;
+
+        $this->db->disconnect();
+
+        return $updated;
     }
 
+    // ----------------- DELETE METHODS -----------------
     /**
-     * Delete an ingredient association from a product (product_ingredient table).
+     * Delete a product from the database. 
      * Returns true if a row was deleted, false otherwise.
      */
-    public static function deleteIngredientFromProduct(int $productId, int $ingredientId): bool
+    public function deleteProduct(int $productId): bool
     {
-        $conn = DatabasePDO::connect();
-        $query = "DELETE FROM product_ingredient WHERE id_product = :product_id AND id_ingredient = :ingredient_id";
-        $stmt = $conn->prepare($query);
+        $this->conn = $this->db->connect();
+        
+        $query = "DELETE FROM product WHERE id_product = :product_id";
+        $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':product_id', $productId, PDO::PARAM_INT);
-        $stmt->bindValue(':ingredient_id', $ingredientId, PDO::PARAM_INT);
         $stmt->execute();
         $deleted = $stmt->rowCount() > 0;
-        DatabasePDO::disconnect();
+        
+        $this->db->disconnect();
+        
         return $deleted;
     }
 }

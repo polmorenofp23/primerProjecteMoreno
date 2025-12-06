@@ -2,32 +2,53 @@
 
 class OrderLineIngredient
 {
-    private $id_line;
-    private $id_ingredient;
-    private $num_portions;
-    private $ingredient_price;
-    private $grams;
-    private $kcal_component;
-    private $protein_g;
-    private $carbs_g;
-    private $fat_g;
-    private $origin;
-    private $doneness;
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_line;
+    
+    /** BIGINT UNSIGNED NOT NULL - PK */
+    private int $id_ingredient;
+    
+    /** TINYINT UNSIGNED NOT NULL (1..99) */
+    private int $num_portions;
+    
+    /** DECIMAL(12,4) NOT NULL */
+    private float $ingredient_price;
+    
+    /** DECIMAL(10,2) NOT NULL */
+    private float $grams;
+    
+    /** DECIMAL(12,2) NOT NULL */
+    private float $kcal_component;
+    
+    /** DECIMAL(12,2) NOT NULL */
+    private float $protein_g;
+    
+    /** DECIMAL(12,2) NOT NULL */
+    private float $carbs_g;
+    
+    /** DECIMAL(12,2) NOT NULL */
+    private float $fat_g;
+    
+    /** ENUM('default','extra') NOT NULL */
+    private string $origin;
+    
+    /** ENUM('rare','medium-rare','medium-well','overcooked') NULL DEFAULT 'medium-rare' */
+    private ?string $doneness = null;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_line = $data['id_line'] ?? null;
-            $this->id_ingredient = $data['id_ingredient'] ?? null;
-            $this->num_portions = $data['num_portions'] ?? null;
-            $this->ingredient_price = $data['ingredient_price'] ?? null;
-            $this->grams = $data['grams'] ?? null;
-            $this->kcal_component = $data['kcal_component'] ?? null;
-            $this->protein_g = $data['protein_g'] ?? null;
-            $this->carbs_g = $data['carbs_g'] ?? null;
-            $this->fat_g = $data['fat_g'] ?? null;
-            $this->origin = $data['origin'] ?? null;
-            $this->doneness = $data['doneness'] ?? null;
+            $this->id_line = (int)($data['id_line'] ?? 0);
+            $this->id_ingredient = (int)($data['id_ingredient'] ?? 0);
+            $this->num_portions = (int)($data['num_portions'] ?? 0);
+            $this->ingredient_price = (float)($data['ingredient_price'] ?? 0.0);
+            $this->grams = (float)($data['grams'] ?? 0.0);
+            $this->kcal_component = (float)($data['kcal_component'] ?? 0.0);
+            $this->protein_g = (float)($data['protein_g'] ?? 0.0);
+            $this->carbs_g = (float)($data['carbs_g'] ?? 0.0);
+            $this->fat_g = (float)($data['fat_g'] ?? 0.0);
+            $this->origin = (string)($data['origin'] ?? 'undefined');
+            $this->doneness = isset($data['doneness']) ? (string)$data['doneness'] : null;
         }
     }
 
@@ -58,7 +79,7 @@ class OrderLineIngredient
     }
     public function setNumPortions($v)
     {
-        $this->num_portions = $v;
+        $this->num_portions = (int)$v;
         return $this;
     }
 

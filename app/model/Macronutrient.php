@@ -2,18 +2,25 @@
 
 class Macronutrient
 {
-    private $id_macronutrient;
-    private $name;
-    private $description;
-    private $icon_dir;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private ?int $id_macronutrient = null;
+    
+    /** VARCHAR(80) NOT NULL */
+    private string $name;
+    
+    /** VARCHAR(255) NULL */
+    private ?string $description = null;
+    
+    /** JSON NOT NULL - can be string (JSON) or array (decoded) */
+    private array $icon_dir;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_macronutrient = $data['id_macronutrient'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->description = $data['description'] ?? null;
-            $this->icon_dir = $data['icon_dir'] ?? null;
+            $this->id_macronutrient = isset($data['id_macronutrient']) ? (int)$data['id_macronutrient'] : 0;
+            $this->name = (string)($data['name'] ?? '');
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
+            $this->icon_dir = isset($data['icon_dir']) ? (is_string($data['icon_dir']) ? json_decode($data['icon_dir'], true) : $data['icon_dir']) : [];
         }
     }
 

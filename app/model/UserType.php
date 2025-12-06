@@ -1,16 +1,21 @@
 <?php
 
 class UserType {
-    private $id_user_type;
-    private $name;
-    private $description;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_user_type;
+    
+    /** VARCHAR(80) NOT NULL */
+    private string $name;
+    
+    /** VARCHAR(255) NULL */
+    private ?string $description = null;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_user_type = $data['id_user_type'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->description = $data['description'] ?? null;
+            $this->id_user_type = isset($data['id_user_type']) ? (int)$data['id_user_type'] : 0;
+            $this->name = (string)($data['name'] ?? '');
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
         }
     }
 

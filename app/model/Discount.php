@@ -2,34 +2,57 @@
 
 class Discount
 {
-    private $id_discount;
-    private $name;
-    private $description;
-    private $percentage;
-    private $status;
-    private $type;
-    private $discount_code;
-    private $start_datetime;
-    private $end_datetime;
-    private $num_reuses;
-    private $img_dir;
-    private $id_user_type;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private ?int $id_discount = null;
+    
+    /** VARCHAR(120) NOT NULL */
+    private string $name;
+    
+    /** TEXT NULL */
+    private ?string $description = null;
+    
+    /** TINYINT(3) UNSIGNED NOT NULL - 0..100 */
+    private int $percentage;
+    
+    /** ENUM('active','inactive') NOT NULL DEFAULT 'active' */
+    private string $status;
+    
+    /** ENUM('promocode','user_type') NOT NULL */
+    private string $type;
+    
+    /** VARCHAR(64) NULL */
+    private ?string $discount_code = null;
+    
+    /** DATETIME NULL */
+    private ?string $start_datetime = null;
+    
+    /** DATETIME NULL */
+    private ?string $end_datetime = null;
+    
+    /** TINYINT(2) UNSIGNED NULL */
+    private ?int $num_reuses = null;
+    
+    /** JSON NULL - can be string (JSON) or array (decoded) */
+    private ?array $img_dir = null;
+    
+    /** BIGINT UNSIGNED NULL */
+    private ?int $id_user_type = null;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_discount = $data['id_discount'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->description = $data['description'] ?? null;
-            $this->percentage = $data['percentage'] ?? null;
-            $this->status = $data['status'] ?? null;
-            $this->type = $data['type'] ?? null;
-            $this->discount_code = $data['discount_code'] ?? $data['discountCode'] ?? null;
-            $this->start_datetime = $data['start_datetime'] ?? null;
-            $this->end_datetime = $data['end_datetime'] ?? null;
-            $this->num_reuses = $data['num_reuses'] ?? null;
-            $this->img_dir = $data['img_dir'] ?? null;
-            $this->id_user_type = $data['id_user_type'] ?? null;
+            $this->id_discount = isset($data['id_discount']) ? (int)$data['id_discount'] : null;
+            $this->name = (string)($data['name'] ?? '');
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
+            $this->percentage = (int)($data['percentage'] ?? 0);
+            $this->status = (string)($data['status'] ?? 'active');
+            $this->type = (string)($data['type'] ?? '');
+            $this->discount_code = isset($data['discount_code']) ? (string)$data['discount_code'] : (isset($data['discountCode']) ? (string)$data['discountCode'] : null);
+            $this->start_datetime = isset($data['start_datetime']) ? (string)$data['start_datetime'] : null;
+            $this->end_datetime = isset($data['end_datetime']) ? (string)$data['end_datetime'] : null;
+            $this->num_reuses = isset($data['num_reuses']) ? (int)$data['num_reuses'] : null;
+            $this->img_dir = isset($data['img_dir']) ? (is_string($data['img_dir']) ? json_decode($data['img_dir'], true) : $data['img_dir']) : null;
+            $this->id_user_type = isset($data['id_user_type']) ? (int)$data['id_user_type'] : null;
         }
     }
 

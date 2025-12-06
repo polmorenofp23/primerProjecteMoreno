@@ -1,33 +1,90 @@
 <?php
 
+require_once MODEL_PATH . 'IngredientMacronutrient.php';
+require_once MODEL_PATH . 'IngredientAllergen.php';
+
+enum IngredientCategory: string {
+    case VEGETABLE = 'vegetable';
+    case FRUIT = 'fruit';
+    case MEAT = 'meat';
+    case FISH = 'fish';
+    case SEAFOOD = 'seafood';
+    case ANIMAL_DERIVATIVE = 'animal_derivative';
+    case TREE_NUT = 'tree_nut';
+    case SPICE = 'spice';
+    case SWEETENER = 'sweetener';
+    case CONDIMENT = 'condiment';
+    case NATURAL_FAT = 'natural_fat';
+    case DRINK = 'drink';
+    case UNDEFINED = 'undefined';
+}
+
 class Ingredient
 {
-    private $id_ingredient;
-    private $name;
-    private $category;
-    private $description;
-    private $price_per_100g;
-    private $kcal_per_100g;
-    private $has_doneness;
-    private $country;
-    private $available;
-    private $created_at;
-    private $updated_at;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_ingredient;
+    
+    /** VARCHAR(120) NOT NULL */
+    private string $name;
+    
+    /** ENUM('vegetable','fruit','meat','fish','seafood','animal_derivative','tree_nut','spice','sweetener','condiment','natural_fat','drink') NOT NULL */
+    private IngredientCategory $category;
+    
+    /** VARCHAR(255) NULL */
+    private ?string $description = null;
+    
+    /** DECIMAL(10,2) NOT NULL */
+    private float $price_per_100g;
+    
+    /** DECIMAL(10,2) NOT NULL */
+    private float $kcal_per_100g;
+    
+    /** TINYINT(1) NOT NULL DEFAULT 0 */
+    private bool $has_doneness;
+    
+    /** VARCHAR(120) NOT NULL */
+    private string $country;
+    
+    /** TINYINT(1) NOT NULL DEFAULT 1 */
+    private bool $available;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP */
+    private string $created_at;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE */
+    private string $updated_at;
+
+    /** @var IngredientMacronutrient[]|null */
+    private ?array $macronutrients = null;
+    
+    /** @var IngredientAllergen[]|null */
+    private ?array $allergens = null;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_ingredient = $data['id_ingredient'] ?? $data['id'] ?? null;
-            $this->name = $data['name'] ?? null;
-            $this->category = $data['category'] ?? null;
-            $this->description = $data['description'] ?? null;
-            $this->price_per_100g = $data['price_per_100g'] ?? $data['pricePer100g'] ?? null;
-            $this->kcal_per_100g = $data['kcal_per_100g'] ?? $data['kcalPer100g'] ?? null;
-            $this->has_doneness = $data['has_doneness'] ?? $data['has_doneness'] ?? null;
-            $this->country = $data['country'] ?? null;
-            $this->available = $data['available'] ?? $data['avaliable'] ?? null;
-            $this->created_at = $data['created_at'] ?? null;
-            $this->updated_at = $data['updated_at'] ?? null;
+            $this->id_ingredient = (int)($data['id_ingredient'] ?? 0);
+            $this->name = (string)($data['name'] ?? '');
+            $this->category = isset($data['category']) ? IngredientCategory::from($data['category']) : IngredientCategory::UNDEFINED;
+            $this->description = isset($data['description']) ? (string)$data['description'] : null;
+            $this->price_per_100g = (float)($data['price_per_100g'] ?? 0.0);
+            $this->kcal_per_100g = (float)($data['kcal_per_100g'] ?? 0.0);
+            $this->has_doneness = (bool)($data['has_doneness'] ?? false);
+            $this->country = (string)($data['country'] ?? '');
+            $this->available = (bool)($data['available'] ?? $data['avaliable'] ?? true);
+            $this->created_at = (string)($data['created_at'] ?? date('Y-m-d H:i:s'));
+            $this->updated_at = (string)($data['updated_at'] ?? date('Y-m-d H:i:s'));
+            if (isset($data['macronutrients']) && is_array($data['macronutrients'])) {
+                $this->setMacronutrients($data['macronutrients']);
+            } else {
+                $this->macronutrients = $data['macronutrients'] ?? null;
+            }
+
+            if (isset($data['allergens']) && is_array($data['allergens'])) {
+                $this->setAllergens($data['allergens']);
+            } else {
+                $this->allergens = $data['allergens'] ?? null;
+            }
         }
     }
 
@@ -51,13 +108,13 @@ class Ingredient
         return $this;
     }
 
-    public function getCategory()
+    public function getCategory(): IngredientCategory
     {
         return $this->category;
     }
-    public function setCategory($category)
+    public function setCategory(IngredientCategory|string $category)
     {
-        $this->category = $category;
+        $this->category = is_string($category) ? IngredientCategory::from($category) : $category;
         return $this;
     }
 
@@ -138,6 +195,86 @@ class Ingredient
     public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+        return $this;
+    }
+
+    /**
+     * Get macronutrient association objects for this ingredient
+     * @return IngredientMacronutrient[]|null
+     */
+    public function getMacronutrients(): ?array
+    {
+        return $this->macronutrients;
+    }
+    /**
+     * Set macronutrient association objects for this ingredient
+     * @param IngredientMacronutrient[]|null $macros
+     */
+    public function setMacronutrients(?array $macros)
+    {
+        if ($macros === null) {
+            $this->macronutrients = null;
+            return $this;
+        }
+
+        $this->macronutrients = [];
+        foreach ($macros as $m) {
+            if ($m instanceof IngredientMacronutrient) {
+                $this->macronutrients[] = $m;
+                continue;
+            }
+
+            if (is_array($m)) {
+                $this->macronutrients[] = new IngredientMacronutrient($m);
+                continue;
+            }
+
+            if (is_object($m)) {
+                $this->macronutrients[] = new IngredientMacronutrient((array)$m);
+                continue;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get allergen association objects for this ingredient
+     * @return IngredientAllergen[]|null
+     */
+    public function getAllergens(): ?array
+    {
+        return $this->allergens;
+    }
+    /**
+     * Set allergen association objects for this ingredient
+     * @param IngredientAllergen[]|null $allergens
+     */
+    public function setAllergens(?array $allergens)
+    {
+        if ($allergens === null) {
+            $this->allergens = null;
+            return $this;
+        }
+
+        $this->allergens = [];
+        foreach ($allergens as $a) {
+            if ($a instanceof IngredientAllergen) {
+                $this->allergens[] = $a;
+                continue;
+            }
+
+            if (is_array($a)) {
+                $this->allergens[] = new IngredientAllergen($a);
+                continue;
+            }
+
+            if (is_object($a)) {
+                $this->allergens[] = new IngredientAllergen((array)$a);
+                continue;
+            }
+        }
+
         return $this;
     }
 }

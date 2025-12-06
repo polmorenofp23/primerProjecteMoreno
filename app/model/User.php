@@ -2,34 +2,57 @@
 
 class User
 {
-    private $id_user;
-    private $id_user_type;
-    private $username;
-    private $role;
-    private $email;
-    private $password_hash;
-    private $first_name;
-    private $last_name;
-    private $phone;
-    private $address; // JSON
-    private $birth_date;
-    private $registered_at;
+    /** BIGINT UNSIGNED - PK AUTO_INCREMENT */
+    private int $id_user;
+    
+    /** BIGINT UNSIGNED NOT NULL */
+    private int $id_user_type;
+    
+    /** VARCHAR(60) NOT NULL */
+    private string $username;
+    
+    /** ENUM('client','admin') NOT NULL DEFAULT 'client' */
+    private string $role;
+    
+    /** VARCHAR(120) NOT NULL */
+    private string $email;
+    
+    /** VARCHAR(255) NOT NULL */
+    private string $password_hash;
+    
+    /** VARCHAR(80) NOT NULL */
+    private string $first_name;
+    
+    /** VARCHAR(120) NULL */
+    private ?string $last_name = null;
+    
+    /** VARCHAR(30) NULL */
+    private ?string $phone = null;
+    
+    /** JSON NULL - can be string (JSON) or array (decoded) */
+    private ?array $address = null;
+    
+    /** DATE NULL */
+    private ?string $birth_date = null;
+    
+    /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP */
+    private string $registered_at;
 
     public function __construct($data = null)
     {
         if ($data) {
-            $this->id_user = $data['id_user'] ?? $data['id'] ?? null;
-            $this->id_user_type = $data['id_user_type'] ?? $data['id_user_type'] ?? null;
-            $this->username = $data['username'] ?? null;
-            $this->role = $data['role'] ?? null;
-            $this->email = $data['email'] ?? null;
-            $this->password_hash = $data['password_hash'] ?? $data['password'] ?? null;
-            $this->first_name = $data['first_name'] ?? null;
-            $this->last_name = $data['last_name'] ?? null;
-            $this->phone = $data['phone'] ?? null;
-            $this->address = $data['address'] ?? null;
-            $this->birth_date = $data['birth_date'] ?? null;
-            $this->registered_at = $data['registered_at'] ?? $data['registeredAt'] ?? null;
+            $this->id_user = (int)($data['id_user'] ?? 0);
+            $this->id_user_type = (int)($data['id_user_type'] ?? 0);
+            $this->username = (string)($data['username'] ?? '');
+            $this->role = (string)($data['role'] ?? 'client');
+            $this->email = (string)($data['email'] ?? '');
+            $this->password_hash = (string)($data['password_hash'] ?? '');
+            $this->first_name = (string)($data['first_name'] ?? '');
+            $this->last_name = isset($data['last_name']) ? (string)$data['last_name'] : null;
+            $this->phone = isset($data['phone']) ? (string)$data['phone'] : null;
+            $this->address = isset($data['address']) ? (is_string($data['address']) ? json_decode($data['address'], true) : $data['address']) : null;
+            $this->birth_date = isset($data['birth_date']) ? (string)$data['birth_date'] : null;
+            $this->registered_at = (string)($data['registered_at'] ?? date('Y-m-d H:i:s'));
         }
     }
 
@@ -67,7 +90,7 @@ class User
     {
         return $this->password_hash;
     }
-    public function setPasswordHash($hash)
+    public function setPasswordHash(string $hash)
     {
         $this->password_hash = $hash;
         return $this;
@@ -151,5 +174,22 @@ class User
     {
         $this->registered_at = $registered_at;
         return $this;
+    }
+
+    /* Password helpers */
+    /**
+     * Set the password from plain text: hashes using PASSWORD_DEFAULT.
+     */
+    public function setAndHashPassword(string $password): void
+    {
+        $this->password_hash = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * Verify a plain text password against the stored hash.
+     */
+    public function verifyPassword(string $password): bool
+    {
+        return password_verify($password, $this->password_hash);
     }
 }
