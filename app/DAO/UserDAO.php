@@ -253,50 +253,6 @@ class UserDAO
         return $deleted;
     }
 
-    //HELPER METHODS
-    /**
-     * Authenticate a user by username or email and plain password.
-     * Returns the User on success, null on failure.
-     */
-    public function authenticate(string $identifier, string $password)
-    {
-        $user = $this->getUserByUsername($identifier);
-        if (!$user) {
-            $user = $this->getUserByEmail($identifier);
-        }
-        if (!$user) return null;
-
-        if ($user->verifyPassword($password)) {
-            return $user;
-        }
-
-        return null;
-    }
-
-    /**
-     * Convenience checks
-     */
-    public function existsByUsername(string $username): bool
-    {
-        $this->conn = $this->db->connect();
-        $query = 'SELECT COUNT(*) as cnt FROM user WHERE username = :username';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->db->disconnect();
-        return $row && $row['cnt'] > 0;
-    }
-
-    public function existsByEmail(string $email): bool
-    {
-        $this->conn = $this->db->connect();
-        $query = 'SELECT COUNT(*) as cnt FROM user WHERE email = :email';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->db->disconnect();
-        return $row && $row['cnt'] > 0;
-    }
+    // Authentication helpers have been moved to `app/util/Auth.php`.
+    // Use Auth::authenticate(), Auth::existsByUsername(), Auth::existsByEmail() instead.
 }

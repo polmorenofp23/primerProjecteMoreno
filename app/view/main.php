@@ -18,7 +18,12 @@
         if (isset($view) && file_exists($view)) { // Include the specific view that was set by the controller
             include_once $view;
         } else {
-            $data = ['error_code' => 404];
+            // Fallback: show a 404 error using the Error model
+            if (!class_exists('Error')) {
+                include_once APP_PATH . 'model/Error.php';
+            }
+            $error = new Error(404);
+            $data = ['error' => $error];
             include_once VIEW_PATH . 'errors/error.php';
         }
         ?>
