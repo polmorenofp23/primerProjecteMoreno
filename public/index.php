@@ -16,6 +16,7 @@ define('MODEL_PATH', APP_PATH . 'model/');
 define('DAO_PATH', APP_PATH . 'DAO/');
 define('UTIL_PATH', APP_PATH . 'util/');
 
+include_once MODEL_PATH . 'Error.php';      // Include Error model globally
 
 if (isset($_GET['controller'])) {
 
@@ -49,13 +50,11 @@ if (isset($_GET['controller'])) {
                 exit;
             }
         } else {
-            // Class not found - show error view with main layout
             header('Location: ?controller=Error&code=404&message=Class+not+found');
             exit;
         }
     }
 } else {
-    // No controller specified - show error view with main layout
     header('Location: ?controller=Error&code=400&message=Controller+parameter+is+missing');
     exit;
 }
