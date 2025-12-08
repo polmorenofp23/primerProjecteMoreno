@@ -10,7 +10,7 @@ class ProductController
      */
     public function show()
     {
-        $view = VIEW_PATH . 'product/show.php';
+        $view = 'product/show.php';
         
         if (!isset($_GET["id"])) {
             header('Location: ?controller=Product&action=index');
@@ -40,7 +40,7 @@ class ProductController
      */
     public function index()
     {
-        $view = VIEW_PATH . 'product/index.php';
+        $view = 'product/index.php';
         
         $productDAO = new ProductDAO();
         

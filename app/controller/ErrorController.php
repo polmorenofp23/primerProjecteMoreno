@@ -14,7 +14,7 @@ class ErrorController
     {
         $errorCode = isset($_GET['code']) ? (int)$_GET['code'] : 404;
         $message = isset($_GET['message']) ? urldecode($_GET['message']) : null;
-        $view = VIEW_PATH . 'errors/error.php';
+        $view = 'errors/error.php';
 
         $error = new AppError($errorCode, $message);
         $data = ['error' => $error];

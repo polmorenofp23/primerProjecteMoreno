@@ -11,7 +11,7 @@ class AuthController
      */
     public function showLogin()
     {
-        $view = VIEW_PATH . 'auth/login.php';
+        $view = 'auth/login.php';
         include_once VIEW_PATH . 'main.php';
     }
 
@@ -31,7 +31,7 @@ class AuthController
         if ($usrKey === '' || $password === '') {
             $error = new Error(400, 'Username or email and password are required.');
             $data = ['error' => $error];
-            $view = VIEW_PATH . 'auth/login.php';
+            $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
@@ -43,7 +43,7 @@ class AuthController
             $exists = $dao->getUserByUsername($usrKey) || $dao->getUserByEmail($usrKey);
             $err = $exists ? new Error(401, 'Invalid credentials.') : new Error(404, 'User not found.');
             $data = ['error' => $err];
-            $view = VIEW_PATH . 'auth/login.php';
+            $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
@@ -61,7 +61,7 @@ class AuthController
      */
     public function showRegister()
     {
-        $view = VIEW_PATH . 'auth/register.php';
+        $view = 'auth/register.php';
         include_once VIEW_PATH . 'main.php';
     }
 
@@ -83,7 +83,7 @@ class AuthController
         if ($username === '' || $email === '' || $password === '') {
             $err = new AppError(422, 'Username, email and password are required.');
             $data = ['error' => $err];
-            $view = VIEW_PATH . 'auth/register.php';
+            $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
@@ -92,14 +92,14 @@ class AuthController
         if (Auth::existsByUsername($username)) {
             $err = new AppError(409, 'Username already taken.');
             $data = ['error' => $err];
-            $view = VIEW_PATH . 'auth/register.php';
+            $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
         if (Auth::existsByEmail($email)) {
             $err = new AppError(409, 'Email already registered.');
             $data = ['error' => $err];
-            $view = VIEW_PATH . 'auth/register.php';
+            $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
@@ -117,7 +117,7 @@ class AuthController
         if (!$id) {
             $err = new AppError(500, 'Failed to create user.');
             $data = ['error' => $err];
-            $view = VIEW_PATH . 'auth/register.php';
+            $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
