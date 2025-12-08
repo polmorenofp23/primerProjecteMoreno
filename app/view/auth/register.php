@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="/css/auth-styles.css">
 <div class="container-fluid register-page auth-bg">
-        
-    <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>   
-    
+
+    <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>
+
     <div class="container-fluid d-flex align-items-center justify-content-center">
         <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-md-8 col-lg-6 my-5">
             <div class="card-header">
@@ -10,99 +10,128 @@
             </div>
 
             <!-- Register Form -->
-            <div class="card-body mt-4 w-100">
-                <form method="POST" action="?controller=Auth&action=doRegister" class="bg-white p-4 rounded">
+            <div class="card-body px-5 pt-3 w-100">
+                <form method="POST" action="?controller=Auth&action=doRegister" class="d-flex flex-column" novalidate>
+                    <legend class="form-label">User Identifier</legend>
                     <!-- First Name -->
-                    <div class="mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstName" name="first_name" 
-                            placeholder="John" required>
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3" id="firstname" name="first_name"
+                                placeholder="First name" required>
+                        </div>
                     </div>
 
                     <!-- Last Name -->
-                    <div class="mb-3">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" name="last_name" 
-                            placeholder="Doe">
-                    </div>
-
-                    <!-- Email -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" 
-                            placeholder="your@email.com" required>
-                        <div class="form-text">We'll never share your email with anyone else.</div>
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3" id="lastname" name="last_name"
+                                placeholder="Last name">
+                        </div>
                     </div>
 
                     <!-- Username -->
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" 
-                            placeholder="yourUsername" required>
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3" id="username" name="username"
+                                placeholder="Username" required>
+                        </div>
                     </div>
 
-                    <!-- Date of Birth -->
-                    <div class="mb-3">
-                        <label class="form-label">Date of Birth</label>
-                        <div class="row">
-                            <div class="col-4">
-                                <input type="number" class="form-control" name="birth_day" 
-                                    placeholder="DD" min="1" max="31">
-                            </div>
-                            <div class="col-4">
-                                <input type="number" class="form-control" name="birth_month" 
-                                    placeholder="MM" min="1" max="12">
-                            </div>
-                            <div class="col-4">
-                                <input type="number" class="form-control" name="birth_year" 
-                                    placeholder="YYYY" min="1900" max="2010">
-                            </div>
+                    <!-- Email -->
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-group d-flex flex-column justify-content-center">
+                            <input type="email" class="form-control w-100 p-3" id="email" name="email"
+                                placeholder="Email" required>
+                        </div>
+                    </div>
+
+                     <!-- Phone -->
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-group">
+                            <input type="tel" class="form-control p-3" id="phone" name="phone"
+                                placeholder="Phone number">
                         </div>
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" 
-                                placeholder="Password" required>
-                            <span class="input-group-text cursor-pointer" onclick="togglePassword('password')">
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-password">
+                            <input type="password" class="form-control p-3" id="password" name="password"
+                                placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" id="togglePasswordBtn" aria-label="Toggle password visibility">
                                 <i class="bi bi-eye"></i>
-                            </span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Confirm Password -->
-                    <div class="mb-3">
-                        <label for="passwordConfirm" class="form-label">Confirm Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="passwordConfirm" 
-                                name="password_confirm" placeholder="Confirm Password" required>
-                            <span class="input-group-text cursor-pointer" onclick="togglePassword('passwordConfirm')">
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <div class="input-password">
+                            <input type="password" class="form-control p-3" id="password_confirm" name="password_confirm"
+                                placeholder="Confirm your password" required>
+                            <button type="button" class="password-toggle" id="togglePasswordConfirmBtn" aria-label="Toggle password confirmation visibility">
                                 <i class="bi bi-eye"></i>
-                            </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <legend class="form-label">Date of Birth</legend>
+                        <div class="input-group row g-2">
+                            <div class="col-4">
+                                <input type="number" class="form-control p-3" name="birth_day"
+                                    placeholder="DD" min="1" max="31">
+                            </div>
+                            <div class="col-4">
+                                <input type="number" class="form-control p-3" name="birth_month"
+                                    placeholder="MM" min="1" max="12">
+                            </div>
+                            <div class="col-4">
+                                <input type="number" class="form-control p-3" name="birth_year"
+                                    placeholder="YYYY" min="1900" max="2026">
+                            </div>
+                            <!--<input type="date" class="form-control p-3" name="birth_date" id="birth_date"
+                                placeholder="YYYY-MM-DD">-->
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group my-2 d-flex flex-column justify-content-center">
+                        <legend class="form-label">Address</legend>
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3 mb-2" id="street" name="address_street"
+                                placeholder="Street">
+                            <div class="d-flex g-2">
+                                <input type="text" class="form-control p-3 me-2" id="city" name="address_city"
+                                    placeholder="City">
+                                <input type="text" class="form-control p-3 me-2" id="postcode" name="address_postcode"
+                                    placeholder="Postcode">
+                                <input type="text" class="form-control p-3" id="country" name="address_country"
+                                    placeholder="Country">
+                            </div>
                         </div>
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn-red w-100">
+                    <button type="submit" class="btn-red my-4 w-100">
                         REGISTER
                     </button>
 
                     <!-- Terms & Login Link -->
-                    <div class="text-center mt-3">
-                        <small class="text-muted">
-                            BY REGISTERING AND USING THIS WEBSITE, YOU AGREE TO OUR
-                            <a href="#" class="text-danger" style="text-decoration: none;">PRIVACY POLICY</a>.
+                    <div class="text-center my-2">
+                        <small>
+                            ALREADY HAVE AN ACCOUNT?
+                            <a href="?controller=Auth&action=showLogin" class="red-link">
+                                SIGN IN HERE
+                            </a>
                         </small>
                     </div>
 
-                    <div class="text-center mt-2">
-                        <small>
-                            ALREADY HAVE AN ACCOUNT?
-                            <a href="?controller=Auth&action=showLogin" class="text-danger" style="text-decoration: none; font-weight: bold;">
-                                SIGN IN HERE
-                            </a>
+                    <div class="text-center my-2">
+                        <small class="text-muted">
+                            BY REGISTERING AND USING THIS WEBSITE, YOU AGREE TO OUR
+                            <a href="#" class="red-link">PRIVACY POLICY</a>.
                         </small>
                     </div>
                 </form>
@@ -111,3 +140,30 @@
     </div>
 </div>
 <script src="/js/auth-utils.js"></script>
+<script>
+    
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', function () {
+            togglePassword('password', this);
+        });
+    }
+
+    const togglePasswordConfirmBtn = document.getElementById('togglePasswordConfirmBtn');
+    if (togglePasswordConfirmBtn) {
+        togglePasswordConfirmBtn.addEventListener('click', function () {
+            togglePassword('password_confirm', this);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.register-page form');
+        if (!form) return;
+            
+        try { // Preguntar porque me pide removeEventListener antes de haver el addEventListener
+            form.removeEventListener('submit', validateForm);
+        } catch (e) {}
+        form.addEventListener('submit', validateForm);
+    });
+
+</script>

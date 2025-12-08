@@ -24,25 +24,42 @@ class AuthController
             header('Location: ?controller=Auth&action=showLogin');
             exit;
         }
-
-        $usrKey = trim($_POST['usrKey'] ?? '');
+        // Read POST (use lowercase names to match the form)
+        $usrKey = trim($_POST['usrkey'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        if ($usrKey === '' || $password === '') {
-            $error = new Error(400, 'Username or email and password are required.');
-            $data = ['error' => $error];
+        // Server-side validation (inline)
+        $errors = [];
+
+        if ($usrKey === '') {
+            $errors['usrkey'] = 'Your username or email is required.';
+        } else {
+            if (strpos($usrKey, '@') !== false && !filter_var($usrKey, FILTER_VALIDATE_EMAIL)) {
+                $errors['usrkey'] = 'Please enter a valid email address.';
+            }
+        }
+
+        if ($password === '') {
+            $errors['password'] = 'The Password field is required.';
+        }
+
+        // If validation failed, re-render login with errors and old values
+        if (!empty($errors)) {
+            $old = ['usrkey' => $usrKey];
             $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
 
+        // Try to authenticate
         $user = Auth::authenticate($usrKey, $password);
         if ($user === null) {
-            // Determine if user exists to provide a better error code
+            // Determine if user exists to provide a better message
             $dao = new UserDAO();
             $exists = $dao->getUserByUsername($usrKey) || $dao->getUserByEmail($usrKey);
-            $err = $exists ? new Error(401, 'Invalid credentials.') : new Error(404, 'User not found.');
-            $data = ['error' => $err];
+            $errors = [];
+            $errors['general'] = $exists ? 'Invalid credentials.' : 'User not found.';
+            $old = ['usrkey' => $usrKey];
             $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
@@ -78,10 +95,56 @@ class AuthController
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $passwordConfirm = $_POST['password_confirm'] ?? '';
+        $firstName = trim($_POST['first_name'] ?? '');
+        $lastName = trim($_POST['last_name'] ?? null);
+        $birthDay = trim($_POST['birth_day'] ?? '');
+        $birthMonth = trim($_POST['birth_month'] ?? '');
+        $birthYear = trim($_POST['birth_year'] ?? '');
 
-        // Make a basic validation thajt the user doesn't match with any existing user
+        $birthDate = null;
+        if ($birthYear !== '' || $birthMonth !== '' || $birthDay !== '') {
+            if ($birthYear === '' || $birthMonth === '' || $birthDay === '') {
+                $err = new AppError(422, 'Incomplete birth date.');
+                $data = ['error' => $err];
+                $view = 'auth/register.php';
+                include_once VIEW_PATH . 'main.php';
+                return;
+            }
+
+            // normalize to integers
+            $y = (int)$birthYear;
+            $m = (int)$birthMonth;
+            $d = (int)$birthDay;
+
+            if (!checkdate($m, $d, $y)) {
+                $err = new AppError(422, 'Invalid birth date.');
+                $data = ['error' => $err];
+                $view = 'auth/register.php';
+                include_once VIEW_PATH . 'main.php';
+                return;
+            }
+
+            $birthDate = sprintf('%04d-%02d-%02d', $y, $m, $d);     // format as YYYY-MM-DD with zero-padding
+        }
+
+        $phone = trim($_POST['phone'] ?? null);
+        $street = trim($_POST['address_street'] ?? null);
+        $city = trim($_POST['address_city'] ?? null);
+        $postcode = trim($_POST['address_postcode'] ?? null);
+        $country = trim($_POST['address_country'] ?? null);
+
+        // Basic validation
         if ($username === '' || $email === '' || $password === '') {
             $err = new AppError(422, 'Username, email and password are required.');
+            $data = ['error' => $err];
+            $view = 'auth/register.php';
+            include_once VIEW_PATH . 'main.php';
+            return;
+        }
+
+        if ($password !== $passwordConfirm) {
+            $err = new AppError(422, 'Password confirmation does not match.');
             $data = ['error' => $err];
             $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
@@ -109,7 +172,27 @@ class AuthController
         $user->setUsername($username);
         $user->setRole('client');
         $user->setEmail($email);
-        $user->setFirstName($username);
+        $user->setFirstName($firstName ?: $username);
+        $user->setLastName($lastName ?: null);
+
+        // phone
+        $user->setPhone($phone ?: null);
+
+        // address as associative array (UserDAO will encode)
+        $address = null;
+        if ($street || $city || $postcode || $country) {
+            $address = [
+                'street' => $street ?: '',
+                'city' => $city ?: '',
+                'postcode' => $postcode ?: '',
+                'country' => $country ?: ''
+            ];
+            $user->setAddress($address);
+        }
+
+        // birth date - expect YYYY-MM-DD or null
+        $user->setBirthDate($birthDate ?: null);
+
         $user->setRegisteredAt(date('Y-m-d H:i:s'));
         $user->setAndHashPassword($password);
 

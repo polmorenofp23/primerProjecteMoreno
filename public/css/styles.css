@@ -150,6 +150,13 @@ p {
     margin: 0 0 1rem;
 }
 
+legend{
+    font-size: 24px;
+    font-family: var(--font-Karla);
+    font-weight: var(--fw-medium);
+    color: var(--primary-dark-red);
+}
+
 /* BUTTON STYLES */
 .btn-red,
 .btn-white {

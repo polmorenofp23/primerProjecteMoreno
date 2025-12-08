@@ -20,10 +20,6 @@
     color: var(--primary-dark-red);
 }
 
-.login-page {
-
-}
-
 .form-card {
     max-width: 600px;
 }
@@ -31,12 +27,33 @@
 .form-group {
 }
 
-.input-group input::placeholder,
-.input-group textarea::placeholder {
+.input-group input:focus,
+.input-password input:focus {
+    border: 2px solid var(--primary-black);
+}
+.input-group input::placeholder, 
+.input-group textarea::placeholder,
+.input-password input::placeholder {
     color: var(--primary-grey);
-    opacity: 1; /* ensure full color, browsers may apply reduced opacity */
 }
 
 .form-control {
     font-size: 14px;
 }
+
+/* Minimal styles to place the eye icon inside the input border */
+.input-password { position: relative; }
+.input-password .form-control { padding-right: 3rem; }
+.input-password .password-toggle {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+.input-password .password-toggle:focus { outline: none; box-shadow: none; }
+
+.input-feedback p { color: #ff0000; font-size: 16px;}
