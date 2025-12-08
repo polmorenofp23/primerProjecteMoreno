@@ -1,0 +1,42 @@
+.auth-bg {
+    background: var(--primary-dark-red);
+    background-image: url('/assets/img/bg/bg-dark-red.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+.auth-logo {
+    width: 110px;
+    height: auto;
+}
+
+.auth-form-title{
+    font-family: var(--font-Sting);
+    font-weight: var(--fw-medium);
+    font-size: 30px;
+    color: var(--primary-dark-red);
+}
+
+.login-page {
+
+}
+
+.form-card {
+    max-width: 600px;
+}
+
+.form-group {
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: var(--primary-grey);
+    opacity: 1; /* ensure full color, browsers may apply reduced opacity */
+}
+
+.form-control {
+    font-size: 14px;
+}

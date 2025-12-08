@@ -1,6 +1,6 @@
 <?php
 
-include_once APP_PATH . 'model/Error.php';
+include_once APP_PATH . 'model/AppError.php';
 
 class ErrorController
 {
@@ -16,7 +16,7 @@ class ErrorController
         $message = isset($_GET['message']) ? urldecode($_GET['message']) : null;
         $view = VIEW_PATH . 'errors/error.php';
 
-        $error = new Error($errorCode, $message);
+        $error = new AppError($errorCode, $message);
         $data = ['error' => $error];
 
         include_once VIEW_PATH . 'main.php';

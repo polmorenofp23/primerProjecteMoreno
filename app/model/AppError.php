@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Error model to represent standardized error information.
+ * AppError model to represent standardized error information.
  *
  * Properties:
  *  - error_code (int)
@@ -9,7 +9,7 @@
  *  - description (string)
  *  - message (?string) : optional developer/user message
  */
-class Error
+class AppError
 {
     private int $error_code;
     private string $name;
@@ -63,9 +63,9 @@ class Error
         $defaultDescription = 'An unexpected error occurred.';
 
         if (isset(self::$errorMessages[$code]) && is_array(self::$errorMessages[$code])) {
-            $entry = self::$errorMessages[$code];
-            $this->name = $entry['name'] ?? $defaultName;
-            $this->description = $entry['description'] ?? $defaultDescription;
+            $error = self::$errorMessages[$code];
+            $this->name = $error['name'] ?? $defaultName;
+            $this->description = $error['description'] ?? $defaultDescription;
         } else {
             $this->name = $defaultName;
             $this->description = $defaultDescription;

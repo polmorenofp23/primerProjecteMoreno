@@ -10,10 +10,10 @@ if (isset($data['error']) && is_object($data['error'])) {
 } else {
     $code = isset($data['error_code']) ? (int)$data['error_code'] : 404;
     $msg = isset($data['message']) ? $data['message'] : null;
-    if (!class_exists('Error')) {
-        include_once APP_PATH . 'model/Error.php';
+    if (!class_exists('AppError')) {
+        include_once APP_PATH . 'model/AppError.php';
     }
-    $errorModel = new Error($code, $msg);
+    $errorModel = new AppError($code, $msg);
 }
 
 $errorCode = $errorModel->getCode();

@@ -16,7 +16,7 @@ define('MODEL_PATH', APP_PATH . 'model/');
 define('DAO_PATH', APP_PATH . 'DAO/');
 define('UTIL_PATH', APP_PATH . 'util/');
 
-include_once MODEL_PATH . 'Error.php';      // Include Error model globally
+include_once MODEL_PATH . 'AppError.php';      // Include AppError model globally
 
 if (isset($_GET['controller'])) {
 

@@ -8,21 +8,20 @@
     <!-- css Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header><?php include_once VIEW_PATH . '/partials/header.php'; ?></header>
 
-    <div class="container">
+    <div class="container-fluid px-0">
         <?php 
-        if (isset($view) && file_exists($view)) { // Include the specific view that was set by the controller
+        if (isset($view) && file_exists($view)) {   // Include the specific view that was set by the controller
             include_once $view;
         } else {
-            // Fallback: show a 404 error using the Error model
-            if (!class_exists('Error')) {
-                include_once APP_PATH . 'model/Error.php';
+            if (!class_exists('AppError')) {    // Fallback: show a 404 error using the AppError model
+                include_once APP_PATH . 'model/AppError.php';
             }
-            $error = new Error(404);
+            $error = new AppError(404);
             $data = ['error' => $error];
             include_once VIEW_PATH . 'errors/error.php';
         }
