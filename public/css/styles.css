@@ -218,19 +218,19 @@ p {
     pointer-events: none;
 }
 
-.btn-red .icon,
-.btn-white .icon {
+.btn-red i,
+.btn-white i {
     display: inline-block;
     line-height: 0;
     height: 20px;
     width: auto;
 }
 
-.btn-white .icon {
+.btn-white i {
     color: var(--primary-red);
 }
 
-.btn-white:disabled .icon {
+.btn-white:disabled i {
     color: var(--secondary-grey);
 }
 

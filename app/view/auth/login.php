@@ -4,7 +4,7 @@
     <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>               
 
     <div class="container-fluid d-flex align-items-center justify-content-center">
-        <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-md-8 col-lg-6">
+        <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-md-8 col-lg-6 my-5">
             <div class="card-header">
                 <h2 class="auth-form-title">LOG IN</h2>
             </div>
@@ -26,6 +26,9 @@
                         <div class="input-group">
                             <input type="password" class="form-control p-3" id="password" name="password" 
                                 placeholder="Enter your password" required>
+                            <span class="input-group-text cursor-pointer" onclick="togglePassword('password')">
+                                <i class="bi bi-eye"></i>
+                            </span>
                         </div>
                     </div>
 
@@ -48,3 +51,4 @@
         </div>
     </div>
 </div>
+<script src="/js/auth-utils.js"></script>
