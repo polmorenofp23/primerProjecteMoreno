@@ -43,9 +43,12 @@ class AuthController
             $errors['password'] = 'The Password field is required.';
         }
 
-        // If validation failed, re-render login with errors and old values
         if (!empty($errors)) {
             $old = ['usrkey' => $usrKey];
+            // Aggregate validation messages into a single AppError for the view
+            $msg = implode(' ', $errors);
+            $err = new AppError(422, $msg);
+            $data = ['error' => $err];
             $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
@@ -54,12 +57,13 @@ class AuthController
         // Try to authenticate
         $user = Auth::authenticate($usrKey, $password);
         if ($user === null) {
-            // Determine if user exists to provide a better message
             $dao = new UserDAO();
             $exists = $dao->getUserByUsername($usrKey) || $dao->getUserByEmail($usrKey);
-            $errors = [];
-            $errors['general'] = $exists ? 'Invalid credentials.' : 'User not found.';
             $old = ['usrkey' => $usrKey];
+            $code = $exists ? 401 : 404;
+            $msg = $exists ? 'Invalid credentials.' : 'User not found.';
+            $err = new AppError($code, $msg);
+            $data = ['error' => $err];
             $view = 'auth/login.php';
             include_once VIEW_PATH . 'main.php';
             return;
@@ -103,7 +107,7 @@ class AuthController
         $birthYear = trim($_POST['birth_year'] ?? '');
 
         $birthDate = null;
-        if ($birthYear !== '' || $birthMonth !== '' || $birthDay !== '') {
+        if ($birthYear !== '' || $birthMonth !== '' || $birthDay !== '') {  // Normalize data into date format (YYYY-MM-DD)
             if ($birthYear === '' || $birthMonth === '' || $birthDay === '') {
                 $err = new AppError(422, 'Incomplete birth date.');
                 $data = ['error' => $err];
@@ -112,7 +116,6 @@ class AuthController
                 return;
             }
 
-            // normalize to integers
             $y = (int)$birthYear;
             $m = (int)$birthMonth;
             $d = (int)$birthDay;
@@ -125,7 +128,7 @@ class AuthController
                 return;
             }
 
-            $birthDate = sprintf('%04d-%02d-%02d', $y, $m, $d);     // format as YYYY-MM-DD with zero-padding
+            $birthDate = sprintf('%04d-%02d-%02d', $y, $m, $d);
         }
 
         $phone = trim($_POST['phone'] ?? null);
@@ -134,7 +137,7 @@ class AuthController
         $postcode = trim($_POST['address_postcode'] ?? null);
         $country = trim($_POST['address_country'] ?? null);
 
-        // Basic validation
+        // Basic validations
         if ($username === '' || $email === '' || $password === '') {
             $err = new AppError(422, 'Username, email and password are required.');
             $data = ['error' => $err];
@@ -190,9 +193,7 @@ class AuthController
             $user->setAddress($address);
         }
 
-        // birth date - expect YYYY-MM-DD or null
         $user->setBirthDate($birthDate ?: null);
-
         $user->setRegisteredAt(date('Y-m-d H:i:s'));
         $user->setAndHashPassword($password);
 
@@ -205,7 +206,6 @@ class AuthController
             return;
         }
 
-        // Registration successful - redirect to login with a success message
         header('Location: ?controller=Auth&action=showLogin&message=registered');
         exit;
     }

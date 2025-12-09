@@ -113,6 +113,19 @@
                         </div>
                     </div>
 
+                    <?php // Show the error message if exists
+                        if (isset($data) && !empty($data['error'])) {
+                            $err = $data['error'];
+                            if (is_object($err)) {
+                                $msg = $err->getMessage();
+                            } else {
+                                $msg = (string)$err;
+                            }
+                            $msg = htmlspecialchars($msg, ENT_QUOTES, 'UTF-8');
+                            echo "<div class=\"input-feedback w-100\"><p>{$msg}</p></div>";
+                        }
+                    ?>
+
                     <!-- Submit Button -->
                     <button type="submit" class="btn-red my-4 w-100">
                         REGISTER

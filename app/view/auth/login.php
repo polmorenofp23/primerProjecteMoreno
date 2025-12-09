@@ -16,7 +16,8 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="usrkey" name="usrkey"
-                                placeholder="Enter your username or email" required>
+                                placeholder="Enter your username or email" required value="<?= htmlspecialchars(
+                                    $old['usrkey'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                         </div>
                     </div>
 
@@ -30,6 +31,19 @@
                             </button>
                         </div>
                     </div>
+
+                    <?php // Show the error message if exists
+                        if (isset($data) && !empty($data['error'])) {
+                            $err = $data['error'];
+                            if (is_object($err)) {
+                                $msg = $err->getMessage();
+                            } else {
+                                $msg = (string)$err;
+                            }
+                            $msg = htmlspecialchars($msg, ENT_QUOTES, 'UTF-8');
+                            echo "<div class=\"input-feedback w-100\"><p>{$msg}</p></div>";
+                        }
+                    ?>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn-red w-100 mt-5 mb-4">
