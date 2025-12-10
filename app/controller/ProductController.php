@@ -28,7 +28,7 @@ class ProductController
         }
         
         if (!$product) {
-            header('Location: ?controller=Error&code=404&message=Product+not+found');
+            header('Location: ?controller=Error&action=show&code=404&message=Product+not+found');
             exit;
         }
         
@@ -40,11 +40,8 @@ class ProductController
      */
     public function index()
     {
-        $view = 'product/index.php';
-        
+        $view = 'product/index.php'; 
         $productDAO = new ProductDAO();
-        
-        // Build filters from query parameters and delegate to unified DAO method
         $filters = [];
 
         // dish_type - accept comma separated list or single value
@@ -79,7 +76,7 @@ class ProductController
             }
         }
 
-        // allergens: contains_allergen / without_allergen - accept csv or single
+        // allergens: contains_allergen / without_allergen (accept csv or single)
         if (isset($_GET['contains_allergen']) && $_GET['contains_allergen'] !== '') {
             $val = trim($_GET['contains_allergen']);
             if (strpos($val, ',') !== false) {
@@ -97,7 +94,7 @@ class ProductController
             }
         }
 
-        // ids - comma separated list of product ids
+        // ids (accept csv or single)
         if (isset($_GET['ids']) && $_GET['ids'] !== '') {
             $filters['id'] = array_map('intval', array_map('trim', explode(',', $_GET['ids'])));
         }

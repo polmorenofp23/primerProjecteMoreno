@@ -75,6 +75,15 @@ class SessionUtils
 		$dao = new UserDAO();
 		return $dao->getUserById($id);
 	}
+	
+	/**
+	 * Returns whether the logged user is an admin
+	 */
+	public static function isAdmin(): bool
+	{
+		$user = self::getSessionUser();
+		return $user !== null && $user->getRole() === 'admin';
+	}
 
 	/**
 	 * Destroys the session completely

@@ -44,7 +44,7 @@ function validateForm(e) {
 		const group = field.closest('.form-group');
 		let feedbackDiv = group ? group.querySelector('.input-feedback') : null;
 
-		if (!feedbackDiv && group) {        // if feedback div missing, create it so we always have a place to show the message
+		if (!feedbackDiv && group) {
 			feedbackDiv = document.createElement('div');
 			feedbackDiv.className = 'input-feedback';
 			group.appendChild(feedbackDiv);
@@ -58,11 +58,7 @@ function validateForm(e) {
 			if (feedbackDiv) {
 				feedbackDiv.innerHTML = '<p class="mb-0">' + escapeHtml(message) + '</p>';
 			}
-
-			//field.classList.add('is-invalid');
 			if (!firstInvalid) firstInvalid = field;
-		} else {
-			//field.classList.remove('is-invalid');
 		}
 	});
 

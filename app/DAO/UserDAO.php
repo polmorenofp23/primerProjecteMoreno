@@ -112,8 +112,7 @@ class UserDAO
 
     // CREATE METHOD
     /**
-     * Create a new user. Optionally pass a plain password which will be hashed.
-     * Returns inserted id or false on failure.
+     * Create a new user
      */
     public function createUser(User $user, ?string $plainPassword = null)
     {
@@ -134,7 +133,6 @@ class UserDAO
         $stmt->bindValue(':password_hash', $user->getPasswordHash(), PDO::PARAM_STR);
         $stmt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
 
-        // nullable fields: bind NULL explicitly when model has null
         if ($user->getLastName() === null) {
             $stmt->bindValue(':last_name', null, PDO::PARAM_NULL);
         } else {
@@ -164,7 +162,6 @@ class UserDAO
         $stmt->execute();
         $id = $this->conn->lastInsertId();
 
-        // If insert succeeded, set the id back on the model for caller convenience
         if ($id) {
             $user->setId((int)$id);
         }
@@ -177,7 +174,6 @@ class UserDAO
     // UPDATE METHOD
     /**
      * Update an existing user record from the provided User model.
-     * Returns true if rows were affected.
      */
     public function updateUser(User $user): bool
     {
@@ -252,7 +248,4 @@ class UserDAO
 
         return $deleted;
     }
-
-    // Authentication helpers have been moved to `app/util/Auth.php`.
-    // Use Auth::authenticate(), Auth::existsByUsername(), Auth::existsByEmail() instead.
 }

@@ -1,0 +1,15 @@
+.main-header{ /* Header auth links overlay: keep links visually on top without affecting layout */
+    position: relative; 
+    background-color: var(--secondary-red);
+}
+
+.bc-logo {
+    width: 110px;
+    height: auto;
+}
+
+nav.main-navbar {
+    font-family: var(--font-Sting);
+    font-weight: var(--fw-regular);
+    font-size: 18px ;
+}

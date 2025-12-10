@@ -4,56 +4,20 @@
     <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>
 
     <div class="container-fluid d-flex align-items-center justify-content-center">
-        <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-sm-10 my-5">
+        <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-md-8 col-lg-6 my-5">
             <div class="card-header">
-                <h2 class="auth-form-title">PROFILE</h2>
+                <h2 class="auth-form-title">REGISTER</h2>
             </div>
 
-
+            <!-- Register Form -->
             <div class="card-body px-5 pt-3 w-100">
-                <?php
-                    $user = $data['user'];
-
-                    $userId = $user->getId();
-                    $first = $user->getFirstName() ?? '';
-                    $last = $user->getLastName() ?? '';
-                    $username = $user->getUsername() ?? '';
-                    $email = $user->getEmail() ?? '';
-                    $phone = $user->getPhone() ?? '';
-
-                    $street = $city = $postcode = $country = '';
-                    if (method_exists($user, 'getAddress')) {
-                        $addr = $user->getAddress();
-                        if (is_array($addr)) {
-                            $street = $addr['street'] ?? '';
-                            $city = $addr['city'] ?? '';
-                            $postcode = $addr['postcode'] ?? '';
-                            $country = $addr['country'] ?? '';
-                        }
-                    }
-
-                    $birth_day = $birth_month = $birth_year = '';
-                    if ($user->getBirthDate()) {
-                        $parts = explode('-', $user->getBirthDate());
-                        if (count($parts) === 3) {
-                            $birth_year = $parts[0];
-                            $birth_month = $parts[1];
-                            $birth_day = $parts[2];
-                        }
-                    }
-                ?>
-
-                <form method="POST" action="?controller=User&action=update" class="d-flex flex-column" novalidate>
-                    <!-- Spoof PUT method -->
-                    <input type="hidden" name="_method" value="PUT">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($userId, ENT_QUOTES, 'UTF-8'); ?>">
-
+                <form method="POST" action="?controller=Auth&action=doRegister" class="d-flex flex-column" novalidate>
                     <legend class="form-label">User Identifier</legend>
                     <!-- First Name -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="firstname" name="first_name"
-                                placeholder="First name" value="<?php echo htmlspecialchars($first, ENT_QUOTES, 'UTF-8'); ?>" required>
+                                placeholder="First name" required>
                         </div>
                     </div>
 
@@ -61,7 +25,7 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="lastname" name="last_name"
-                                placeholder="Last name" value="<?php echo htmlspecialchars($last, ENT_QUOTES, 'UTF-8'); ?>">
+                                placeholder="Last name">
                         </div>
                     </div>
 
@@ -69,7 +33,7 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="username" name="username"
-                                placeholder="Username" value="<?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?>" required>
+                                placeholder="Username" required>
                         </div>
                     </div>
 
@@ -77,7 +41,7 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group d-flex flex-column justify-content-center">
                             <input type="email" class="form-control w-100 p-3" id="email" name="email"
-                                placeholder="Email" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>" required>
+                                placeholder="Email" required>
                         </div>
                     </div>
 
@@ -85,15 +49,15 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="tel" class="form-control p-3" id="phone" name="phone"
-                                placeholder="Phone number" value="<?php echo htmlspecialchars($phone, ENT_QUOTES, 'UTF-8'); ?>">
+                                placeholder="Phone number">
                         </div>
                     </div>
 
-                    <!-- Password  -->
+                    <!-- Password -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-password">
                             <input type="password" class="form-control p-3" id="password" name="password"
-                                placeholder="Enter new password (leave blank to keep current)">
+                                placeholder="Enter your password" required>
                             <button type="button" class="password-toggle" id="togglePasswordBtn" aria-label="Toggle password visibility">
                                 <i class="bi bi-eye"></i>
                             </button>
@@ -104,7 +68,7 @@
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-password">
                             <input type="password" class="form-control p-3" id="password_confirm" name="password_confirm"
-                                placeholder="Confirm new password">
+                                placeholder="Confirm your password" required>
                             <button type="button" class="password-toggle" id="togglePasswordConfirmBtn" aria-label="Toggle password confirmation visibility">
                                 <i class="bi bi-eye"></i>
                             </button>
@@ -117,16 +81,18 @@
                         <div class="input-group row g-2">
                             <div class="col-4">
                                 <input type="number" class="form-control p-3" name="birth_day"
-                                    placeholder="DD" min="1" max="31" value="<?php echo htmlspecialchars($birth_day, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="DD" min="1" max="31">
                             </div>
                             <div class="col-4">
                                 <input type="number" class="form-control p-3" name="birth_month"
-                                    placeholder="MM" min="1" max="12" value="<?php echo htmlspecialchars($birth_month, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="MM" min="1" max="12">
                             </div>
                             <div class="col-4">
                                 <input type="number" class="form-control p-3" name="birth_year"
-                                    placeholder="YYYY" min="1900" max="2026" value="<?php echo htmlspecialchars($birth_year, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="YYYY" min="1900" max="2026">
                             </div>
+                            <!--<input type="date" class="form-control p-3" name="birth_date" id="birth_date"
+                                placeholder="YYYY-MM-DD">-->
                         </div>
                     </div>
 
@@ -135,14 +101,14 @@
                         <legend class="form-label">Address</legend>
                         <div class="input-group">
                             <input type="text" class="form-control p-3 mb-2" id="street" name="address_street"
-                                placeholder="Street" value="<?php echo htmlspecialchars($street, ENT_QUOTES, 'UTF-8'); ?>">
+                                placeholder="Street">
                             <div class="d-flex g-2">
                                 <input type="text" class="form-control p-3 me-2" id="city" name="address_city"
-                                    placeholder="City" value="<?php echo htmlspecialchars($city, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="City">
                                 <input type="text" class="form-control p-3 me-2" id="postcode" name="address_postcode"
-                                    placeholder="Postcode" value="<?php echo htmlspecialchars($postcode, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="Postcode">
                                 <input type="text" class="form-control p-3" id="country" name="address_country"
-                                    placeholder="Country" value="<?php echo htmlspecialchars($country, ENT_QUOTES, 'UTF-8'); ?>">
+                                    placeholder="Country">
                             </div>
                         </div>
                     </div>
@@ -162,14 +128,8 @@
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn-red my-4 w-100">
-                        UPDATE PROFILE
+                        REGISTER
                     </button>
-
-                    <div class="text-center my-2">
-                        <small class="text-muted">
-                            Leave password fields blank to keep your current password
-                        </small>
-                    </div>
                 </form>
             </div>
         </div>
@@ -177,6 +137,7 @@
 </div>
 <script src="/js/auth-utils.js"></script>
 <script>
+    
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     if (togglePasswordBtn) {
         togglePasswordBtn.addEventListener('click', function () {
@@ -194,7 +155,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('.register-page form');
         if (!form) return;
-        try { form.removeEventListener('submit', validateForm); } catch (e) {}
+            
+        try { // Preguntar porque me pide removeEventListener antes de haver el addEventListener
+            form.removeEventListener('submit', validateForm);
+        } catch (e) {}
         form.addEventListener('submit', validateForm);
     });
+
 </script>

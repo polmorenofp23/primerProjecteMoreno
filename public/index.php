@@ -10,13 +10,14 @@ define('LOGS_PATH', BASE_PATH . 'logs/');
 define('PUBLIC_PATH', BASE_PATH . 'public/');
 
 // ----- APP Paths
-define('CONTROLLER_BASE_PATH', APP_PATH . 'controller/');
+define('CONTROLLER_PATH', APP_PATH . 'controller/');
 define('VIEW_PATH', APP_PATH . 'view/');
 define('MODEL_PATH', APP_PATH . 'model/');
 define('DAO_PATH', APP_PATH . 'DAO/');
 define('UTIL_PATH', APP_PATH . 'util/');
 
 include_once MODEL_PATH . 'AppError.php';      // Include AppError model globally
+include_once UTIL_PATH . 'SessionUtils.php';      // Include SessionUtils globally
 
 if (isset($_GET['controller'])) {
 
@@ -29,12 +30,12 @@ if (isset($_GET['controller'])) {
     } else {                                                                                        // Regular request
 
         $controllerName = ucfirst($controllerName) . 'Controller';
-        $controllerFile = CONTROLLER_BASE_PATH . $controllerName . ".php";                          // Build controller file path
+        $controllerFile = CONTROLLER_PATH . $controllerName . ".php";                           // Build controller file path
 
         if (file_exists($controllerFile)) {                                                         // Load controller file
             require_once $controllerFile;
         } else {
-            header('Location: ?controller=Error&code=404&message=Controller+not+found');
+            header('Location: ?controller=Error&action=show&code=404&message=Controller+not+found');
             exit;
         }
 
@@ -46,15 +47,15 @@ if (isset($_GET['controller'])) {
             if (isset($action) && method_exists($controllerInstance, $action)) {
                 $controllerInstance->$action();
             } else {
-                header('Location: ?controller=Error&code=404&message=Action+not+found');
+                header('Location: ?controller=Error&action=show&code=404&message=Action+not+found');
                 exit;
             }
         } else {
-            header('Location: ?controller=Error&code=404&message=Class+not+found');
+            header('Location: ?controller=Error&action=show&code=404&message=Class+not+found');
             exit;
         }
     }
 } else {
-    header('Location: ?controller=Error&code=400&message=Controller+parameter+is+missing');
+    header('Location: ?controller=Error&action=show&code=400&message=Controller+parameter+is+missing');
     exit;
 }

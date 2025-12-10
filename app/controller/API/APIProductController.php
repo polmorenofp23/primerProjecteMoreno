@@ -71,7 +71,7 @@ class APIProductController
 
 		$products = $dao->getProductsByFilter($filters, $orderBy);
 
-		jsonResponse(serializeArray($products, 'serializeProduct', $this));
+		JsonUtils::jsonResponse(JsonUtils::serializeArray($products, 'serializeProduct', $this));
 	}
 
 	/**
@@ -85,7 +85,7 @@ class APIProductController
 		$product = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
 
 		if (!$product) {
-			return jsonError('Not found', ['data' => null], 404);
+			return JsonUtils::jsonError('Not found', ['data' => null], 404);
 		}
 
 		// Load ingredients as well
@@ -93,7 +93,7 @@ class APIProductController
 		$ingredients = $piDao->getIngredientsByProduct((int)$id);
 		$product->setIngredients($ingredients);
 
-		jsonResponse(serializeItem($product, 'serializeProduct', $this));
+		JsonUtils::jsonResponse(JsonUtils::serializeItem($product, 'serializeProduct', $this));
 	}
 
 	/**
@@ -103,9 +103,9 @@ class APIProductController
 	// POST /api?resource=Product
 	public function store()
 	{
-		$data = readJsonBody();
+		$data = JsonUtils::readJsonBody();
 		if ($data === null) {
-			return jsonError('Invalid JSON body', ['data' => null], 400);
+			return JsonUtils::jsonError('Invalid JSON body', ['data' => null], 400);
 		}
 
 		// Basic validation
@@ -122,7 +122,7 @@ class APIProductController
 		if ($price === null || $price < 0) $errors[] = 'price must be >= 0';
 
 		if (!empty($errors)) {
-			return jsonError('Validation error', ['errors' => $errors], 422);
+			return JsonUtils::jsonError('Validation error', ['errors' => $errors], 422);
 		}
 
 		$productData = [
@@ -139,11 +139,11 @@ class APIProductController
 		$createdId = $dao->createProduct($product);
 		
 		if (!$createdId) {
-			return jsonError('Failed to create product', ['data' => null], 500);
+			return JsonUtils::jsonError('Failed to create product', ['data' => null], 500);
 		}
 		
 		$created = $dao->getProductsByFilter(['id' => $createdId]);
-		return jsonResponse(serializeItem($created, 'serializeProduct', $this), 201);
+		return JsonUtils::jsonResponse(JsonUtils::serializeItem($created, 'serializeProduct', $this), 201);
 	}
 
 	/**
@@ -156,12 +156,12 @@ class APIProductController
 		$dao = new ProductDAO();
 		$product = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
 		if (!$product) {
-			return jsonError('Not found', ['data' => null], 404);
+			return JsonUtils::jsonError('Not found', ['data' => null], 404);
 		}
 
-		$data = readJsonBody();
+		$data = JsonUtils::readJsonBody();
 		if ($data === null) {
-			return jsonError('Invalid JSON body', ['data' => null], 400);
+			return JsonUtils::jsonError('Invalid JSON body', ['data' => null], 400);
 		}
 
 		// Allowed fields - apply to model via setters
@@ -180,7 +180,7 @@ class APIProductController
 						break;
 					case 'price':
 						$priceVal = (float)$data['price'];
-						if ($priceVal < 0) return jsonError('Validation error', ['errors' => ['price must be >= 0']], 422);
+						if ($priceVal < 0) return JsonUtils::jsonError('Validation error', ['errors' => ['price must be >= 0']], 422);
 						$product->setPrice($priceVal);
 						break;
 					case 'img_dir':
@@ -196,11 +196,11 @@ class APIProductController
 		$ok = $dao->updateProduct($product);
 		
 		if (!$ok) {
-			return jsonError('No changes made or update failed', ['data' => null], 400);
+			return JsonUtils::jsonError('No changes made or update failed', ['data' => null], 400);
 		}
 		
 		$updated = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
-		return jsonResponse(serializeItem($updated, 'serializeProduct', $this));
+		return JsonUtils::jsonResponse(JsonUtils::serializeItem($updated, 'serializeProduct', $this));
 	}
 
 	/**
@@ -213,9 +213,9 @@ class APIProductController
 		$dao = new ProductDAO();
 		$deleted = $dao->deleteProduct((int)$id);
 		if (!$deleted) {
-			return jsonError('Not found', ['data' => null], 404);
+			return JsonUtils::jsonError('Not found', ['data' => null], 404);
 		}
-		return jsonResponse(['deleted' => true]);
+		return JsonUtils::jsonResponse(['deleted' => true]);
 	}
 
 	// ---------- Helpers ----------
@@ -246,7 +246,7 @@ class APIProductController
 	public function serializeProductIngredients($ingredients)
 	{
 		if (!is_array($ingredients)) return [];
-		return serializeArray($ingredients, function($pi) {
+		return JsonUtils::serializeArray($ingredients, function($pi) {
 			return [
 				'ingredient_id' => method_exists($pi, 'getIngredientId') ? $pi->getIngredientId() : null,
 				'grams_per_portion' => method_exists($pi, 'getGramsPerPortion') ? $pi->getGramsPerPortion() : null,

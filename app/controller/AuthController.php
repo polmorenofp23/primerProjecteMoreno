@@ -4,6 +4,7 @@ require_once DAO_PATH . 'UserDAO.php';
 require_once UTIL_PATH . 'AuthUtils.php';
 require_once UTIL_PATH . 'SessionUtils.php';
 require_once MODEL_PATH . 'User.php';
+require_once CONTROLLER_PATH . 'UserController.php';
 
 class AuthController
 {
@@ -94,107 +95,11 @@ class AuthController
             exit;
         }
 
-        $username = trim($_POST['username'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
-        $passwordConfirm = $_POST['password_confirm'] ?? '';
-        $firstName = trim($_POST['first_name'] ?? '');
-        $lastName = trim($_POST['last_name'] ?? null);
-        $birthDay = trim($_POST['birth_day'] ?? '');
-        $birthMonth = trim($_POST['birth_month'] ?? '');
-        $birthYear = trim($_POST['birth_year'] ?? '');
+        $uc = new UserController();
+        $result = $uc->store($_POST, true, 'auth/register.php', '?controller=Auth&action=showLogin&message=registered');
 
-        $birthDate = null;
-        if ($birthYear !== '' || $birthMonth !== '' || $birthDay !== '') {  // Normalize data into date format (YYYY-MM-DD)
-            if ($birthYear === '' || $birthMonth === '' || $birthDay === '') {
-                $err = new AppError(422, 'Incomplete birth date.');
-                $data = ['error' => $err];
-                $view = 'auth/register.php';
-                include_once VIEW_PATH . 'main.php';
-                return;
-            }
-
-            $y = (int)$birthYear;
-            $m = (int)$birthMonth;
-            $d = (int)$birthDay;
-
-            if (!checkdate($m, $d, $y)) {
-                $err = new AppError(422, 'Invalid birth date.');
-                $data = ['error' => $err];
-                $view = 'auth/register.php';
-                include_once VIEW_PATH . 'main.php';
-                return;
-            }
-
-            $birthDate = sprintf('%04d-%02d-%02d', $y, $m, $d);
-        }
-
-        $phone = trim($_POST['phone'] ?? null);
-        $street = trim($_POST['address_street'] ?? null);
-        $city = trim($_POST['address_city'] ?? null);
-        $postcode = trim($_POST['address_postcode'] ?? null);
-        $country = trim($_POST['address_country'] ?? null);
-
-        // Basic validations
-        if ($username === '' || $email === '' || $password === '') {
-            $err = new AppError(422, 'Username, email and password are required.');
-            $data = ['error' => $err];
-            $view = 'auth/register.php';
-            include_once VIEW_PATH . 'main.php';
-            return;
-        }
-
-        if ($password !== $passwordConfirm) {
-            $err = new AppError(422, 'Password confirmation does not match.');
-            $data = ['error' => $err];
-            $view = 'auth/register.php';
-            include_once VIEW_PATH . 'main.php';
-            return;
-        }
-
-        $dao = new UserDAO();
-        if (AuthUtils::existsByUsername($username)) {
-            $err = new AppError(409, 'Username already taken.');
-            $data = ['error' => $err];
-            $view = 'auth/register.php';
-            include_once VIEW_PATH . 'main.php';
-            return;
-        }
-        if (AuthUtils::existsByEmail($email)) {
-            $err = new AppError(409, 'Email already registered.');
-            $data = ['error' => $err];
-            $view = 'auth/register.php';
-            include_once VIEW_PATH . 'main.php';
-            return;
-        }
-
-        $user = new User();
-        $user->setUserTypeId(1);
-        $user->setUsername($username);
-        $user->setRole('client');
-        $user->setEmail($email);
-        $user->setFirstName($firstName ?: $username);
-        $user->setLastName($lastName ?: null);
-        $user->setPhone($phone ?: null);
-
-        $address = null;
-        if ($street || $city || $postcode || $country) {
-            $address = [
-                'street' => $street ?: '',
-                'city' => $city ?: '',
-                'postcode' => $postcode ?: '',
-                'country' => $country ?: ''
-            ];
-            $user->setAddress($address);
-        }
-
-        $user->setBirthDate($birthDate ?: null);
-        $user->setRegisteredAt(date('Y-m-d H:i:s'));
-        $user->setAndHashPassword($password);
-
-        $id = $dao->createUser($user);
-        if (!$id) {
-            $err = new AppError(500, 'Failed to create user.');
+        if (!is_array($result) || empty($result['success'])) {
+            $err = $result['error'] ?? new AppError(500, 'Registration failed.');
             $data = ['error' => $err];
             $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';

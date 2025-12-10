@@ -8,11 +8,6 @@
     padding-top: 20px;
 }
 
-.auth-logo {
-    width: 110px;
-    height: auto;
-}
-
 .auth-form-title{
     font-family: var(--font-Sting);
     font-weight: var(--fw-medium);

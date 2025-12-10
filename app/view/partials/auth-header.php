@@ -6,6 +6,6 @@
     </a>
     <!-- Logo -->
     <div class="text-center">
-        <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="auth-logo text-white">
+        <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="bc-logo text-white">
     </div>
 </header>

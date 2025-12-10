@@ -1,6 +1,6 @@
 <?php
 
-define('API_CONTROLLER_BASE_PATH', CONTROLLER_BASE_PATH . 'API/');
+define('API_CONTROLLER_BASE_PATH', CONTROLLER_PATH . 'API/');
 
 // CORS y JSON headers
 header('Content-Type: application/json');
