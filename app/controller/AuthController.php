@@ -1,7 +1,8 @@
 <?php
 
 require_once DAO_PATH . 'UserDAO.php';
-require_once UTIL_PATH . 'Auth.php';
+require_once UTIL_PATH . 'AuthUtils.php';
+require_once UTIL_PATH . 'SessionUtils.php';
 require_once MODEL_PATH . 'User.php';
 
 class AuthController
@@ -11,6 +12,7 @@ class AuthController
      */
     public function showLogin()
     {
+        SessionUtils::logout();
         $view = 'auth/login.php';
         include_once VIEW_PATH . 'main.php';
     }
@@ -24,11 +26,10 @@ class AuthController
             header('Location: ?controller=Auth&action=showLogin');
             exit;
         }
-        // Read POST (use lowercase names to match the form)
+        
         $usrKey = trim($_POST['usrkey'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        // Server-side validation (inline)
         $errors = [];
 
         if ($usrKey === '') {
@@ -45,8 +46,7 @@ class AuthController
 
         if (!empty($errors)) {
             $old = ['usrkey' => $usrKey];
-            // Aggregate validation messages into a single AppError for the view
-            $msg = implode(' ', $errors);
+            $msg = implode(' ', $errors);   // Return to the login view the error encountered
             $err = new AppError(422, $msg);
             $data = ['error' => $err];
             $view = 'auth/login.php';
@@ -54,8 +54,8 @@ class AuthController
             return;
         }
 
-        // Try to authenticate
-        $user = Auth::authenticate($usrKey, $password);
+        // Try to authenticate the user
+        $user = AuthUtils::authenticate($usrKey, $password);
         if ($user === null) {
             $dao = new UserDAO();
             $exists = $dao->getUserByUsername($usrKey) || $dao->getUserByEmail($usrKey);
@@ -69,10 +69,7 @@ class AuthController
             return;
         }
 
-        // Successful login: set session and redirect to home
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-        $_SESSION['user_id'] = $user->getId();
-
+        SessionUtils::login($user->getId());
         header('Location: ?controller=Product&action=index');
         exit;
     }
@@ -82,6 +79,7 @@ class AuthController
      */
     public function showRegister()
     {
+        SessionUtils::logout();
         $view = 'auth/register.php';
         include_once VIEW_PATH . 'main.php';
     }
@@ -155,14 +153,14 @@ class AuthController
         }
 
         $dao = new UserDAO();
-        if (Auth::existsByUsername($username)) {
+        if (AuthUtils::existsByUsername($username)) {
             $err = new AppError(409, 'Username already taken.');
             $data = ['error' => $err];
             $view = 'auth/register.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
-        if (Auth::existsByEmail($email)) {
+        if (AuthUtils::existsByEmail($email)) {
             $err = new AppError(409, 'Email already registered.');
             $data = ['error' => $err];
             $view = 'auth/register.php';
@@ -177,11 +175,8 @@ class AuthController
         $user->setEmail($email);
         $user->setFirstName($firstName ?: $username);
         $user->setLastName($lastName ?: null);
-
-        // phone
         $user->setPhone($phone ?: null);
 
-        // address as associative array (UserDAO will encode)
         $address = null;
         if ($street || $city || $postcode || $country) {
             $address = [
@@ -215,9 +210,7 @@ class AuthController
      */
     public function logout()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-        unset($_SESSION['user_id']);
-        session_regenerate_id(true);
+        SessionUtils::logout();
         header('Location: ?controller=Auth&action=showLogin&message=logged_out');
         exit;
     }

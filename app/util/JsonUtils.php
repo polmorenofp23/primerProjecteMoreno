@@ -2,9 +2,7 @@
 
 /**
  * Send a successful JSON response with a standardized payload.
- *
  * Structure: { status: true, data: any }
- * Example: jsonResponse([ 'items' => [] ], 200)
  */
 function jsonResponse($data = null, int $httpStatus = 200)
 {
@@ -20,9 +18,7 @@ function jsonResponse($data = null, int $httpStatus = 200)
 
 /**
  * Send an error JSON response with a standardized payload.
- *
  * Structure: { status: false, message: string, ...extra }
- * Example: jsonError('Not found', ['data' => null], 404)
  */
 function jsonError(string $message, array $extra = [], int $httpStatus = 400)
 {
@@ -88,7 +84,6 @@ function resolveSerializer($serializer, $context = null, $item = null): ?callabl
 
 /**
  * Serialize a single item using a given serializer (callable or method name).
- * Note: Named serializeItem to avoid clashing with PHP's built-in serialize().
  */
 function serializeItem($item, $serializer, $context = null)
 {
@@ -96,7 +91,7 @@ function serializeItem($item, $serializer, $context = null)
     if ($callable) {
         return $callable($item);
     }
-    return $item; // passthrough
+    return $item;
 }
 
 /**

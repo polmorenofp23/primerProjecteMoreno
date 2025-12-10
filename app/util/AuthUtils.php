@@ -9,7 +9,7 @@ require_once DAO_PATH . 'UserDAO.php';
  * and reuse the `UserDAO` for data access. Keep methods static for easy use
  * from controllers.
  */
-class Auth
+class AuthUtils
 {
     /**
      * Authenticate a user by username or email and plain password.

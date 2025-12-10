@@ -78,7 +78,7 @@
         const form = document.querySelector('.login-page form');
         if (!form) return;
             
-        try { // Preguntar porque me pide removeEventListener antes de haver el addEventListener
+        try { // Preguntar al david porque me pide removeEventListener antes de haver el addEventListener
             form.removeEventListener('submit', validateForm);
         } catch (e) {}
         form.addEventListener('submit', validateForm);
