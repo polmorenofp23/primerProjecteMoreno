@@ -53,7 +53,7 @@ function validateForm(e) {
 		if (feedbackDiv) feedbackDiv.innerHTML = '';
 
 		if (!field.checkValidity()) {
-			const message = field.validity.valueMissing ? 'This field is required.' : 'Invalid field value.';
+			const message = field.validity.valueMissing ? 'This field is required' : 'Invalid field value';
 
 			if (feedbackDiv) {
 				feedbackDiv.innerHTML = '<p class="mb-0">' + escapeHtml(message) + '</p>';
