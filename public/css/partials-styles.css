@@ -1,5 +1,5 @@
 /** Main Header Styles **/
-.main-header{ /* Header auth links overlay: keep links visually on top without affecting layout */
+.main-header{
     background-color: var(--secondary-red);
     display: flex;
     justify-content: center;
