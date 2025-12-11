@@ -1,3 +1,4 @@
+/** Main Header Styles **/
 .main-header{ /* Header auth links overlay: keep links visually on top without affecting layout */
     background-color: var(--secondary-red);
     display: flex;
@@ -12,17 +13,24 @@
     z-index: 10;
 }
 
-.papa {
+.main-navbar-box {
     position: absolute;
     z-index: 20;
 }
+
+/* .main-header div{
+    position: absolute;
+    width: 100%;
+} */
+
 .bc-logo a img{
     width: 110px;
     height: auto;
 }
 
+/** Main Navbar Styles **/
 nav.main-navbar {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
-    font-size: 18px ;
+    font-size: 18px;
 }
