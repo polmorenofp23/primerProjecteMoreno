@@ -28,9 +28,14 @@
     height: auto;
 }
 
-/** Main Navbar Styles **/
-nav.main-navbar {
+/** Main Navbar & Sub Navbar Styles **/
+nav.main-navbar, nav.sub-navbar  {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 18px;
+
+}
+
+nav.main-navbar{
+    text-transform: uppercase;
 }

@@ -1,7 +1,7 @@
 <header> 
     <!-- Back Link -->
     <a href="?controller=Product&action=index" class="white-link">
-        <icon class="bi bi-arrow-left-circle-fill me-2"></icon>    
+        <i data-lucide="chevron-left" class="icon-white"></i>
         <small> BACK</small>
     </a>
     <!-- Logo -->

@@ -59,7 +59,7 @@
                             <input type="password" class="form-control p-3" id="password" name="password"
                                 placeholder="Enter your password" required>
                             <button type="button" class="password-toggle" id="togglePasswordBtn" aria-label="Toggle password visibility">
-                                <i class="bi bi-eye"></i>
+                                <i data-lucide="eye" class="icon-grey"></i>
                             </button>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             <input type="password" class="form-control p-3" id="password_confirm" name="password_confirm"
                                 placeholder="Confirm your password" required>
                             <button type="button" class="password-toggle" id="togglePasswordConfirmBtn" aria-label="Toggle password confirmation visibility">
-                                <i class="bi bi-eye"></i>
+                                <i data-lucide="eye" class="icon-grey"></i>
                             </button>
                         </div>
                     </div>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/partials-styles.css">
+    <link rel="stylesheet" href="/css/icons-styles.css">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -67,6 +68,10 @@
         integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
         crossorigin="anonymous">
     </script>
+    <!-- Lucide icons: load full UMD from CDN with local fallback, then init -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.561.0/dist/umd/lucide.js"></script>
+    <script>if(!window.lucide){document.write('<script src="/vendor/lucide.js"><\/script>');}</script>
+    <script src="/js/lucide-init.js"></script>
 </body>
 
 </html>
