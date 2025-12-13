@@ -16,14 +16,16 @@
         <div class="main-navbar-box d-flex flex-column justify-content-center align-items-center bg-transparent z-3">
             <div class="bc-logo">
                 <a href="?controller=Product&action=index">
-                    <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="text-white my-3"> <!---->
+                    <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="text-white mt-3"> <!---->
                 </a>
             </div>
             <?php include_once VIEW_PATH . '/partials/navbar.php'; ?>
         </div>
     </div>
-    <!-- Sub Navigation -->
-    <div class="sub-header">
-        <?php include_once VIEW_PATH . '/partials/subnavbar.php'; ?>
-    </div>
+    <?php if ($viewSection !== 'home' && $viewSection !== 'membership' && $viewSection !== 'errors'): ?>
+        <!-- Sub Navigation -->
+        <div class="sub-header">
+            <?php include_once VIEW_PATH . '/partials/subnavbar.php'; ?>
+        </div>
+    <?php endif; ?>
 </header>

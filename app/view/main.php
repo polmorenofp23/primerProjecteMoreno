@@ -11,6 +11,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/background-styles.css">
     <link rel="stylesheet" href="/css/partials-styles.css">
     <link rel="stylesheet" href="/css/icons-styles.css">
 </head>
@@ -21,9 +22,9 @@
     if (isset($view) && file_exists(VIEW_PATH . $view)) {
 
         $parts = explode('/', $view, 2);    // Determine group by the prefix before the first '/'
-        $viewGroup = strtolower($parts[0] ?? '');
+        $viewSection = strtolower($parts[0] ?? '');
 
-        switch ($viewGroup) {
+        switch ($viewSection) {
             case 'auth':    // Authentication views
                 include_once VIEW_PATH . $view;
                 break;
