@@ -1,14 +1,10 @@
 <link rel="stylesheet" href="/css/auth-styles.css">
-<div class="container-fluid register-page auth-bg">
-
-    <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>
-
+<div class="container-fluid profile-page white-bg">
     <div class="container-fluid d-flex align-items-center justify-content-center">
         <div class="form-card d-flex flex-column justify-content-center align-items-center bg-white p-5 col-sm-10 my-5">
             <div class="card-header">
                 <h2 class="auth-form-title">PROFILE</h2>
             </div>
-
 
             <div class="card-body px-5 pt-3 w-100">
                 <?php
@@ -95,7 +91,7 @@
                             <input type="password" class="form-control p-3" id="password" name="password"
                                 placeholder="Enter new password (leave blank to keep current)">
                             <button type="button" class="password-toggle" id="togglePasswordBtn" aria-label="Toggle password visibility">
-                                <i class="bi bi-eye"></i>
+                                <i data-lucide="eye" class="icon-grey"></i>
                             </button>
                         </div>
                     </div>
@@ -106,7 +102,7 @@
                             <input type="password" class="form-control p-3" id="password_confirm" name="password_confirm"
                                 placeholder="Confirm new password">
                             <button type="button" class="password-toggle" id="togglePasswordConfirmBtn" aria-label="Toggle password confirmation visibility">
-                                <i class="bi bi-eye"></i>
+                                <i data-lucide="eye" class="icon-grey"></i>
                             </button>
                         </div>
                     </div>
@@ -192,7 +188,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('.register-page form');
+        const form = document.querySelector('.profile-page form');
         if (!form) return;
         try { form.removeEventListener('submit', validateForm); } catch (e) {}
         form.addEventListener('submit', validateForm);

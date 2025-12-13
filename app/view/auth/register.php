@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/auth-styles.css">
-<div class="container-fluid register-page auth-bg">
+<div class="container-fluid register-page dark-red-bg min-vh-100 pt-3">
 
     <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>
 
