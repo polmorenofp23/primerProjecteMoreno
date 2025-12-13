@@ -29,13 +29,21 @@
 }
 
 /** Main Navbar & Sub Navbar Styles **/
-nav.main-navbar, nav.sub-navbar  {
+nav.main-navbar, nav.sub-navbar {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 18px;
+}
 
+nav.main-navbar .active{
+    font-weight: var(--fw-black);
 }
 
 nav.main-navbar{
     text-transform: uppercase;
+}
+
+nav.sub-navbar  ul li a {
+    text-transform: capitalize;
+    color : var(--primary-white);
 }

@@ -4,13 +4,23 @@
 svg.lucide, i svg {
   width: 24px;
   height: 24px;
-  stroke-width: 2;
+  stroke-width: 1.5;
 }
 
-.big-icon svg.lucide, .big-icon svg {
+.icon-32 svg.lucide, .icon-32 svg,
+svg.icon-32, svg.lucide.icon-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-64 svg.lucide, .icon-64 svg,
+svg.icon-64, svg.lucide.icon-64 {
   width: 64px;
   height: 64px;
-  stroke-width: 3;
+}
+
+.icon-64 svg *, svg.icon-64 * {
+  stroke-width: 2;
 }
 
 /* Icon hover effect */

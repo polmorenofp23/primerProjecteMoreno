@@ -1,0 +1,23 @@
+/** BACKGROUND IMAGES **/
+/** Basic Backgrounds **/
+.white-bg {
+    background: var(--secondary-white);
+    background-image: url('/assets/img/bg/bg-white.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.red-bg {
+    background: var(--secondary-red);
+    background-image: url('/assets/img/bg/bg-red.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.dark-red-bg {
+    background: var(--secondary-dark-red);
+    background-image: url('/assets/img/bg/bg-dark-red.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

@@ -1,13 +1,3 @@
-.auth-bg {
-    background: var(--primary-dark-red);
-    background-image: url('/assets/img/bg/bg-dark-red.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 100vh;
-    padding-top: 20px;
-}
-
 .auth-form-title{
     font-family: var(--font-Sting);
     font-weight: var(--fw-medium);
