@@ -1,3 +1,5 @@
-<footer class="classic-footer">
+<footer>
+    <div class="main-footer">
 
+    </div>
 </footer>

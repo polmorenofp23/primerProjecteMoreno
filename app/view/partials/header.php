@@ -3,12 +3,9 @@
         <!-- Auth/User Links Bar -->
         <?php if (!SessionUtils::isLogged()): ?>
             <div class="auth-user-links bg-black d-flex flex-row justify-content-end align-items-center py-2 z-1">
-                <a href="?controller=Auth&action=showLogin" class="btn btn-sm btn-outline-danger me-2">
-                    <i class="bi bi-box-arrow-in-right"></i> SIGN IN
-                </a>
-                <a href="?controller=Auth&action=showRegister" class="btn btn-sm btn-danger me-2">
-                    <i class="bi bi-person-plus"></i> REGISTER
-                </a>
+                <a href="?controller=Auth&action=showLogin" class="me-2">SIGN IN</a>
+                <a class="text-white me-2">|</a>
+                <a href="?controller=Auth&action=showRegister" class="me-2">REGISTER</a>
             </div>
         <?php endif; ?>
             
@@ -16,7 +13,7 @@
         <div class="main-navbar-box d-flex flex-column justify-content-center align-items-center bg-transparent z-3">
             <div class="bc-logo">
                 <a href="?controller=Product&action=index">
-                    <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="text-white mt-3"> <!---->
+                    <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="text-white mt-3">
                 </a>
             </div>
             <?php include_once VIEW_PATH . '/partials/navbar.php'; ?>

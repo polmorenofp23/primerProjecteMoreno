@@ -261,8 +261,6 @@ a.white-link:hover {
     text-decoration: underline;
 }
 
-/* 
-
 /* Responsive scale-down for small screens */
 @media (max-width: 576px) {
     h1 { font-size: 48px; }

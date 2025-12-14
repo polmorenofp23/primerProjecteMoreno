@@ -1,9 +1,4 @@
 <?php
-
-// $sectionName = $parts[0];
-//     $sectionName = strtolower(preg_replace('/\.php$/', '', $sectionName));
-//     $currentSection = $sectionName;
-
 function navActiveSection($name, $sectionName) { 
     if ($name === $sectionName) {   
         return 'active';
@@ -34,7 +29,7 @@ function navActiveSection($name, $sectionName) {
                 </li>
                 <?php if (SessionUtils::isAdmin()): ?>
                     <li class="nav-item mx-4">
-                        <a class="nav-link <?php echo navActiveSection('admin', $viewSection); ?>" href="?controller=Auth&action=logout">ADMIN</a>
+                        <a class="nav-link <?php echo navActiveSection('admin', $viewSection); ?>" href="?controller=Admin&action=index">ADMIN</a>
                     </li>
                 <?php endif; ?>
             </ul>

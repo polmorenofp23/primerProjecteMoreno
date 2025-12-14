@@ -1,5 +1,6 @@
 /** Main Header Styles **/
-.main-header{
+/* ".main-header" styles box height is done on a very dirty way, i must try to change it, ask to Laura*/
+.main-header {
     background-color: var(--secondary-red);
     display: flex;
     justify-content: center;
@@ -7,10 +8,23 @@
     height: 200px;
 }
 
-.auth-user-links{
+@media (max-width: 1000px) {
+    .main-header { height: 360px; }
+}
+
+.auth-user-links {
     position: absolute;
     width: 100%;
     z-index: 10;
+}
+
+.auth-user-links a {
+    font-family: var(--font-Karla);
+    font-weight: var(--fw-regular);
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+
 }
 
 .main-navbar-box {
@@ -18,32 +32,38 @@
     z-index: 20;
 }
 
-/* .main-header div{
-    position: absolute;
-    width: 100%;
-} */
-
-.bc-logo a img{
+.bc-logo a img {
     width: 110px;
     height: auto;
 }
 
 /** Main Navbar & Sub Navbar Styles **/
-nav.main-navbar, nav.sub-navbar {
+nav.main-navbar,
+nav.sub-navbar {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 18px;
 }
 
-nav.main-navbar .active{
+nav.main-navbar .active {
     font-weight: var(--fw-black);
 }
 
-nav.main-navbar{
+nav.main-navbar {
     text-transform: uppercase;
 }
 
-nav.sub-navbar  ul li a {
+nav.sub-navbar ul li a {
     text-transform: capitalize;
-    color : var(--primary-white);
+    color: var(--primary-white);
+}
+
+/** Footer Styles **/
+footer.main-footer {
+    background-color: var(--secondary-red);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: auto;
 }

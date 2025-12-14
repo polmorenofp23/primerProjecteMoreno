@@ -156,7 +156,7 @@ class UserController
             return;
         }
 
-        header('Location: ?controller=User&action=edit&message=updated');
+        header('Location: ?controller=User&action=edit&code=200&message=User+successfully+updated');
         exit;
     }
 

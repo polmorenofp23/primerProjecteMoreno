@@ -19,6 +19,9 @@
 <body class="d-flex flex-column min-vh-100">
 
     <?php
+    // Obtain the ruser logged information
+    $logUser = SessionUtils::isLogged() ? SessionUtils::getSessionUser() : null;
+
     if (isset($view) && file_exists(VIEW_PATH . $view)) {
 
         $parts = explode('/', $view, 2);    // Determine group by the prefix before the first '/'
