@@ -72,10 +72,10 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link mx-2 dropdown-toggle" href="#" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i data-lucide="circle-user-round" class="icon-white"></i>
-                        </a>
                         <?php if (SessionUtils::isLogged()): ?>
+                            <a class="nav-link mx-2 dropdown-toggle" href="#" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i data-lucide="circle-user-round" class="icon-white"></i>
+                            </a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userMenuDropdown">
                                 <?php $fullName = trim($logUser->getFirstName() . ' ' . ($logUser->getLastName() ?? ''));?>
                                 <li>
