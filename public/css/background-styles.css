@@ -21,3 +21,21 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+/** Solid Color Backgrounds **/
+.bg-color-white {
+    background: var(--secondary-white);
+    color: var(--primary-red);
+}
+.bg-color-grey {
+    background: var(--secondary-grey);
+}
+.bg-color-red {
+    background: var(--secondary-red);
+}
+.bg-color-dark-red {
+    background: var(--secondary-dark-red);
+}
+.bg-color-black {
+    background: var(--primary-black);
+}

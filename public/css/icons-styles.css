@@ -37,11 +37,6 @@ button:hover svg.lucide, i:hover svg {
   color: var(--primary-grey);
 }
 
-.icon-filled-grey {
-    color: var(--primary-grey);
-  stroke: none;
-}
-
 .icon-black {
   color: var(--primary-black);
 }
