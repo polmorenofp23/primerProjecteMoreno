@@ -71,6 +71,11 @@
                             <i data-lucide="heart" class="icon-white"></i>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="?controller=Product&action=index">
+                            <i data-lucide="shopping-cart" class="icon-white"></i>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <?php if (SessionUtils::isLogged()): ?>
                             <!--<a class="nav-link mx-2 dropdown-toggle" href="?controller=User&action=edit" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -89,10 +94,10 @@
                                 <li><a class="dropdown-item" href="?controller=Auth&action=logout"><i data-lucide="log-out" class="icon-white mx-2"></i>Logout</a></li>
                             </ul>-->
                             <div class="btn-group p-0">
-                                <button type="button" class="btn p-0"><a class="nav-link btn btn-link" href="?controller=User&action=edit" role="button" aria-label="Profile">
+                                <button type="button" class="btn py-0 pe-0"><a class="nav-link btn btn-link" href="?controller=User&action=edit" role="button" aria-label="Profile">
                                         <i data-lucide="circle-user-round" class="icon-white"></i>
                                     </a></button>
-                                <button type="button" class="btn dropdown-toggle dropdown-toggle-split p-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn dropdown-toggle dropdown-toggle-split py-0 ps-1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userMenuDropdown">
@@ -117,11 +122,6 @@
                                 <i data-lucide="circle-user-round" class="icon-white"></i>
                             </a>
                         <?php endif; ?>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link mx-2" href="?controller=Product&action=index">
-                            <i data-lucide="shopping-cart" class="icon-white"></i>
-                        </a>
                     </li>
                 </ul>
             <?php endif; ?>
