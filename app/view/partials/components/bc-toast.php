@@ -1,6 +1,6 @@
 <?php
 
-    function showHttpResponseToast(?\HttpResponse $response = null, string $bgClass = '', string $textClass = '', int $delay = 5000) {
+    function showHttpResponseToast(?\HttpResponse $response = null, string $bgClass = '', string $textClass = '', int $delay = 3000) {
         if (!$response) return;
 
         $code = $response->getCode();
