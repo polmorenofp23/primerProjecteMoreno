@@ -14,70 +14,20 @@
         <a href="?controller=Product&action=index">Tots els productes</a>
 
         <main class="products-grid">
-            <?php if (!empty($products)): ?>
-                <?php foreach ($products as $product): ?>
-                    <article class="product-card">
-                        <div class="product-image">
-                            <?php if ($product->getImgDir()): ?>
-                                <?php
-                                    $imgDir = $product->getImgDir();
-                                    if (is_array($imgDir)) {
-                                        $imgSrc = $imgDir[0] ?? '';
-                                    } else {
-                                        $imgSrc = $imgDir;
-                                    }
-                                ?>
-                                <img src="<?= htmlspecialchars($imgSrc) ?>" 
-                                     alt="<?= htmlspecialchars($product->getName()) ?>">
-                            <?php else: ?>
-                                <div class="no-image">Sense imatge</div>
-                            <?php endif; ?>
+            <div class="row g-4">
+                <?php if (!empty($products)): ?>
+                    <?php include_once VIEW_PATH . 'partials/components/bc-menu-product.php'; ?>
+                    <?php foreach ($products as $product): ?>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                            <?php renderBCMenuProduct($product); ?>
                         </div>
-
-                        <div class="product-info">
-                            <h2 class="product-name">
-                                <?= htmlspecialchars($product->getName()) ?>
-                            </h2>
-
-                            <p class="product-type">
-                                <span class="badge"><?= htmlspecialchars($product->getDishType()) ?></span>
-                            </p>
-
-                            <?php if ($product->getDescription()): ?>
-                                <p class="product-description">
-                                    <?= htmlspecialchars($product->getDescription()) ?>
-                                </p>
-                            <?php endif; ?>
-
-                            <div class="product-footer">
-                                <span class="product-price">
-                                    <?= number_format($product->getPrice(), 2) ?> €
-                                </span>
-
-                                <div class="product-actions">
-                                    <a href="?controller=Product&action=show&id=<?= $product->getId() ?>" 
-                                       class="btn btn-details">
-                                        Veure detalls
-                                    </a>
-                                    
-                                    <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : (method_exists($product, 'getAvaliable') ? $product->getAvaliable() : false)): ?>
-                                        <button class="btn btn-add-cart" 
-                                                data-product-id="<?= $product->getId() ?>">
-                                            Afegir al carret
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="unavailable">No disponible</span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="no-products">
-                    <p>No s'han trobat productes.</p>
-                </div>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="no-products">
+                        <p>No products found for this filter</p>
+                    </div>
+                <?php endif; ?>
+            </div>
         </main>
     </div>
 
