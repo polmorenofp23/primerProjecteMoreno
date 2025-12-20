@@ -86,6 +86,17 @@ class SessionUtils
 	}
 
 	/**
+	 * Require the current user to be an admin
+	 */
+	public static function requireAdmin(string $redirect = '?controller=Error&action=show&code=403&message=Forbidden,+only+admins'): void
+	{
+		if (!self::isAdmin()) {
+			header('Location: ' . $redirect);
+			exit;
+		}
+	}
+
+	/**
 	 * Destroys the session completely
 	 */
 	public static function destroy(): void

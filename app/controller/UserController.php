@@ -149,14 +149,14 @@ class UserController
 
         $ok = $dao->updateUser($user);
         if (!$ok) {
-            $err = new AppError(500, 'Failed to update user.');
-            $dataOut = ['error' => $err];
+            $err = new AppError(500, 'Failed to update user');
+            $data = ['user' => $user, 'error' => $err];
             $view = 'user/profile.php';
             include_once VIEW_PATH . 'main.php';
             return;
         }
 
-        header('Location: ?controller=User&action=profile&message=updated');
+        header('Location: ?controller=User&action=edit&code=200&message=User+successfully+updated');
         exit;
     }
 

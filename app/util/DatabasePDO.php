@@ -29,7 +29,12 @@ class DatabasePDO{
                 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                 $this->conn = $pdo;
             } catch (PDOException $e) {
-                error_log('DB connection failed: ' . $e->getMessage());                             // Log error and rethrow so callers see a proper exception instead of silent null.
+                error_log('DB connection failed: ' . $e->getMessage());
+                if (!headers_sent()) {
+                    $msg = urlencode('Error connecting with the DB: ' . $e->getMessage());
+                    header('Location: ?controller=Error&action=show&code=500&message=' . $msg);
+                    exit;
+                }
                 throw $e;
             }
         }

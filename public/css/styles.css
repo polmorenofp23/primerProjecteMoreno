@@ -70,7 +70,7 @@
     /* Color palette  */
     --primary-red: #c10000;
     --secondary-red: #a80006;
-    --terciary-red: #9e1b1d;
+    --tertiary-red: #9e1b1d;
     --primary-dark-red: #370019;
     --secondary-dark-red: #6e0b1d;
     --primary-white: #ffffff;
@@ -91,9 +91,7 @@ h1 {
     font-family: var(--font-Sting);
     font-weight: var(--fw-black);
     font-size: 80px;
-    line-height: 1.05;
     color: var(--primary-red);
-    margin: 0 0 0.5rem;
     text-transform: uppercase;
 }
 
@@ -101,53 +99,47 @@ h2 {
     font-family: var(--font-Karla);
     font-weight: var(--fw-bold);
     font-size: 60px;
-    line-height: 1.05;
     color: var(--secondary-red);
-    margin: 0 0 0.5rem;
+    text-transform: uppercase;
 }
 
 h3 {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 48px;
-    line-height: 1.1;
     color: var(--primary-red);
-    margin: 0 0 0.5rem;
+    text-transform: uppercase;
 }
 
 h4 {
     font-family: var(--font-Karla);
     font-weight: var(--fw-medium);
     font-size: 40px;
-    line-height: 1.1;
     color: var(--secondary-red);
-    margin: 0 0 0.5rem;
+    text-transform: uppercase;
 }
 
 h5 {
     font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 32px;
-    line-height: 1.15;
     color: var(--primary-red);
-    margin: 0 0 0.5rem;
+    text-transform: uppercase;
 }
 
 h6 {
-    font-family: var(--font-Karla);
+    font-family: var(--font-Sting);
     font-weight: var(--fw-regular);
     font-size: 20px;
-    line-height: 1.3;
-    color: var(--secondary-red);
-    margin: 0 0 0.5rem;
+    color: var(--tertiary-red);
+    text-transform: uppercase;
 }
 
 p {
     font-family: var(--font-Karla);
+    font-weight: var(--fw-regular);
     font-size: 20px;
-    line-height: 1.6;
     color: var(--primary-black);
-    margin: 0 0 1rem;
 }
 
 legend{
@@ -155,6 +147,38 @@ legend{
     font-family: var(--font-Karla);
     font-weight: var(--fw-medium);
     color: var(--primary-dark-red);
+}
+
+/* GLOBAL TEXT COLORS */
+.text-primary-red {
+    color: var(--primary-red) !important;
+}
+.text-secondary-red {
+    color: var(--secondary-red) !important;
+}
+.text-tertiary-red {
+    color: var(--tertiary-red) !important;
+}
+.text-primary-dark-red {
+    color: var(--primary-dark-red) !important;
+}
+.text-secondary-dark-red {
+    color: var(--secondary-dark-red) !important;
+}
+.text-primary-white {
+    color: var(--primary-white) !important;
+}
+.text-secondary-white {
+    color: var(--secondary-white) !important;
+}
+.text-primary-grey {
+    color: var(--primary-grey) !important;
+}
+.text-secondary-grey {
+    color: var(--secondary-grey) !important;
+}
+.text-primary-black {
+    color: var(--primary-black) !important;
 }
 
 /* BUTTON STYLES */
@@ -241,6 +265,8 @@ legend{
     color: var(--secondary-grey);
 }
 
+
+
 /* URL link styles */
 a.red-link {
     font-family: var(--font-Karla);
@@ -260,8 +286,6 @@ a.red-link:hover,
 a.white-link:hover {
     text-decoration: underline;
 }
-
-/* 
 
 /* Responsive scale-down for small screens */
 @media (max-width: 576px) {

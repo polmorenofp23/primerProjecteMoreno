@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/auth-styles.css">
-<div class="container-fluid login-page auth-bg">    
+<div class="container-fluid login-page dark-red-bg min-vh-100 pt-3">    
 
     <?php include_once VIEW_PATH . '/partials/auth-header.php'; ?>
 
@@ -27,12 +27,12 @@
                             <input type="password" class="form-control p-3" id="password" name="password"
                                 placeholder="Enter your password" required>
                             <button type="button" class="password-toggle" id="togglePasswordBtn" aria-label="Toggle password visibility">
-                                <i class="bi bi-eye"></i>
+                                <i data-lucide="eye" class="icon-grey"></i>
                             </button>
                         </div>
                     </div>
 
-                    <?php // Show the error message if exists
+                    <?php // Show the error message if exists 
                         if (isset($data) && !empty($data['error'])) {
                             $err = $data['error'];
                             if (is_object($err)) {
@@ -70,17 +70,13 @@
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     if (togglePasswordBtn) {
         togglePasswordBtn.addEventListener('click', function () {
-            togglePassword('password', this);
+            togglePassword('password', togglePasswordBtn);
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('.login-page form');
         if (!form) return;
-            
-        try { // Preguntar al david porque me pide removeEventListener antes de haver el addEventListener
-            form.removeEventListener('submit', validateForm);
-        } catch (e) {}
         form.addEventListener('submit', validateForm);
     });
 

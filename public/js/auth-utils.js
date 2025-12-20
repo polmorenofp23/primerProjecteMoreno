@@ -11,10 +11,20 @@ function togglePassword(fieldId, btn) {
 		field.type = isPwd ? 'text' : 'password';
 
 		if (btn && btn.querySelector) {
-			const icon = btn.querySelector('i');
+			const icon = btn.querySelector('[data-lucide]') || btn.querySelector('i');
 			if (icon) {
-				icon.classList.toggle('bi-eye');
-				icon.classList.toggle('bi-eye-slash');
+				if (icon.getAttribute && icon.hasAttribute('data-lucide')) {
+					const current = icon.getAttribute('data-lucide') || '';
+					const next = current === 'eye' ? 'eye-off' : 'eye';
+					icon.setAttribute('data-lucide', next);
+					if (window.lucide && typeof window.lucide.createIcons === 'function') {
+						try {
+							window.lucide.createIcons({ root: btn });
+						} catch (err) {
+							console.error('lucide.createIcons error', err);
+						}
+					}
+				}
 			}
 		}
 	} catch (e) {
@@ -22,6 +32,9 @@ function togglePassword(fieldId, btn) {
 	}
 }
 
+/**
+ * Validates a form's required fields and return the feedback messages
+ */
 function validateForm(e) {
 
 	let form = null;
@@ -53,7 +66,7 @@ function validateForm(e) {
 		if (feedbackDiv) feedbackDiv.innerHTML = '';
 
 		if (!field.checkValidity()) {
-			const message = field.validity.valueMissing ? 'This field is required.' : 'Invalid field value.';
+			const message = field.validity.valueMissing ? 'This field is required' : 'Invalid field value';
 
 			if (feedbackDiv) {
 				feedbackDiv.innerHTML = '<p class="mb-0">' + escapeHtml(message) + '</p>';

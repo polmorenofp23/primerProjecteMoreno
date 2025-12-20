@@ -1,0 +1,58 @@
+/** The icons called in html like this: <i data-lucide="search" class="icon-white"></i> **/
+
+/* Icon size styles */
+svg.lucide, i svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.5;
+}
+
+.icon-32 svg.lucide, .icon-32 svg,
+svg.icon-32, svg.lucide.icon-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-64 svg.lucide, .icon-64 svg,
+svg.icon-64, svg.lucide.icon-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.icon-64 svg *, svg.icon-64 * {
+  stroke-width: 2;
+}
+
+/* Icon hover effect */
+button:hover svg.lucide, i:hover svg {
+  opacity: 0.6;
+}
+
+/* Icon color styles */
+.icon-white {
+  color: var(--primary-white);
+}
+
+.icon-grey {
+  color: var(--primary-grey);
+}
+
+.icon-black {
+  color: var(--primary-black);
+}
+
+.icon-red {
+  color: var(--primary-red);
+}
+
+.icon-dark-red {
+  color: var(--primary-dark-red);
+}
+
+.icon-danger {
+  color: #ff0000;
+}
+
+.icon-success {
+  color: #00ff00;
+}

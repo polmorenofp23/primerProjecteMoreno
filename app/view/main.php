@@ -5,24 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bees Cavern Web</title>
+    <link rel="icon" href="/assets/img/logos/logo-bc-official.svg" type="image/svg+xml">
     <!--<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>-->
     <!-- css Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/background-styles.css">
     <link rel="stylesheet" href="/css/partials-styles.css">
+    <link rel="stylesheet" href="/css/icons-styles.css">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
     <?php
+    // Import all components necessaries for all the pages
+    include_once VIEW_PATH . 'partials/components/bc-toast.php';
+    include_once APP_PATH . 'model/HttpResponse.php';
+    include_once APP_PATH . 'model/AppError.php';
+    
+    // Obtain the ruser logged information
+    $logUser = SessionUtils::isLogged() ? SessionUtils::getSessionUser() : null;
+
     if (isset($view) && file_exists(VIEW_PATH . $view)) {
 
         $parts = explode('/', $view, 2);    // Determine group by the prefix before the first '/'
-        $viewGroup = strtolower($parts[0] ?? '');
+        $viewSection = strtolower($parts[0] ?? '');
 
-        switch ($viewGroup) {
+        switch ($viewSection) {
             case 'auth':    // Authentication views
                 include_once VIEW_PATH . $view;
                 break;
@@ -44,14 +55,20 @@
                 break;
         }
     } else {
-
-        if (!class_exists('AppError')) {
-            include_once APP_PATH . 'model/AppError.php';
-        }
         $error = new AppError(404);
         $data = ['error' => $error];
         include_once VIEW_PATH . 'errors/error.php';
     }
+ 
+    if (isset($_GET['code'])) {  // When is httpResponse code, show toast
+        $httpCode = isset($_GET['code']) ? (int)$_GET['code'] : 404;
+        $msg = isset($_GET['message']) ? urldecode($_GET['message']) : null;
+        $toastInfo = new HttpResponse($httpCode, $msg);
+        if ($toastInfo != null) {
+            showHttpResponseToast($toastInfo);
+        }
+    }
+
     ?>
 
     <!--Javascript Bootstrap-->
@@ -59,14 +76,20 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    <!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
         integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
         crossorigin="anonymous">
-    </script>
+    </script>-->
+    <!-- Lucide icons: load full UMD from CDN with local fallback, then init -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.561.0/dist/umd/lucide.js"></script>
+    <script>if(!window.lucide){document.write('<script src="/vendor/lucide.js"><\/script>');}</script>
+    <script src="/js/lucide-init.js"></script>
+    <!-- Import the "General Utils" js script -->
+    <script src="/js/general-utils.js"></script>
 </body>
 
 </html>
