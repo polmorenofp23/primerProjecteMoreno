@@ -34,8 +34,6 @@ function togglePassword(fieldId, btn) {
 
 /**
  * Validates a form's required fields and return the feedback messages
- * @param {*} e 
- * @returns 
  */
 function validateForm(e) {
 

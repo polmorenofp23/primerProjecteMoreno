@@ -88,6 +88,8 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.561.0/dist/umd/lucide.js"></script>
     <script>if(!window.lucide){document.write('<script src="/vendor/lucide.js"><\/script>');}</script>
     <script src="/js/lucide-init.js"></script>
+    <!-- Import the "General Utils" js script -->
+    <script src="/js/general-utils.js"></script>
 </body>
 
 </html>
