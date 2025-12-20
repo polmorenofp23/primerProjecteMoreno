@@ -5,30 +5,34 @@
 INSERT INTO macronutrient (name, description, icon_dir) VALUES
 ('Protein', 'Macronutrient responsible for muscle repair and growth.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/macronutrient/icon_macronutrient_protein_color.png',
-    'black', '../public/assets/icons/macronutrient/icon_macronutrient_protein_black.png',
-    'white', '../public/assets/icons/macronutrient/icon_macronutrient_protein_white.png'
+    'txt', '../public/assets/icons/macronutrient/icon_macronutrient_protein_txt.svg',
+    'color', '../public/assets/icons/macronutrient/icon_macronutrient_protein.svg',
+    'black', '../public/assets/icons/macronutrient/icon_macronutrient_protein_black.svg',
+    'white', '../public/assets/icons/macronutrient/icon_macronutrient_protein_white.svg'
   )
 ),
 ('Fat', 'Essential fats used for energy storage and metabolic functions.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/macronutrient/icon_macronutrient_fat_color.png',
-    'black', '../public/assets/icons/macronutrient/icon_macronutrient_fat_black.png',
-    'white', '../public/assets/icons/macronutrient/icon_macronutrient_fat_white.png'
+    'txt', '../public/assets/icons/macronutrient/icon_macronutrient_fat_txt.svg',
+    'color', '../public/assets/icons/macronutrient/icon_macronutrient_fat.svg',
+    'black', '../public/assets/icons/macronutrient/icon_macronutrient_fat_black.svg',
+    'white', '../public/assets/icons/macronutrient/icon_macronutrient_fat_white.svg'
   )
 ),
 ('Carbohydrate', 'Primary source of energy for the human body.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_color.png',
-    'black', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_black.png',
-    'white', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_white.png'
+    'txt', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_txt.svg',
+    'color', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate.svg',
+    'black', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_black.svg',
+    'white', '../public/assets/icons/macronutrient/icon_macronutrient_carbohydrate_white.svg'
   )
 ),
 ('Water', 'Hydration component essential for all metabolic processes.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/macronutrient/icon_macronutrient_water_color.png',
-    'black', '../public/assets/icons/macronutrient/icon_macronutrient_water_black.png',
-    'white', '../public/assets/icons/macronutrient/icon_macronutrient_water_white.png'
+    'txt', '../public/assets/icons/macronutrient/icon_macronutrient_water_txt.svg',
+    'color', '../public/assets/icons/macronutrient/icon_macronutrient_water.svg',
+    'black', '../public/assets/icons/macronutrient/icon_macronutrient_water_black.svg',
+    'white', '../public/assets/icons/macronutrient/icon_macronutrient_water_white.svg'
   )
 );
 
@@ -37,65 +41,74 @@ INSERT INTO macronutrient (name, description, icon_dir) VALUES
 INSERT INTO allergen (name, description, icon_dir) VALUES
 ('Gluten', 'Protein found in wheat and related grains.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_gluten_white.svg'
   )
 ),
 ('Soy', 'Allergen present in soybeans and soy-based products.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_soy_white.svg'
   )
 ),
 ('Fish', 'Allergen present in all types of fish.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_fish_white.svg'
   )
 ),
 ('Crustaceans', 'Allergen found in crustacean shellfish such as prawns and crabs.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_white.svg'
   )
 ),
 ('Molluscs', 'Allergen found in mollusk shellfish such as clams and squid.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_molluscs_white.svg'
   )
 ),
 ('Egg', 'Allergen derived from bird eggs.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_egg_white.svg'
   )
 ),
 ('Lactose', 'Milk sugar present in dairy products.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_lactose_white.svg'
   )
 ),
 ('Mustard', 'Plant-based allergen used commonly in sauces and condiments.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_mustard_white.svg'
   )
 ),
 ('Tree Nuts', 'Allergen present in nuts such as walnuts, almonds, and hazelnuts.',
   JSON_OBJECT(
-    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_color.png',
-    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_black.png',
-    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_white.png'
+    'txt', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_txt.svg',
+    'color', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts.svg',
+    'black', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_black.svg',
+    'white', '../public/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_white.svg'
   )
 );  
 

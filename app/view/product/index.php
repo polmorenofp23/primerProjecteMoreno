@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productes - Bees Cavern</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -81,6 +81,6 @@
         </main>
     </div>
 
-    <script src="/public/js/product-cart.js"></script>
+    <!--<script src="/js/product-cart.js"></script>-->
 </body>
 </html>

@@ -6,13 +6,21 @@
             </div>
             <div class="row justify-content-between align-items-center my-5">
                 <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logo-meat_quality.webp" alt="Quality logo 1">
+                    <img src="/assets/img/logos/logo-meat-quality.svg" alt="Logo Meat Quality Approved By ONU">
                 </div>
                 <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logo.png" alt="Quality logo 2">
+                    <img src="/assets/img/logos/logo-bc-official.svg" alt="Bees Cavern Official Logo">
                 </div>
                 <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logo-real-food-1.jpg" alt="Quality logo 3">
+                    <img src="/assets/img/logos/logo-cow.svg" alt="Logo Grass Fed Beef Certified">
+                </div>
+            </div>
+            <div class="row justify-content-between align-items-center my-5">
+                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
+                    <img src="/assets/img/logos/logo-bio-carne.svg" alt="Logo Bio Meat Certified">
+                </div>
+                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
+                    <img src="/assets/img/logos/logo-real-fooding.svg" alt="Logo Real Fooding Ingredients Certified">
                 </div>
             </div>
             <div class="row col-10 my-4">
@@ -23,7 +31,7 @@
             <div class="container p-5">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-4">
-                        <img src="/assets/img/logo.png" alt="Bees Cavern Logo" class="foot-logo">
+                        <img src="/assets/img/logos/logo-bc-official.svg" alt="Bees Cavern Logo" class="foot-logo">
                         <h5 class="text-tertiary-red mt-3">BEES CAVERN RESTAURANT</h5>
                         <address class="d-block my-4">
                             Vantage London<br>
