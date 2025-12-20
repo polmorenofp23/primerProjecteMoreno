@@ -8,12 +8,10 @@
             <div class="card-header">
                 <h2 class="auth-form-title">REGISTER</h2>
             </div>
-
-            <!-- Register Form -->
             <div class="card-body px-5 pt-3 w-100">
                 <form method="POST" action="?controller=Auth&action=doRegister" class="d-flex flex-column" novalidate>
                     <legend class="form-label">User Identifier</legend>
-                    <!-- First Name -->
+                    <!-- First name field -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="firstname" name="first_name"
@@ -21,7 +19,7 @@
                         </div>
                     </div>
 
-                    <!-- Last Name -->
+                    <!-- Last name field-->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="lastname" name="last_name"
@@ -29,7 +27,7 @@
                         </div>
                     </div>
 
-                    <!-- Username -->
+                    <!-- Username field-->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="text" class="form-control p-3" id="username" name="username"
@@ -37,7 +35,7 @@
                         </div>
                     </div>
 
-                    <!-- Email -->
+                    <!-- Email fiels-->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group d-flex flex-column justify-content-center">
                             <input type="email" class="form-control w-100 p-3" id="email" name="email"
@@ -45,7 +43,7 @@
                         </div>
                     </div>
 
-                     <!-- Phone -->
+                     <!-- Phone field -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-group">
                             <input type="tel" class="form-control p-3" id="phone" name="phone"
@@ -53,7 +51,7 @@
                         </div>
                     </div>
 
-                    <!-- Password -->
+                    <!-- Password field -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-password">
                             <input type="password" class="form-control p-3" id="password" name="password"
@@ -64,7 +62,7 @@
                         </div>
                     </div>
 
-                    <!-- Confirm Password -->
+                    <!-- Confirmation of password field -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <div class="input-password">
                             <input type="password" class="form-control p-3" id="password_confirm" name="password_confirm"
@@ -75,7 +73,7 @@
                         </div>
                     </div>
 
-                    <!-- Date of Birth -->
+                    <!-- Date of birth fields info-->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <legend class="form-label">Date of Birth</legend>
                         <div class="input-group row g-2">
@@ -96,7 +94,7 @@
                         </div>
                     </div>
 
-                    <!-- Address -->
+                    <!-- Address info -->
                     <div class="form-group my-2 d-flex flex-column justify-content-center">
                         <legend class="form-label">Address</legend>
                         <div class="input-group">
@@ -126,12 +124,11 @@
                         }
                     ?>
 
-                    <!-- Submit Button -->
                     <button type="submit" class="btn-red my-4 w-100">
                         REGISTER
                     </button>
 
-                    <!-- Terms & Login Link -->
+                    <!-- Linksn and info of context  -->
                     <div class="text-center my-2">
                         <small>
                             ALREADY HAVE AN ACCOUNT?
@@ -158,24 +155,20 @@
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     if (togglePasswordBtn) {
         togglePasswordBtn.addEventListener('click', function () {
-            togglePassword('password', this);
+            togglePassword('password', togglePasswordBtn);
         });
     }
 
     const togglePasswordConfirmBtn = document.getElementById('togglePasswordConfirmBtn');
     if (togglePasswordConfirmBtn) {
         togglePasswordConfirmBtn.addEventListener('click', function () {
-            togglePassword('password_confirm', this);
+            togglePassword('password_confirm', togglePasswordConfirmBtn);
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('.register-page form');
         if (!form) return;
-            
-        try { // Preguntar porque me pide removeEventListener antes de haver el addEventListener
-            form.removeEventListener('submit', validateForm);
-        } catch (e) {}
         form.addEventListener('submit', validateForm);
     });
 

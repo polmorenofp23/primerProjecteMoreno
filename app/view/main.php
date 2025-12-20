@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bees Cavern Web</title>
+    <link rel="icon" href="/assets/img/logos/logo-bc-official.svg" type="image/svg+xml">
     <!--<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>-->
     <!-- css Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -19,6 +20,11 @@
 <body class="d-flex flex-column min-vh-100">
 
     <?php
+    // Import all components necessaries for all the pages
+    include_once VIEW_PATH . 'partials/components/bc-toast.php';
+    include_once APP_PATH . 'model/HttpResponse.php';
+    include_once APP_PATH . 'model/AppError.php';
+    
     // Obtain the ruser logged information
     $logUser = SessionUtils::isLogged() ? SessionUtils::getSessionUser() : null;
 
@@ -49,14 +55,20 @@
                 break;
         }
     } else {
-
-        if (!class_exists('AppError')) {
-            include_once APP_PATH . 'model/AppError.php';
-        }
         $error = new AppError(404);
         $data = ['error' => $error];
         include_once VIEW_PATH . 'errors/error.php';
     }
+ 
+    if (isset($_GET['code'])) {  // When is httpResponse code, show toast
+        $httpCode = isset($_GET['code']) ? (int)$_GET['code'] : 404;
+        $msg = isset($_GET['message']) ? urldecode($_GET['message']) : null;
+        $toastInfo = new HttpResponse($httpCode, $msg);
+        if ($toastInfo != null) {
+            showHttpResponseToast($toastInfo);
+        }
+    }
+
     ?>
 
     <!--Javascript Bootstrap-->

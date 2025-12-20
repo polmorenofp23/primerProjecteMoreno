@@ -7,7 +7,7 @@
     <!-- Logo -->
     <div class="bc-auth-logo text-center">
         <a href="?controller=Product&action=index">
-            <img src="/assets/img/logo.png" alt="Bees Cavern Website Logo" class="text-white">
+            <img src="/assets/img/logos/logo-bc-official.svg" alt="Bees Cavern Website Logo" class="text-white">
         </a>
     </div>
 </header>

@@ -71,7 +71,8 @@ class AuthController
         }
 
         SessionUtils::login($user->getId());
-        header('Location: ?controller=Product&action=index');
+        // Redirect to product index and request a toast message showing successful login
+        header('Location: ?controller=Product&action=index&code=200&message=User+logged+in+successfully');
         exit;
     }
 
@@ -96,7 +97,7 @@ class AuthController
         }
 
         $uc = new UserController();
-        $result = $uc->store($_POST, true, 'auth/register.php', '?controller=Auth&action=showLogin&message=registered');
+        $result = $uc->store($_POST, true, 'auth/register.php', '?controller=Auth&action=showLogin&code=201&message=registered');
 
         if (!is_array($result) || empty($result['success'])) {
             $err = $result['error'] ?? new AppError(500, 'Registration failed.');
@@ -106,7 +107,7 @@ class AuthController
             return;
         }
 
-        header('Location: ?controller=Auth&action=showLogin&message=registered');
+        header('Location: ?controller=Auth&action=showLogin&code=201&message=New+user+registered');
         exit;
     }
 
@@ -116,7 +117,7 @@ class AuthController
     public function logout()
     {
         SessionUtils::logout();
-        header('Location: ?controller=Auth&action=showLogin&message=logged_out');
+        header('Location: ?controller=Auth&action=showLogin&code=200&message=User+logged+out');
         exit;
     }
 }

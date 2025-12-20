@@ -32,7 +32,7 @@
                         </div>
                     </div>
 
-                    <?php // Show the error message if exists
+                    <?php // Show the error message if exists 
                         if (isset($data) && !empty($data['error'])) {
                             $err = $data['error'];
                             if (is_object($err)) {
@@ -70,17 +70,13 @@
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     if (togglePasswordBtn) {
         togglePasswordBtn.addEventListener('click', function () {
-            togglePassword('password', this);
+            togglePassword('password', togglePasswordBtn);
         });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('.login-page form');
         if (!form) return;
-            
-        try { // Preguntar al david porque me pide removeEventListener antes de haver el addEventListener
-            form.removeEventListener('submit', validateForm);
-        } catch (e) {}
         form.addEventListener('submit', validateForm);
     });
 

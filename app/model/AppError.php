@@ -2,6 +2,7 @@
 
 /**
  * AppError model to represent standardized error information.
+ * Designed to handle the errors internally in the application.
  *
  * Properties:
  *  - error_code (int)
