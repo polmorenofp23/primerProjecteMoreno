@@ -5,7 +5,6 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
 
     function showHttpResponseToast(?\HttpResponse $response = null, string $bgClass = '', string $textClass = '', int $delay = 3000) {
         if (!$response) return;
-
         $code = $response->getCode();
         $name = $response->getName();
         $description = $response->getDescription();
@@ -48,7 +47,66 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
         <?php
     }
 
-    function renderBCPageTitle(){}
+    function renderBCPageTitle(array $breadcrumbs = []){
+        $items = [];    
+        if (!empty($breadcrumbs)) { // Normalize to list of ['label'=>..,'url'=>..]
+            $first = reset($breadcrumbs);
+            if (is_array($first) && array_key_exists('label', $first)) {
+                foreach ($breadcrumbs as $it) {
+                    $items[] = ['label' => (string)($it['label'] ?? ''), 'url' => $it['url'] ?? null];
+                }
+            } else {
+                foreach ($breadcrumbs as $label => $url) {
+                    $items[] = ['label' => (string)$label, 'url' => $url ?? null];
+                }
+            }
+        }
+
+        $title = '';
+        $activeIndex = null;
+        foreach ($items as $idx => $it) {
+            if ($it['url'] === null || $it['url'] === '') { $title = $it['label']; $activeIndex = $idx; break; }
+        }
+        if ($activeIndex === null && !empty($items)) {
+            $last = end($items);
+            $title = $last['label'];
+            $activeIndex = count($items) - 1;
+        }
+
+        ?>
+        <div class="bc-page-title w-100 py-3">
+            <?php if (!empty($items)) : ?>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent font-sting-light fs-12 ms-5 mb-2">
+                        <?php foreach ($items as $i => $it):
+                            $labelEsc = htmlspecialchars((string)$it['label']);
+                            $urlStr = $it['url'] === null ? '' : (string)$it['url'];
+                            $isActive = ($i === $activeIndex || $urlStr === '');
+                        ?>
+                            <?php if ($isActive): ?>
+                                <li class="breadcrumb-item text-primary-grey active" aria-current="page"><?php echo $labelEsc; ?></li>
+                            <?php else: ?>
+                                <li class="breadcrumb-item"><a href="<?php echo htmlspecialchars($urlStr); ?>"><?php echo $labelEsc; ?></a></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ol>
+                </nav>
+            <?php endif; ?>
+
+            <?php if ($title !== ''): ?>
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="d-flex align-items-center">
+                            <hr class="col-1 border-0 bg-primary-red py-1">
+                            <h1 class="font-sting-regular fs-48 text-primary-dark-red ms-4"><?php echo htmlspecialchars($title); ?></h1>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php
+    }
 
     function renderBCProductCard(Product $product) {
         $id = $product->getId() ?? null;

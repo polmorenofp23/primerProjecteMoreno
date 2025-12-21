@@ -23,19 +23,40 @@
 }
 
 /** Solid Color Backgrounds **/
-.bg-color-white {
+.bg-secondary-white {
     background: var(--secondary-white);
     color: var(--primary-red);
+    opacity: 1;
 }
-.bg-color-grey {
+.bg-primary-grey {
+    background: var(--primary-grey);
+    opacity: 1;
+}
+.bg-secondary-grey {
     background: var(--secondary-grey);
+    opacity: 1;
 }
-.bg-color-red {
+.bg-primary-red {
+    background: var(--primary-red);
+    color: var(--primary-white);
+    opacity: 1;
+}
+.bg-secondary-red {
     background: var(--secondary-red);
+    color: var(--primary-white);
+    opacity: 1;
 }
-.bg-color-dark-red {
+.bg-primary-dark-red {
+    background: var(--primary-dark-red);
+    color: var(--primary-white);
+    opacity: 1;
+}
+.bg-secondary-dark-red {
     background: var(--secondary-dark-red);
+    color: var(--primary-white);
+    opacity: 1;
 }
-.bg-color-black {
+.bg-primary-black {
     background: var(--primary-black);
+    opacity: 1;
 }

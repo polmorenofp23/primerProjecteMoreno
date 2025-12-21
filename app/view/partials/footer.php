@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row bg-color-white p-5 m-1">
+            <div class="row bg-secondary-white p-5 m-1">
                     <div class="col-12">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small ">
                             <div class="mb-2 mb-md-0"><span>Privacy Policy &nbsp;|&nbsp; Terms And Conditions &nbsp;|&nbsp; FAQs &nbsp;|&nbsp; Policies And Regulations</span></div>

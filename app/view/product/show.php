@@ -8,10 +8,14 @@
 </head>
 <body>
     <div class="container">
-        
-        <a href="/">Inici</a> &gt; 
-        <a href="?controller=Product&action=index">Productes</a> &gt; 
-        <span><?= htmlspecialchars($product->getName()) ?></span>
+        <?php
+
+        renderBCPageTitle([
+            'Menu' => '/?controller=Product&action=index',
+            'Main Plates' => '?controller=Product&action=index&dishType=' . urlencode($product->getDishType()),
+            htmlspecialchars($product->getName()) => null,
+        ]);
+        ?>
 
         <main class="product-detail">
             <div class="product-detail-grid">
