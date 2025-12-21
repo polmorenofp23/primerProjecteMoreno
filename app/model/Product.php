@@ -14,7 +14,7 @@ class Product
     /** ENUM('appetiser','main','dessert','drink') NOT NULL */
     private string $dish_type;
     
-    /** DECIMAL(10,2) NOT NULL DEFAULT 0.00 - min_price in DB */
+    /** DECIMAL(10,2) NOT NULL DEFAULT 0.00 - price in DB */
     private float $price;
     
     /** JSON NOT NULL - can be string (JSON) or array (decoded) */

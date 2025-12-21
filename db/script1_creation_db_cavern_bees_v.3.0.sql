@@ -48,7 +48,7 @@ CREATE TABLE product (
   name              VARCHAR(120) NOT NULL,
   description       TEXT NULL,
   dish_type         ENUM('appetiser','main','dessert','drink') NOT NULL, -- ("appetiser" -> entrante, "main" -> principal, "dessert" -> postre)
-  min_price         DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- preu minim del plat. mirar de fer el calcul del preu amb els ingredients que el composen desde un trigger
+  price             DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- preu minim del plat. mirar de fer el calcul del preu amb els ingredients que el composen desde un trigger
   img_dir           JSON NOT NULL,
   available         TINYINT(1) NOT NULL DEFAULT 1,
   created_at        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

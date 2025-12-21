@@ -51,7 +51,7 @@ BEGIN
 END$$
 
 
--- Funció auxiliar: recalcular el min_price d'un producte concret
+-- Funció auxiliar: recalcular el price d'un producte concret
 -- La fem com a bloc reutilitzable dins dels triggers AFTER
 -- (no es pot crear FUNCTION dins un trigger, així que repetirem el bloc)
 -- -------------------------------------------------------------
@@ -59,14 +59,14 @@ END$$
 
 -- -------------------------------------------------------------
 -- AFTER INSERT: quan s'afegeix un ingredient a un producte,
---               recalcula el min_price del producte.
+--               recalcula el price del producte.
 -- -------------------------------------------------------------
 CREATE TRIGGER ai_product_ingredient_minprice
 AFTER INSERT ON product_ingredient
 FOR EACH ROW
 BEGIN
   UPDATE product p
-  SET p.min_price = (
+  SET p.price = (
     SELECT IFNULL(SUM(pi.portion_price), 0)
     FROM product_ingredient pi
     WHERE pi.id_product = NEW.id_product
@@ -77,14 +77,14 @@ END$$
 
 -- -------------------------------------------------------------
 -- AFTER UPDATE: quan es modifica una línia (grams, ingredient...),
---               recalcula el min_price del producte.
+--               recalcula el price del producte.
 -- -------------------------------------------------------------
 CREATE TRIGGER au_product_ingredient_minprice
 AFTER UPDATE ON product_ingredient
 FOR EACH ROW
 BEGIN
   UPDATE product p
-  SET p.min_price = (
+  SET p.price = (
     SELECT IFNULL(SUM(pi.portion_price), 0)
     FROM product_ingredient pi
     WHERE pi.id_product = NEW.id_product
@@ -95,14 +95,14 @@ END$$
 
 -- -------------------------------------------------------------
 -- AFTER DELETE: quan s'elimina una línia d'ingredient d'un producte,
---               recalcula el min_price del producte.
+--               recalcula el price del producte.
 -- -------------------------------------------------------------
 CREATE TRIGGER ad_product_ingredient_minprice
 AFTER DELETE ON product_ingredient
 FOR EACH ROW
 BEGIN
   UPDATE product p
-  SET p.min_price = (
+  SET p.price = (
     SELECT IFNULL(SUM(pi.portion_price), 0)
     FROM product_ingredient pi
     WHERE pi.id_product = OLD.id_product

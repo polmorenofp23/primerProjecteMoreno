@@ -124,7 +124,6 @@ h5 {
     font-weight: var(--fw-regular);
     font-size: 32px;
     color: var(--primary-red);
-    text-transform: uppercase;
 }
 
 h6 {
@@ -132,7 +131,6 @@ h6 {
     font-weight: var(--fw-regular);
     font-size: 20px;
     color: var(--tertiary-red);
-    text-transform: uppercase;
 }
 
 p {
@@ -147,6 +145,75 @@ legend{
     font-family: var(--font-Karla);
     font-weight: var(--fw-medium);
     color: var(--primary-dark-red);
+}
+
+/* GLOBAL FONT STYLES */
+.font-karla-regular {
+    font-family: var(--font-Karla);
+    font-weight: var(--fw-regular);
+}
+
+.font-karla-medium {
+    font-family: var(--font-Karla);
+    font-weight: var(--fw-medium);
+}
+
+.font-karla-bold {
+    font-family: var(--font-Karla);
+    font-weight: var(--fw-bold);
+}
+
+.font-sting-light {
+    font-family: var(--font-Sting);
+    font-weight: var(--fw-light);
+}
+
+.font-sting-regular {
+    font-family: var(--font-Sting);
+    font-weight: var(--fw-regular);
+}
+
+.font-sting-black {
+    font-family: var(--font-Sting);
+    font-weight: var(--fw-black);
+}
+
+/* GLOBAL TEXT SIZES */
+.fs-10 {
+    font-size: 10px !important;
+}
+.fs-12 {
+    font-size: 12px !important;
+}
+.fs-14 {
+    font-size: 14px !important;
+}
+.fs-16 {
+    font-size: 16px !important;
+}
+.fs-18 {
+    font-size: 18px !important;
+}
+.fs-20 {
+    font-size: 20px !important;
+}
+.fs-24 {
+    font-size: 24px !important;
+}
+.fs-32 {
+    font-size: 32px !important;
+}
+.fs-40 {
+    font-size: 40px !important;
+}
+.fs-48 {
+    font-size: 48px !important;
+}
+.fs-60 {
+    font-size: 60px !important;
+}
+.fs-80 {
+    font-size: 80px !important;
 }
 
 /* GLOBAL TEXT COLORS */

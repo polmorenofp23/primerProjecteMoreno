@@ -21,7 +21,7 @@
 
     <?php
     // Import all components necessaries for all the pages
-    include_once VIEW_PATH . 'partials/components/bc-toast.php';
+    include_once VIEW_PATH . 'partials/bc-render-components.php';
     include_once APP_PATH . 'model/HttpResponse.php';
     include_once APP_PATH . 'model/AppError.php';
     

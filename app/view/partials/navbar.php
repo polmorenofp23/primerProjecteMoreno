@@ -7,7 +7,7 @@ function navActiveSection($name, $sectionName) {
 }
 
 ?>
-<nav class="main-navbar navbar navbar-expand-lg navbar-dark bg-transparent">
+<nav class="main-navbar navbar navbar-expand-sm navbar-dark bg-transparent">
     <div class="container-fluid justify-content-center align-items-center">
 
         <!-- Toggler + nav items (collapse for small screens) -->

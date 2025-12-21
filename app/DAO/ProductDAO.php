@@ -136,7 +136,7 @@ class ProductDAO{
         if (isset($filters['price_range']) && is_array($filters['price_range'])) {
             $min = $filters['price_range'][0];
             $max = $filters['price_range'][1];
-            $wheres[] = 'p.min_price BETWEEN :min_price AND :max_price';
+            $wheres[] = 'p.price BETWEEN :min_price AND :max_price';
             $params[':min_price'] = $min;
             $params[':max_price'] = $max;
         }
@@ -159,10 +159,10 @@ class ProductDAO{
         if ($orderBy) {
             switch ($orderBy) {
                 case 'price_asc':
-                    $orderByQuery = ' ORDER BY p.min_price ASC';
+                    $orderByQuery = ' ORDER BY p.price ASC';
                     break;
                 case 'price_desc':
-                    $orderByQuery = ' ORDER BY p.min_price DESC';
+                    $orderByQuery = ' ORDER BY p.price DESC';
                     break;
                 case 'dish_type':
                     $orderByQuery = ' ORDER BY p.dish_type ASC';
@@ -217,13 +217,13 @@ class ProductDAO{
     {
         $this->conn = $this->db->connect();
 
-        $query = "INSERT INTO product (name, description, dish_type, min_price, img_dir, available) 
-                VALUES (:name, :description, :dish_type, :min_price, :img_dir, :available)";
+        $query = "INSERT INTO product (name, description, dish_type, price, img_dir, available) 
+                VALUES (:name, :description, :dish_type, :price, :img_dir, :available)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':name', $product->getName());
         $stmt->bindValue(':description', $product->getDescription() ?? '');
         $stmt->bindValue(':dish_type', $product->getDishType());
-        $stmt->bindValue(':min_price', $product->getPrice());
+        $stmt->bindValue(':price', $product->getPrice());
         $stmt->bindValue(':img_dir', json_encode($product->getImgDir()));
         $stmt->bindValue(':available', (bool)$product->getAvailable(), PDO::PARAM_BOOL);
         $stmt->execute();
@@ -258,8 +258,8 @@ class ProductDAO{
         $fields[] = "dish_type = :dish_type";
         $params[':dish_type'] = $product->getDishType();
 
-        $fields[] = "min_price = :min_price";
-        $params[':min_price'] = $product->getPrice();
+        $fields[] = "price = :price";
+        $params[':price'] = $product->getPrice();
 
         $fields[] = "img_dir = :img_dir";
         $params[':img_dir'] = json_encode($product->getImgDir());

@@ -4,23 +4,31 @@
             <div class="row mb-3">
                 <h3 class="text-uppercase">OFFICIAL QUALITY STAMPTS</h3>
             </div>
-            <div class="row justify-content-between align-items-center my-5">
-                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logos/logo-meat-quality.svg" alt="Logo Meat Quality Approved By ONU">
+            <div class="row col-8 justify-content-around align-items-center my-5">
+                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
+                    <div class="quality-logo">
+                        <img src="/assets/img/logos/logo-meat-quality.svg" alt="Logo Meat Quality Approved By ONU">
+                    </div>
                 </div>
-                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logos/logo-bc-official.svg" alt="Bees Cavern Official Logo">
+                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
+                    <div class="quality-logo">
+                        <img src="/assets/img/logos/logo-bc-official.svg" alt="Bees Cavern Official Logo">
+                    </div>
                 </div>
-                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logos/logo-cow.svg" alt="Logo Grass Fed Beef Certified">
+                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
+                    <div class="quality-logo">
+                        <img src="/assets/img/logos/logo-cow.svg" alt="Logo Grass Fed Beef Certified">
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-between align-items-center my-5">
-                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logos/logo-bio-carne.svg" alt="Logo Bio Meat Certified">
+                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
+                    <div class="quality-logo">
+                        <img src="/assets/img/logos/logo-bio-carne.svg" alt="Logo Bio Meat Certified">
+                    </div>
                 </div>
-                <div class="col-6 col-sm-4 col-md-2 d-flex justify-content-center">
-                    <img src="/assets/img/logos/logo-real-fooding.svg" alt="Logo Real Fooding Ingredients Certified">
+                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-5">
+                    <div class="quality-logo">
+                        <img src="/assets/img/logos/logo-real-fooding.svg" alt="Logo Real Fooding Ingredients Certified">
+                    </div>
                 </div>
             </div>
             <div class="row col-10 my-4">

@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productes - Bees Cavern</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Menu - Bees Cavern</title>
 </head>
 <body>
-    <div class="container">
+    <div class="mx-auto my-4 col-11 col-lg-10">
 
+        <!-- Component Title -->
         <h1>Menú de Productes</h1>
         <a href="/">Inici</a>
         <a href="?controller=Product&action=index">Tots els productes</a>
 
+
+        <!-- Filter Buttons Options -->
+
         <main class="products-grid">
             <div class="row g-4">
                 <?php if (!empty($products)): ?>
-                    <?php include_once VIEW_PATH . 'partials/components/bc-menu-product.php'; ?>
                     <?php foreach ($products as $product): ?>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
-                            <?php renderBCMenuProduct($product); ?>
+                        <div class="col-12 col-sm-6 col-lg-4 col-xl-3 d-flex">
+                            <?php renderBCProductCard($product); ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="no-products">
-                        <p>No products found for this filter</p>
+                        <p>No products found for these filters</p>
                     </div>
                 <?php endif; ?>
             </div>
