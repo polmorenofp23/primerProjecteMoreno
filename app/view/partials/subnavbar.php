@@ -43,16 +43,16 @@
                 <?php else: ?>
                     <ul class="navbar-nav">
                         <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Product&action=index">Appetissers</a>
+                            <a class="nav-link" href="?controller=Product&action=index&dish_type=appetiser">Appetissers</a>
                         </li>
                         <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Product&action=index">Main Plates</a>
+                            <a class="nav-link" href="?controller=Product&action=index&dish_type=main">Main Plates</a>
                         </li>
                         <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Product&action=index">Desserts</a>
+                            <a class="nav-link" href="?controller=Product&action=index&dish_type=dessert">Desserts</a>
                         </li>
                         <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Product&action=index">Drinks</a>
+                            <a class="nav-link" href="?controller=Product&action=index&dish_type=drink">Drinks</a>
                         </li>
                     </ul>
                 <?php endif; ?>
