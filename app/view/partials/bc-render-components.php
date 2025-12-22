@@ -133,11 +133,9 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
             if ($avg !== null) $rating = (float)$avg;
         } catch (Exception $e) {
             $rating = null;
-        }
-        
+        } 
         if ($rating === null) $rating = 0.0;
 
-        // Render in html the component
         ?>
         <div class="card bc-menu-product-card h-100 w-100 border-0 rounded-0 shadow-none">
             <a href="?controller=Product&action=show&id=<?php echo htmlspecialchars((string)$id); ?>" class="text-decoration-none text-reset">
