@@ -97,6 +97,27 @@ class SessionUtils
 	}
 
 	/**
+	 * Store a temporary http response (code + message) in session to be shown after redirect
+	 */
+	public static function setFlashHttpResponse(int $code, ?string $message = null): void
+	{
+		self::ensureStarted();
+		$_SESSION['http_response'] = ['code' => $code, 'message' => $message];
+	}
+
+	/**
+	 * Retrieve and clear the flash http response from session. Returns array|null
+	 */
+	public static function getFlashHttpResponse(): ?array
+	{
+		self::ensureStarted();
+		if (!isset($_SESSION['http_response'])) return null;
+		$httpResponse = $_SESSION['http_response'];
+		unset($_SESSION['http_response']);
+		return is_array($httpResponse) ? $httpResponse : null;
+	}
+
+	/**
 	 * Destroys the session completely
 	 */
 	public static function destroy(): void

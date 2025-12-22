@@ -1,7 +1,6 @@
 <nav class="sub-navbar navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container-fluid justify-content-center align-items-center">
 
-        <!-- Toggler + nav items (collapse for small screens) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#subNavbar"
             aria-controls="subNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

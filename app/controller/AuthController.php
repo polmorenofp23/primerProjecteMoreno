@@ -71,8 +71,8 @@ class AuthController
         }
 
         SessionUtils::login($user->getId());
-        // Redirect to product index and request a toast message showing successful login
-        header('Location: ?controller=Product&action=index&code=200&message=User+logged+in+successfully');
+        SessionUtils::setFlashHttpResponse(200, 'User logged in successfully');
+        header('Location: ?controller=Product&action=index');
         exit;
     }
 
@@ -97,7 +97,7 @@ class AuthController
         }
 
         $uc = new UserController();
-        $result = $uc->store($_POST, true, 'auth/register.php', '?controller=Auth&action=showLogin&code=201&message=registered');
+        $result = $uc->store($_POST, true, 'auth/register.php', '?controller=Auth&action=showLogin');
 
         if (!is_array($result) || empty($result['success'])) {
             $err = $result['error'] ?? new AppError(500, 'Registration failed.');
@@ -107,7 +107,8 @@ class AuthController
             return;
         }
 
-        header('Location: ?controller=Auth&action=showLogin&code=201&message=New+user+registered');
+        SessionUtils::setFlashHttpResponse(201, 'New user registered');
+        header('Location: ?controller=Auth&action=showLogin');
         exit;
     }
 
@@ -117,7 +118,8 @@ class AuthController
     public function logout()
     {
         SessionUtils::logout();
-        header('Location: ?controller=Auth&action=showLogin&code=200&message=User+logged+out');
+        SessionUtils::setFlashHttpResponse(200, 'User logged out');
+        header('Location: ?controller=Auth&action=showLogin');
         exit;
     }
 }

@@ -156,7 +156,8 @@ class UserController
             return;
         }
 
-        header('Location: ?controller=User&action=edit&code=200&message=User+successfully+updated');
+        SessionUtils::setFlashHttpResponse(200, 'User successfully updated');
+        header('Location: ?controller=User&action=edit');
         exit;
     }
 

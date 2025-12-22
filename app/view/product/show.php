@@ -98,37 +98,18 @@
                                 </div>
                                 
                                 <button type="submit" class="btn btn-add-cart-large">
-                                    Afegir al carret
+                                    Add to Cart
                                 </button>
                             </form>
                         </div>
                     <?php else: ?>
                         <div class="product-unavailable-notice">
-                            <p>Aquest producte no està disponible actualment.</p>
+                            <p>Product not available right now</p>
                         </div>
                     <?php endif; ?>
-
-                    <!-- Additional Info -->
-                    <div class="product-additional-info">
-                        <?php if ($product->getCreatedAt()): ?>
-                            <p class="info-item">
-                                <strong>Afegit:</strong> 
-                                <?= date('d/m/Y', strtotime($product->getCreatedAt())) ?>
-                            </p>
-                        <?php endif; ?>
-                        
-                        <?php if ($product->getUpdatedAt()): ?>
-                            <p class="info-item">
-                                <strong>Última actualització:</strong> 
-                                <?= date('d/m/Y', strtotime($product->getUpdatedAt())) ?>
-                            </p>
-                        <?php endif; ?>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
-
-    <!--<script src="/js/product-cart.js"></script>-->
 </body>
 </html>

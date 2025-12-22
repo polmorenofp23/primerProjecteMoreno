@@ -24,6 +24,7 @@
     include_once VIEW_PATH . 'partials/bc-render-components.php';
     include_once APP_PATH . 'model/HttpResponse.php';
     include_once APP_PATH . 'model/AppError.php';
+    include_once UTIL_PATH . 'SessionUtils.php';
     
     // Obtain the ruser logged information
     $logUser = SessionUtils::isLogged() ? SessionUtils::getSessionUser() : null;
@@ -60,13 +61,12 @@
         include_once VIEW_PATH . 'errors/error.php';
     }
  
-    if (isset($_GET['code'])) {  // When is httpResponse code, show toast
-        $httpCode = isset($_GET['code']) ? (int)$_GET['code'] : 404;
-        $msg = isset($_GET['message']) ? urldecode($_GET['message']) : null;
+    $httpResponse = SessionUtils::getFlashHttpResponse();
+    if ($httpResponse !== null) {
+        $httpCode = isset($httpResponse['code']) ? (int)$httpResponse['code'] : 404;
+        $msg = $httpResponse['message'] ?? null;
         $toastInfo = new HttpResponse($httpCode, $msg);
-        if ($toastInfo != null) {
-            showHttpResponseToast($toastInfo);
-        }
+        if ($toastInfo != null) showHttpResponseToast($toastInfo);
     }
 
     ?>

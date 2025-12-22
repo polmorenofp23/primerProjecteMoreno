@@ -99,12 +99,8 @@ class ProductController
             $filters['id'] = array_map('intval', array_map('trim', explode(',', $_GET['ids'])));
         }
 
-        // order_by
         $orderBy = $_GET['order_by'] ?? null;
-
-        // Delegate to the unified DAO filter method
         $products = $productDAO->getProductsByFilter($filters, $orderBy);
-        
         include_once VIEW_PATH . 'main.php';
     }
 }
