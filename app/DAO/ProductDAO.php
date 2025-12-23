@@ -114,6 +114,12 @@ class ProductDAO{
             )";
         }
 
+        // by name like (search by partial name)
+        if (isset($filters['name_like']) && $filters['name_like'] !== '') {
+            $wheres[] = 'p.name LIKE :name_like';
+            $params[':name_like'] = '%' . $filters['name_like'] . '%';
+        }
+
         // by dish_type (accept string or array)
         if (isset($filters['dish_type'])) {
             if (is_array($filters['dish_type'])) {

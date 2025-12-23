@@ -2,8 +2,8 @@
 
 -- macronutrient (id_macronutrient, name, description, icon_dir)
 -- INSERTS
-INSERT INTO macronutrient (name, description, icon_dir) VALUES
-('Protein', 'Macronutrient responsible for muscle repair and growth.',
+INSERT INTO macronutrient (id_macronutrient, name, description, icon_dir) VALUES
+(1, 'Protein', 'Macronutrient responsible for muscle repair and growth.',
   JSON_OBJECT(
     'txt', '/assets/icons/macronutrient/icon_macronutrient_protein_txt.svg',
     'color', '/assets/icons/macronutrient/icon_macronutrient_protein.svg',
@@ -11,7 +11,7 @@ INSERT INTO macronutrient (name, description, icon_dir) VALUES
     'white', '/assets/icons/macronutrient/icon_macronutrient_protein_white.svg'
   )
 ),
-('Fat', 'Essential fats used for energy storage and metabolic functions.',
+(2, 'Fat', 'Essential fats used for energy storage and metabolic functions.',
   JSON_OBJECT(
     'txt', '/assets/icons/macronutrient/icon_macronutrient_fat_txt.svg',
     'color', '/assets/icons/macronutrient/icon_macronutrient_fat.svg',
@@ -19,7 +19,7 @@ INSERT INTO macronutrient (name, description, icon_dir) VALUES
     'white', '/assets/icons/macronutrient/icon_macronutrient_fat_white.svg'
   )
 ),
-('Carbohydrate', 'Primary source of energy for the human body.',
+(3, 'Carbohydrate', 'Primary source of energy for the human body.',
   JSON_OBJECT(
     'txt', '/assets/icons/macronutrient/icon_macronutrient_carbohydrate_txt.svg',
     'color', '/assets/icons/macronutrient/icon_macronutrient_carbohydrate.svg',
@@ -27,7 +27,7 @@ INSERT INTO macronutrient (name, description, icon_dir) VALUES
     'white', '/assets/icons/macronutrient/icon_macronutrient_carbohydrate_white.svg'
   )
 ),
-('Water', 'Hydration component essential for all metabolic processes.',
+(4, 'Water', 'Hydration component essential for all metabolic processes.',
   JSON_OBJECT(
     'txt', '/assets/icons/macronutrient/icon_macronutrient_water_txt.svg',
     'color', '/assets/icons/macronutrient/icon_macronutrient_water.svg',
@@ -38,8 +38,8 @@ INSERT INTO macronutrient (name, description, icon_dir) VALUES
 
 -- allergen (id_allergen, name, description, icon_dir)
 -- INSERTS
-INSERT INTO allergen (name, description, icon_dir) VALUES
-('Gluten', 'Protein found in wheat and related grains.',
+INSERT INTO allergen (id_allergen, name, description, icon_dir) VALUES
+(1, 'Gluten', 'Protein found in wheat and related grains.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_gluten_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_gluten.svg',
@@ -47,7 +47,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_gluten_white.svg'
   )
 ),
-('Soy', 'Allergen present in soybeans and soy-based products.',
+(2, 'Soy', 'Allergen present in soybeans and soy-based products.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_soy_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_soy.svg',
@@ -55,7 +55,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_soy_white.svg'
   )
 ),
-('Fish', 'Allergen present in all types of fish.',
+(3, 'Fish', 'Allergen present in all types of fish.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_fish_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_fish.svg',
@@ -63,7 +63,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_fish_white.svg'
   )
 ),
-('Crustaceans', 'Allergen found in crustacean shellfish such as prawns and crabs.',
+(4, 'Crustaceans', 'Allergen found in crustacean shellfish such as prawns and crabs.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_crustaceans.svg',
@@ -71,7 +71,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_crustaceans_white.svg'
   )
 ),
-('Molluscs', 'Allergen found in mollusk shellfish such as clams and squid.',
+(5, 'Molluscs', 'Allergen found in mollusk shellfish such as clams and squid.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_molluscs_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_molluscs.svg',
@@ -79,7 +79,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_molluscs_white.svg'
   )
 ),
-('Egg', 'Allergen derived from bird eggs.',
+(6, 'Egg', 'Allergen derived from bird eggs.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_egg_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_egg.svg',
@@ -87,7 +87,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_egg_white.svg'
   )
 ),
-('Lactose', 'Milk sugar present in dairy products.',
+(7, 'Lactose', 'Milk sugar present in dairy products.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_lactose_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_lactose.svg',
@@ -95,7 +95,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_lactose_white.svg'
   )
 ),
-('Mustard', 'Plant-based allergen used commonly in sauces and condiments.',
+(8, 'Mustard', 'Plant-based allergen used commonly in sauces and condiments.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_mustard_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_mustard.svg',
@@ -103,7 +103,7 @@ INSERT INTO allergen (name, description, icon_dir) VALUES
     'white', '/assets/icons/contain_allergen/icon_contain_allergen_mustard_white.svg'
   )
 ),
-('Tree Nuts', 'Allergen present in nuts such as walnuts, almonds, and hazelnuts.',
+(9, 'Tree Nuts', 'Allergen present in nuts such as walnuts, almonds, and hazelnuts.',
   JSON_OBJECT(
     'txt', '/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts_txt.svg',
     'color', '/assets/icons/contain_allergen/icon_contain_allergen_tree_nuts.svg',

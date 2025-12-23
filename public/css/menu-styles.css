@@ -1,0 +1,26 @@
+/* Menu Filters styles */
+.input-group select,
+.input-group input, 
+.input-group select option {
+	background: var(--secondary-white);
+	color: var(--primary-black);
+	font-family: var(--font-Sting);
+	font-weight: var(--fw-light);
+	font-size: 14px;
+	border: 0;
+	border-radius: 0;
+	outline: none;
+    appearance: auto;
+}
+
+.input-group select option:disabled,
+.input-group input::placeholder{
+    color: var(--secondary-grey);
+}
+
+
+/* Search by identifier placeholder style */
+input.text-primary-red::placeholder { 
+    color: currentColor; 
+    opacity: 1; 
+}

@@ -285,6 +285,7 @@ legend{
     transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
     text-decoration: none;
     user-select: none;
+    border-radius: 0;
 }
 
 /* Red button: solid red background with white text */
@@ -292,7 +293,6 @@ legend{
     font-family: var(--font-Karla);
     font-weight: var(--fw-medium);
     font-size: 16px;
-    padding: 14px 35px;
     background-color: var(--primary-red);
     color: var(--primary-white);
     border: 1px solid transparent;
@@ -319,7 +319,6 @@ legend{
     font-family: var(--font-Karla);
     font-weight: var(--fw-medium);
     font-size: 16px;
-    padding: 14px 35px;
     background-color: var(--primary-white);
     color: var(--primary-dark-red);
     border: 1px solid transparent;
@@ -376,6 +375,17 @@ a.white-link {
 a.red-link:hover, 
 a.white-link:hover {
     text-decoration: underline;
+}
+
+/* Change default inputs/select focus borders*/
+input:focus, select:focus {
+	outline: none;
+}
+
+input:focus-visible,
+select:focus-visible {
+	box-shadow: 0 0 0 4px rgba(var(--primary-dark-red), 0.25); 
+	border-radius: 0;
 }
 
 /* Responsive scale-down for small screens */

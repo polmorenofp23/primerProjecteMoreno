@@ -171,7 +171,6 @@ class Product
             }
 
             if (is_object($ingredient)) {
-                // cast object to array to feed constructor
                 $this->ingredients[] = new ProductIngredient((array)$ingredient);
                 continue;
             }
@@ -187,8 +186,7 @@ class Product
             if (is_array($ingredient) || is_object($ingredient)) {
                 $ingredient = new ProductIngredient((array)$ingredient);
             } else {
-                // invalid ingredient type, ignore
-                return $this;
+                return $this;   // invalid ingredient type, ignore
             }
         }
 
