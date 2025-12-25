@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Menu - Bees Cavern</title>
-    <link rel="stylesheet" href="/css/menu-styles.css">
+    <link rel="stylesheet" href="/css/products-styles.css">
 </head>
 <body>
     <div class="d-flex flex-column justify-content-center align-items-center col-12">
@@ -38,10 +38,8 @@
                 </form>
             </div>
         </div>
-        <!-- Filter Buttons Options -->
-        
         <form action="<?php echo htmlspecialchars($incomingUrl); ?>" method="POST" class="w-100">
-            <div class="d-flex flex-column flex-lg-row col-11 col-lg-12 justify-content-between align-items-center gap-4 mb-4 px-5">
+            <div class=" products-filter d-flex flex-column flex-lg-row col-11 col-lg-12 justify-content-between align-items-center gap-4 mb-4 px-5">
                 <div class="input-group font-sting-light fs-14 text-primary-black"><?php echo count($products ?? []); ?> Product Result</div>
 
                 <div class="input-group ingredient-category-input">
@@ -78,13 +76,13 @@
                 </div>
 
                 <div class="input-group gap-3 price-range-input">
-                    <input name="price_min" type="number" class="form-control rounded-0 py-2" placeholder="Price min" value="<?php echo htmlspecialchars($_POST['price_min'] ?? ''); ?>">
-                    <input name="price_max" type="number" class="form-control rounded-0 py-2" placeholder="Price max" value="<?php echo htmlspecialchars($_POST['price_max'] ?? ''); ?>">
+                    <input name="price_min" type="number" min="0" class="form-control rounded-0 py-2" placeholder="Price min" value="<?php echo htmlspecialchars($_POST['price_min'] ?? ''); ?>">
+                    <input name="price_max" type="number" min="0" class="form-control rounded-0 py-2" placeholder="Price max" value="<?php echo htmlspecialchars($_POST['price_max'] ?? ''); ?>">                
                 </div>
 
                 <div class="input-group justify-content-center gap-3">
-                    <a class="input-group-text btn-white rounded-0 px-3 py-1" href="<?php echo htmlspecialchars($incomingUrl); ?>">Reset</a>
-                    <button class="input-group-text btn-red rounded-0 px-3 py-1" type="submit"><!--<i data-lucide="search" class="icon-white"></i>-->Apply</button>
+                    <a class="input-group-text btn-white rounded-0 px-3 py-2" href="<?php echo htmlspecialchars($incomingUrl); ?>">Reset</a>
+                    <button class="input-group-text btn-red rounded-0 px-3 py-2" type="submit">Apply</button>
                 </div>
 
                 <div class="input-group">

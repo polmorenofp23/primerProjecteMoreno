@@ -49,7 +49,7 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
 
     function renderBCPageTitle(array $breadcrumbs = []){
         $items = [];    
-        if (!empty($breadcrumbs)) { // Normalize to list of ['label'=>..,'url'=>..]
+        if (!empty($breadcrumbs)) { // Normalize the list of breadcrumnb content ['label'=>..,'url'=>..]
             $first = reset($breadcrumbs);
             if (is_array($first) && array_key_exists('label', $first)) {
                 foreach ($breadcrumbs as $it) {
@@ -94,13 +94,9 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
             <?php endif; ?>
 
             <?php if ($title !== ''): ?>
-                <div class="row align-items-center">
-                    <div class="col">
-                        <div class="d-flex align-items-center">
-                            <hr class="col-1 border-0 bg-primary-red py-1">
-                            <h1 class="font-sting-regular fs-48 text-primary-dark-red ms-4"><?php echo htmlspecialchars($title); ?></h1>
-                        </div>
-                    </div>
+                <div class="d-flex flex-row justify-content-start align-items-center">
+                    <hr class="col-1 border-0 bg-primary-red py-1">
+                    <h1 class="font-sting-regular fs-48 text-primary-dark-red ms-4"><?php echo htmlspecialchars($title); ?></h1>
                 </div>
             <?php endif; ?>
         </div>

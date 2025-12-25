@@ -1,7 +1,7 @@
 <?php
 
 require_once MODEL_PATH . 'IngredientMacronutrient.php';
-require_once MODEL_PATH . 'IngredientAllergen.php';
+require_once MODEL_PATH . 'Allergen.php';
 
 enum IngredientCategory: string {
     case VEGETABLE = 'vegetable';
@@ -57,7 +57,7 @@ class Ingredient
     /** @var IngredientMacronutrient[]|null */
     private ?array $macronutrients = null;
     
-    /** @var IngredientAllergen[]|null */
+    /** @var Allergen[]|null */
     private ?array $allergens = null;
 
     public function __construct($data = null)
@@ -240,7 +240,7 @@ class Ingredient
 
     /**
      * Get allergen association objects for this ingredient
-     * @return IngredientAllergen[]|null
+     * @return Allergen[]|null
      */
     public function getAllergens(): ?array
     {
@@ -248,7 +248,7 @@ class Ingredient
     }
     /**
      * Set allergen association objects for this ingredient
-     * @param IngredientAllergen[]|null $allergens
+     * @param Allergen[]|null $allergens
      */
     public function setAllergens(?array $allergens)
     {
@@ -259,18 +259,18 @@ class Ingredient
 
         $this->allergens = [];
         foreach ($allergens as $a) {
-            if ($a instanceof IngredientAllergen) {
+            if ($a instanceof Allergen) {
                 $this->allergens[] = $a;
                 continue;
             }
 
             if (is_array($a)) {
-                $this->allergens[] = new IngredientAllergen($a);
+                $this->allergens[] = new Allergen($a);
                 continue;
             }
 
             if (is_object($a)) {
-                $this->allergens[] = new IngredientAllergen((array)$a);
+                $this->allergens[] = new Allergen((array)$a);
                 continue;
             }
         }

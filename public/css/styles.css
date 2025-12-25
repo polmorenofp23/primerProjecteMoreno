@@ -215,6 +215,18 @@ legend{
 .fs-80 {
     font-size: 80px !important;
 }
+.fs-100 {
+    font-size: 100px !important;
+}
+.fs-120 {
+    font-size: 120px !important;
+}
+.fs-160 {
+    font-size: 160px !important;
+}
+.fs-200 {
+    font-size: 200px !important;
+}
 
 /* GLOBAL TEXT COLORS */
 .text-primary-red {
@@ -384,7 +396,7 @@ input:focus, select:focus {
 
 input:focus-visible,
 select:focus-visible {
-	box-shadow: 0 0 0 4px rgba(var(--primary-dark-red), 0.25); 
+	box-shadow: 0 0 0 4px rgba(193, 0, 0, 0.12); 
 	border-radius: 0;
 }
 

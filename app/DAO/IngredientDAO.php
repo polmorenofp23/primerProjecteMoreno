@@ -5,7 +5,7 @@ require_once MODEL_PATH . 'Ingredient.php';
 require_once DAO_PATH . 'IngredientMacronutrientDAO.php';
 require_once DAO_PATH . 'AllergenDAO.php';
 
-use IngredientCategory;
+// use IngredientCategory;
 
 class IngredientDAO{
 
@@ -17,6 +17,15 @@ class IngredientDAO{
     }
 
     /**
+     * Get a single Ingredient by its id, or null if not found.
+     */
+    public function getIngredientById(int $id)
+    {
+        $list = $this->getIngredientsByFilter(['id' => $id]);
+        return $list[0] ?? null;
+    }
+
+    /**
      * It returns all ingredients from the database
      */
     public function getAllIngredients()
@@ -24,17 +33,6 @@ class IngredientDAO{
         return $this->getIngredientsByFilter();
     }
 
-    /**
-     * General filtering function for ingredients.
-     * Supported filters keys:
-     *  - id: int or array of ints
-     *  - contains_allergen: int or array of ints
-     *  - without_allergen: int or array of ints
-     *  - name: string (partial match)
-     *  - category: string or array of strings
-     *  - available: bool
-     * $orderBy: 'price_asc', 'price_desc', 'category'
-     */
     public function getIngredientsByFilter(array $filters = [], ?string $orderBy = null)
     {
         $this->conn = $this->db->connect();
@@ -113,12 +111,10 @@ class IngredientDAO{
             $params[':available'] = (bool)$filters['available'];
         }
 
-        // mounting the final query
         $sql = $select;
         if ($joins) $sql .= ' ' . $joins;
         if (!empty($wheres)) $sql .= ' WHERE ' . implode(' AND ', $wheres);
 
-        // ordering the query content
         $orderByQuery = '';
         if ($orderBy) {
             switch ($orderBy) {
@@ -138,7 +134,6 @@ class IngredientDAO{
 
         $sql .= $orderByQuery;
         
-         // bind all params
         $stmt = $this->conn->prepare($sql);
         foreach ($params as $k => $v) {
             if (is_int($v)) $stmt->bindValue($k, $v, PDO::PARAM_INT);
@@ -156,8 +151,8 @@ class IngredientDAO{
         $allDao = new AllergenDAO();
         foreach ($results as $row) {
             $ingredient = new Ingredient($row);
-            $macros = $imDao->getMacronutrientsByIngredient((int)$ingredient->getId());
-            $ingredient->setMacronutrients($macros);
+            $ingMacros = $imDao->getMacronutrientsByIngredient((int)$ingredient->getId());
+            $ingredient->setMacronutrients($ingMacros);
             $allergens = $allDao->getAllergensByIngredient((int)$ingredient->getId());
             $ingredient->setAllergens($allergens);
             $ingredientsList[] = $ingredient;

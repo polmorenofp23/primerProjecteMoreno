@@ -2,6 +2,13 @@
 
 require_once DAO_PATH . 'ProductDAO.php';
 require_once DAO_PATH . 'ProductIngredientDAO.php';
+require_once DAO_PATH . 'ProductRatingDAO.php';
+//require_once DAO_PATH . 'ProductFavouriteDAO.php';
+require_once DAO_PATH . 'IngredientDAO.php';
+require_once DAO_PATH . 'IngredientMacronutrientDAO.php';
+require_once DAO_PATH . 'AllergenDAO.php';
+require_once DAO_PATH . 'MacronutrientDAO.php';
+
 
 class ProductController
 {
@@ -17,14 +24,56 @@ class ProductController
             exit;
         }
         
-        $id = intval($_GET["id"]);
+        $productId = intval($_GET["id"]);
         $productDAO = new ProductDAO();
-        $product = $productDAO->getProductsByFilter(['id' => $id])[0] ?? null;
+        $product = $productDAO->getProductsByFilter(['id' => $productId])[0] ?? null;
 
         if ($product) {
             $piDao = new ProductIngredientDAO();
-            $ingredients = $piDao->getIngredientsByProduct((int)$id);
-            $product->setIngredients($ingredients);
+            $productIngredients = $piDao->getIngredientsByProduct((int)$productId);
+            $product->setIngredients($productIngredients);
+
+            $ingredients = [];
+            $generalMacronutrients = [];
+            //$generalAllergens = [];
+            $productContainedAllergens = [];
+            $productRating = null;
+
+            $ingredientDao = new IngredientDAO();
+            $imDao = new IngredientMacronutrientDAO();
+            $allergenDao = new AllergenDAO();
+            $macroDao = new MacronutrientDAO();
+            $prodRatDAO = new ProductRatingDAO();
+
+            $generalMacronutrients = $macroDao->getAllMacronutrients();
+            //$generalAllergens = $allergenDao->getAllAllergens();
+            $productContainedAllergens = $allergenDao->getAllergensByProduct((int)$productId);
+            $productRating = $prodRatDAO->getProductRatingAverage((int)$product->getId()) ?? 0.0;
+           
+            foreach ($productIngredients as $pi) { 
+                $ingredientId = $pi->getIngredientId();
+                if (!$ingredientId) continue;
+
+                $ingredient = $ingredientDao->getIngredientById((int)$ingredientId);
+                if (!$ingredient) continue;
+
+                $ingredients[] = $ingredient;
+            }
+
+            $imgDir = $product->getImgDir();
+            $productImages = [];
+            $defaultImg = '/assets/img/products/default.webp';
+            if (is_array($imgDir) && !empty($imgDir)) {
+                foreach ($imgDir as $candidate) {
+                    $candidate = (string)$candidate;
+                    if (!$candidate) continue;
+                    $fsPath = rtrim((string)$_SERVER['DOCUMENT_ROOT'], "\\/") . '/' . ltrim($candidate, '/');
+                    if (file_exists($fsPath)) {
+                        $productImages[] = '/' . ltrim($candidate, '/');
+                    }
+                }
+            } 
+            if (empty($productImages)) $productImages[] = $defaultImg;
         }
         
         if (!$product) {

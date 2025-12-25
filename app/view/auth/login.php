@@ -46,7 +46,7 @@
                     ?>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn-red w-100 mt-5 mb-4">
+                    <button type="submit" class="btn-red w-100 py-3 mt-5 mb-4">
                         LOGIN
                     </button>
 

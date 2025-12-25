@@ -62,4 +62,25 @@ class Allergen{
         $this->icon_dir = $icon_dir;
         return $this;
     }
+
+    public function getIconUrl(string $key = 'color', string $fallbackFolder = '/assets/img/icons/contain_allergen/')
+    {
+        $icons = $this->getIconDir() ?? [];
+        $iconSrc = $icons[$key] ?? null;
+        if (!$iconSrc || $iconSrc == '') return null;
+
+        $url = (strpos($iconSrc, '/') === 0) ? $iconSrc : rtrim($fallbackFolder, '/') . '/' . ltrim($iconSrc, '/');
+        $fs = rtrim((string)$_SERVER['DOCUMENT_ROOT'], '\/') . $url;
+        return file_exists($fs) ? $url : null;
+    }
+
+    public function renderIconOrName(string $key = 'color', $attrs = 'width="40" height="40"')
+    {
+        $url = $this->getIconUrl($key);
+        if ($url) {
+            return '<img src="'.htmlspecialchars($url).'" alt="'.htmlspecialchars($this->getName()).': ' . htmlspecialchars($this->getDescription()) . '"
+                title="'.htmlspecialchars($this->getName()).': ' . htmlspecialchars($this->getDescription()) . '" '.$attrs.' class="allergen-icon bg-transparent border-0">';
+        }
+        return '<span class="font-sting-regular fs-16 text-primary-dark-red text-uppercase">' . htmlspecialchars($this->getName() ?: 'Allergen') . '</span>';
+    }
 }

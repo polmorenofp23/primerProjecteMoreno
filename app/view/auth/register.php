@@ -124,7 +124,7 @@
                         }
                     ?>
 
-                    <button type="submit" class="btn-red my-4 w-100">
+                    <button type="submit" class="btn-red w-100 py-3 my-4">
                         REGISTER
                     </button>
 
