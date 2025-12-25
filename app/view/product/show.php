@@ -228,12 +228,13 @@
                         <h3 class="fs-32 text-capitalize">Ingredients</h3>
                         <ul class="w-100">
                             <?php foreach ($productIngredients as $pi): ?>
+                                <?php if ($pi->getIsDefault()): ?>
                                 <?php
                                     $igId = $pi->getIngredientId() ?? null;
                                     $ingredientObj = null;
                                     if (!empty($igId) && !empty($ingredients) && is_array($ingredients)) {
                                         foreach ($ingredients as $cand) {
-                                           $candId = $cand->getId() ?? null;
+                                        $candId = $cand->getId() ?? null;
                                             if ($candId !== null && (string)$candId === (string)$igId) {
                                                 $ingredientObj = $cand;
                                                 break;
@@ -249,7 +250,7 @@
                                     $igContainedAllergens = [];
                                     $igContainedAllergens = $allergenDao->getAllergensByIngredient((int)$igId);
                                 ?>
-                                <li class="d-flex align-items-center text-primary-dark-red w-100">
+                                <li class="d-flex align-items-center text-primary-dark-red">
                                     <div class="d-flex align-items-center gap-2 flex-grow-1">
                                         <span class="fs-20 fw-bold"><?= htmlspecialchars($igName) ?></span>
                                         <?php if ($igCountry): ?> <span class="fs-14">(<?= htmlspecialchars($igCountry) ?>)</span> <?php endif; ?>
@@ -262,6 +263,7 @@
                                         <?php endforeach; ?>
                                     </div>
                                 </li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
                     </div>
