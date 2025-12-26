@@ -1,0 +1,7 @@
+.content-section {
+    display: none;
+}
+
+.content-section.active-section {
+    display: block;
+}

@@ -10,25 +10,8 @@
             <div class="d-flex flex-row justify-content-between py-0 w-100">
 
                 <!-- Left-aligned nav items -->
-                <?php if ($viewSection === 'admin'): ?>
-                    <ul class="navbar-nav">
-                        <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Admin&action=index">Orders</a>
-                        </li>
-                        <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Admin&action=index">Products</a>
-                        </li>
-                        <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Admin&action=index">Ingredients</a>
-                        </li>
-                        <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Admin&action=index">Offers</a>
-                        </li>
-                        <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=Admin&action=index">Logs</a>
-                        </li>
-                    </ul>
-                <?php elseif ($viewSection === 'user'): ?>
+                
+                <?php if ($viewSection === 'user'): ?>
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link mx-4" href="?controller=User&action=index">Favourite Products</a>

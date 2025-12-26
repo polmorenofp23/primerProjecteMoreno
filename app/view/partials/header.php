@@ -1,6 +1,6 @@
 <header>
     <div class="main-header"> 
-        <!-- Auth/User Links Bar -->
+
         <?php if (!SessionUtils::isLogged()): ?>
             <div class="auth-user-links bg-black d-flex flex-row justify-content-end align-items-center py-2 z-1">
                 <a href="?controller=Auth&action=showLogin" class="me-2">SIGN IN</a>
@@ -9,7 +9,6 @@
             </div>
         <?php endif; ?>
             
-        <!-- Logo & Main Navbar -->
         <div class="main-navbar-box d-flex flex-column justify-content-center align-items-center bg-transparent z-3">
             <div class="bc-logo">
                 <a href="?controller=Product&action=index">
@@ -19,8 +18,7 @@
             <?php include_once VIEW_PATH . '/partials/navbar.php'; ?>
         </div>
     </div>
-    <?php if ($viewSection !== 'home' && $viewSection !== 'membership' && $viewSection !== 'errors'): ?>
-        <!-- Sub Navigation -->
+    <?php if ($viewSection !== 'home' && $viewSection !== 'membership' && $viewSection !== 'admin' && $viewSection !== 'errors'): ?>
         <div class="sub-header">
             <?php include_once VIEW_PATH . '/partials/subnavbar.php'; ?>
         </div>

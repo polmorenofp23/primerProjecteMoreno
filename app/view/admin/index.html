@@ -4,30 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Bees Cavern</title>
-    <style>
-        .content-section {
-            display: none;
-        }
-        
-        .content-section.active-section {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/partials-styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-styles.css">
 </head>
 <body>        
-    <span>Admin</span>
-    <nav>
-        <button class="menu-btn" data-target="users">Users</button>
-        <button class="menu-btn" data-target="orders">Orders</button>
-        <button class="menu-btn" data-target="products">Products</button>
-        <button class="menu-btn" data-target="ingredients">Ingredients</button>
-        <button class="menu-btn" data-target="offers">Offers</button>
-        <button class="menu-btn" data-target="logs">Logs</button>
+    <nav class="sub-navbar navbar navbar-dark bg-black font-sting-regular fs-18 text-primary-white text-capitalize">
+        <div class="d-flex flex-row justify-content-start gap-3 w-100 ps-5">
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="users">Users</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="orders">Orders</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="products">Products</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="ingredients">Ingredients</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="offers">Offers</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="logs">Logs</button>
+        </div>
     </nav>
 
     <main class="main-content">
-        <section id="users" class="content-section active-section">
-            <h1>Users</h1>
+        <div class="bc-page-title w-100 py-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent font-sting-light fs-12 ms-5 mb-2">
+                        <li class="breadcrumb-item text-capitalize"><a href="/?controller=Admin&action=index">Admin</a></li>
+                    </ol>
+                </nav>
+
+                <div class="section-title d-flex flex-row justify-content-start align-items-center">
+                    <hr class="col-1 border-0 bg-primary-red py-1">
+                    <h1 class="font-sting-regular fs-48 text-primary-dark-red text-uppercase ms-4">Admin</h1>
+                </div>
+        </div>
+        <section id="admin" class="content-section active-section">
+            <div class="d-flex flex-column justify-content-center align-items-center py-5 my-5 text-center">
+                <p class="font-karla-medium fs-80 text-primary-red">Welcome to the "Admin Panel"</p>
+                <p class="font-karla-regular fs-60 text-primary-red">Please select a section from the submenu</p>
+            </div>
+        </section>
+        <section id="users" class="content-section">
             <p>Users management section</p>
             
             <table id="users-table">
@@ -52,89 +63,26 @@
         </section>
         
         <section id="orders" class="content-section">
-            <h1>Orders</h1>
             <p>Orders management section</p>
         </section>
         
         <section id="products" class="content-section">
-            <h1>Products</h1>
-            <p>Products management section</p>
+            <div id="products-placeholder" class="d-flex flex-column justify-content-center align-items-center w-100"></div>
         </section>
         
         <section id="ingredients" class="content-section">
-            <h1>Ingredients</h1>
             <p>Ingredients management section</p>
         </section>
         
         <section id="offers" class="content-section">
-            <h1>Offers</h1>
             <p>Offers management section</p>
         </section>
         
         <section id="logs" class="content-section">
-            <h1>Logs</h1>
             <p>System logs section</p>
         </section>
     </main>
 </body>
 </html>
 
-<script>
-
-    // obtener botones del menu
-    const botonesMenu = document.querySelectorAll('.menu-btn');
-
-    // Obtenin seccions
-    const sections = document.querySelectorAll('.content-section');
-
-    botonesMenu.forEach( button => {
-        button.addEventListener('click', () => {
-            const target= button.getAttribute('data-target');
-            setActiveSection(target);
-        });
-    });
-
-    // Funcio per establir seccio activa
-    function setActiveSection(targetId) {
-        sections.forEach(section => {
-            section.classList.remove('active-section');
-        });
-        document.getElementById(targetId).classList.add('active-section');
-    }
-
-    const arrayUsers = [];
-    const users= fetch('http://localhost/primerProjecteMoreno/public/?controller=User&action=getAllUsers')
-        .then(response => response.json());
-
-    users.forEach(user => {
-        const newUser = new User(
-            user.id,
-            user.username,
-            user.email,
-            user.role,
-            user.userType,
-            user.firstName,
-            user.lastName,
-            user.phone,
-            user.registeredAt
-        );
-        arrayUsers.push(newUser);
-        console.log(newUser);
-    });
-
-    // Classe de JS para guardar los datos de usuario (FER CLASSE EN JS DE ORDER, PRODUCT, ETC) <similar als models de PHP>
-    class User{
-        constructor(id, username, email, role, userType, firstName, lastName, phone, registeredAt){
-            this.id = id;
-            this.username = username;
-            this.email = email;
-            this.role = role;
-            this.userType = userType;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.phone = phone;
-            this.registeredAt = registeredAt;
-        }
-    }
-
-</script>
+<script src="/admin/js/main.js" type="module"></script>

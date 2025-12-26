@@ -39,15 +39,15 @@
                 include_once VIEW_PATH . $view;
                 break;
 
-            case 'admin':   // Admin viewa
-                if (file_exists(VIEW_PATH . 'partials/admin_header.php')) {
-                    include_once VIEW_PATH . 'partials/admin_header.php';
-                }
-                include_once VIEW_PATH . $view;
-                if (file_exists(VIEW_PATH . 'partials/admin_footer.php')) {
-                    include_once VIEW_PATH . 'partials/admin_footer.php';
-                }
-                break;
+            // case 'admin':   // Admin viewa
+            //     if (file_exists(VIEW_PATH . 'partials/admin_header.php')) {
+            //         include_once VIEW_PATH . 'partials/admin_header.php';
+            //     }
+            //     include_once VIEW_PATH . $view;
+            //     if (file_exists(VIEW_PATH . 'partials/admin_footer.php')) {
+            //         include_once VIEW_PATH . 'partials/admin_footer.php';
+            //     }
+            //     break;
 
             default:
                 include_once VIEW_PATH . 'partials/header.php';

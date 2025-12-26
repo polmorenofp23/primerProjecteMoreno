@@ -10,12 +10,10 @@ class APIProductController
 	 * List products (optionally filtered by dish_type or available)
 	 * Responds with JSON: { status, data: Product[] }
 	 */
-	// GET /api?resource=Product
+	// GET /?controller=api&resource=Product
 	public function index()
 	{
-		$dao = new ProductDAO();
-
-		// Build filters from query parameters (same semantics as ProductController::index)
+		$pDao = new ProductDAO();
 		$filters = [];
 
 		if (isset($_GET['dish_type']) && $_GET['dish_type'] !== '') {
@@ -37,39 +35,13 @@ class APIProductController
 			$filters['price_range'] = [$min, $max];
 		}
 
-		if (isset($_GET['ingredient_category']) && $_GET['ingredient_category'] !== '') {
-			$val = trim($_GET['ingredient_category']);
-			if (strpos($val, ',') !== false) {
-				$filters['ingredient_category'] = array_map('trim', explode(',', $val));
-			} else {
-				$filters['ingredient_category'] = $val;
-			}
-		}
-
-		if (isset($_GET['contains_allergen']) && $_GET['contains_allergen'] !== '') {
-			$val = trim($_GET['contains_allergen']);
-			if (strpos($val, ',') !== false) {
-				$filters['contains_allergen'] = array_map('intval', array_map('trim', explode(',', $val)));
-			} else {
-				$filters['contains_allergen'] = intval($val);
-			}
-		}
-		if (isset($_GET['without_allergen']) && $_GET['without_allergen'] !== '') {
-			$val = trim($_GET['without_allergen']);
-			if (strpos($val, ',') !== false) {
-				$filters['without_allergen'] = array_map('intval', array_map('trim', explode(',', $val)));
-			} else {
-				$filters['without_allergen'] = intval($val);
-			}
-		}
-
 		if (isset($_GET['ids']) && $_GET['ids'] !== '') {
 			$filters['id'] = array_map('intval', array_map('trim', explode(',', $_GET['ids'])));
 		}
 
 		$orderBy = $_GET['order_by'] ?? null;
 
-		$products = $dao->getProductsByFilter($filters, $orderBy);
+		$products = $pDao->getProductsByFilter($filters, $orderBy);
 
 		JsonUtils::jsonResponse(JsonUtils::serializeArray($products, 'serializeProduct', $this));
 	}
@@ -78,17 +50,16 @@ class APIProductController
 	 * Retrieve a single product by ID, including its ingredients
 	 * Responds with JSON: { status, data: Product }
 	 */
-	// GET /api?resource=Product&id=123
+	// GET /?controller=api&resource=Product&id=123
 	public function show($id)
 	{
-		$dao = new ProductDAO();
-		$product = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
+		$pDao = new ProductDAO();
+		$product = $pDao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
 
 		if (!$product) {
 			return JsonUtils::jsonError('Not found', ['data' => null], 404);
 		}
 
-		// Load ingredients as well
 		$piDao = new ProductIngredientDAO();
 		$ingredients = $piDao->getIngredientsByProduct((int)$id);
 		$product->setIngredients($ingredients);
@@ -100,7 +71,7 @@ class APIProductController
 	 * Create a new product (placeholder until DAO create is implemented)
 	 * Responds with JSON: { status, data: { message, payload } }
 	 */
-	// POST /api?resource=Product
+	// POST /?controller=api&resource=Product
 	public function store()
 	{
 		$data = JsonUtils::readJsonBody();
@@ -108,7 +79,6 @@ class APIProductController
 			return JsonUtils::jsonError('Invalid JSON body', ['data' => null], 400);
 		}
 
-		// Basic validation
 		$name = trim($data['name'] ?? '');
 		$dishType = trim($data['dish_type'] ?? '');
 		$price = isset($data['price']) ? (float)$data['price'] : null;
@@ -134,27 +104,46 @@ class APIProductController
 			'available' => $available,
 		];
 
-		$dao = new ProductDAO();
+		$pDao = new ProductDAO();
 		$product = new Product($productData);
-		$createdId = $dao->createProduct($product);
+		$createdId = $pDao->createProduct($product);
 		
 		if (!$createdId) {
 			return JsonUtils::jsonError('Failed to create product', ['data' => null], 500);
 		}
 		
-		$created = $dao->getProductsByFilter(['id' => $createdId]);
-		return JsonUtils::jsonResponse(JsonUtils::serializeItem($created, 'serializeProduct', $this), 201);
+		$piDao = new ProductIngredientDAO();
+		$addedCount = 0;
+		// Expect exactly `productIngredients` array with camelCase fields from frontend
+		if (isset($data['productIngredients']) && is_array($data['productIngredients'])) {
+			$normalized = [];
+			foreach ($data['productIngredients'] as $ing) {
+				$normalized[] = [
+					'id_product' => (int)$createdId,
+					'id_ingredient' => (int)$ing['ingredientId'],
+					'grams_per_portion' => (float)$ing['gramsPerPortion'],
+					'portion_price' => (float)$ing['portionPrice'],
+					'is_default' => (bool)$ing['isDefault'],
+				];
+			}
+			$addedCount = $piDao->addMultipleIngredientsToProduct((int)$createdId, $normalized);
+		}
+		
+		$created = $pDao->getProductsByFilter(['id' => $createdId]);
+		$response = JsonUtils::serializeItem($created, 'serializeProduct', $this);
+		$response['ingredient_changes'] = ['added' => $addedCount];
+		return JsonUtils::jsonResponse($response, 201);
 	}
 
 	/**
 	 * Update product fields by ID (placeholder until DAO update is implemented)
 	 * Responds with JSON: { status, data: { message, payload } }
 	 */
-	// PUT/PATCH /api?resource=Product&id=123
+	// PUT/PATCH /?controller=api&resource=Product&id=123
 	public function update($id)
 	{
-		$dao = new ProductDAO();
-		$product = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
+		$pDao = new ProductDAO();
+		$product = $pDao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
 		if (!$product) {
 			return JsonUtils::jsonError('Not found', ['data' => null], 404);
 		}
@@ -193,23 +182,58 @@ class APIProductController
 			}
 		}
 
-		$ok = $dao->updateProduct($product);
+		$ok = $pDao->updateProduct($product);
 		
-		if (!$ok) {
+		// Process ingredient modifications if provided. Accepts array of ingredient objects.
+		// Each ingredient may include an optional 'action' field: 'add', 'update', 'delete'.
+		$piDao = new ProductIngredientDAO();
+		$ingredientResults = ['added' => 0, 'updated' => 0, 'deleted' => 0];
+		// Expect exactly `productIngredients` array with camelCase fields from frontend
+		if (isset($data['productIngredients']) && is_array($data['productIngredients'])) {
+			foreach ($data['productIngredients'] as $ing) {
+				$ingredientId = (int)$ing['ingredientId'];
+				$action = strtolower(trim($ing['action'] ?? ''));
+				$piData = [
+					'id_product' => (int)$id,
+					'id_ingredient' => $ingredientId,
+					'grams_per_portion' => (float)$ing['gramsPerPortion'],
+					'portion_price' => (float)$ing['portionPrice'],
+					'is_default' => (bool)$ing['isDefault'],
+				];
+				$pi = new ProductIngredient($piData);
+				if ($action === 'add') {
+					if ($piDao->addIngredientToProduct($pi)) $ingredientResults['added']++;
+					continue;
+				}
+				if ($action === 'delete') {
+					if ($piDao->deleteIngredientFromProduct((int)$id, $ingredientId)) $ingredientResults['deleted']++;
+					continue;
+				}
+				// default to update if no explicit 'add' or 'delete'
+				if ($piDao->updateIngredientFromProduct($pi)) $ingredientResults['updated']++;
+			}
+		}
+		
+		if (!$ok && $ingredientResults['added'] + $ingredientResults['updated'] + $ingredientResults['deleted'] === 0) {
 			return JsonUtils::jsonError('No changes made or update failed', ['data' => null], 400);
 		}
 		
-		$updated = $dao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
-		return JsonUtils::jsonResponse(JsonUtils::serializeItem($updated, 'serializeProduct', $this));
+		$updated = $pDao->getProductsByFilter(['id' => (int)$id])[0] ?? null;
+		$response = JsonUtils::serializeItem($updated, 'serializeProduct', $this);
+		$response['ingredient_changes'] = $ingredientResults;
+		return JsonUtils::jsonResponse($response);
 	}
 
 	/**
 	 * Delete a product by ID
 	 * Responds with JSON: { status, data: { deleted: true } }
 	 */
-	// DELETE /api?resource=Product&id=123
+	// DELETE /?controller=api&resource=Product&id=123
 	public function destroy($id)
 	{
+		$piDao = new ProductIngredientDAO();
+		$piDao->deleteAllIngredientsFromProduct((int)$id);
+		
 		$dao = new ProductDAO();
 		$deleted = $dao->deleteProduct((int)$id);
 		if (!$deleted) {
@@ -230,13 +254,13 @@ class APIProductController
 			'id' => $product->getId(),
 			'name' => $product->getName(),
 			'description' => $product->getDescription(),
-			'dish_type' => $product->getDishType(),
+			'dishType' => $product->getDishType(),
 			'price' => $product->getPrice(),
-			'img_dir' => $product->getImgDir(),
+			'imgDir' => $product->getImgDir(),
 			'available' => $product->getAvailable(),
-			'created_at' => $product->getCreatedAt(),
-			'updated_at' => $product->getUpdatedAt(),
-			'ingredients' => $this->serializeProductIngredients($product->getIngredients()),
+			'createdAt' => $product->getCreatedAt(),
+			'updatedAt' => $product->getUpdatedAt(),
+			'productIngredients' => $this->serializeProductIngredients($product->getIngredients()),
 		];
 	}
 
@@ -248,11 +272,11 @@ class APIProductController
 		if (!is_array($ingredients)) return [];
 		return JsonUtils::serializeArray($ingredients, function($pi) {
 			return [
-				'ingredient_id' => method_exists($pi, 'getIngredientId') ? $pi->getIngredientId() : null,
-				'grams_per_portion' => method_exists($pi, 'getGramsPerPortion') ? $pi->getGramsPerPortion() : null,
-				'portion_price' => method_exists($pi, 'getPortionPrice') ? $pi->getPortionPrice() : null,
-				'is_default' => method_exists($pi, 'getIsDefault') ? $pi->getIsDefault() : null,
-				'is_in_final_product' => method_exists($pi, 'getIsInFinalProduct') ? $pi->getIsInFinalProduct() : (method_exists($pi, 'getIsDefault') ? $pi->getIsDefault() : null),
+				'productId' => method_exists($pi, 'getProductId') ? $pi->getProductId() : null,
+				'ingredientId' => method_exists($pi, 'getIngredientId') ? $pi->getIngredientId() : null,
+				'gramsPerPortion' => method_exists($pi, 'getGramsPerPortion') ? $pi->getGramsPerPortion() : null,
+				'portionPrice' => method_exists($pi, 'getPortionPrice') ? $pi->getPortionPrice() : null,
+				'isDefault' => method_exists($pi, 'getIsDefault') ? $pi->getIsDefault() : null,
 			];
 		});
 	}

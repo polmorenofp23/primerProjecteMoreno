@@ -16,17 +16,25 @@ define('MODEL_PATH', APP_PATH . 'model/');
 define('DAO_PATH', APP_PATH . 'DAO/');
 define('UTIL_PATH', APP_PATH . 'util/');
 
-include_once MODEL_PATH . 'AppError.php';      // Include AppError model globally
-include_once UTIL_PATH . 'SessionUtils.php';      // Include SessionUtils globally
+include_once MODEL_PATH . 'AppError.php';           // Include AppError model globally
+include_once UTIL_PATH . 'SessionUtils.php';        // Include SessionUtils globally
 
 if (isset($_GET['controller'])) {
 
-    $controllerName = trim($_GET['controller']);
+    $controllerName = strtolower(trim($_GET['controller']));
 
     if ($controllerName == "api" && isset($_GET['resource'])) {                                     // API request
 
         require_once PUBLIC_PATH . "api.php";                                                       // Load the API router
 
+    } elseif ($controllerName == "admin"){                                                         // Admin section reqest
+
+        $action = $_GET['action'] ?? 'index';
+        if ($action == 'index') {                                                          // Check admin session
+            $view = 'admin/index.html';
+        }
+        include_once VIEW_PATH . 'main.php';
+        
     } else {                                                                                        // Regular request
 
         $controllerName = ucfirst($controllerName) . 'Controller';

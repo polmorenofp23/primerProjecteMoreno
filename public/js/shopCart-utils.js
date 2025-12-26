@@ -1,4 +1,3 @@
-
 // Para usarlo en php guardariamos las ids 
 // fer el carrito en una taula nova  ala base ded ades
 
