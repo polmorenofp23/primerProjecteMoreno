@@ -84,9 +84,8 @@
         integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
         crossorigin="anonymous">
     </script>-->
-    <!-- Lucide icons: load full UMD from CDN with local fallback, then init -->
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.561.0/dist/umd/lucide.js"></script>
-    <script>if(!window.lucide){document.write('<script src="/vendor/lucide.js"><\/script>');}</script>
+    <!-- Lucide: load UMD from CDN and initialize -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.561.0/dist/umd/lucide.min.js"></script>
     <script src="/js/lucide-init.js"></script>
     <!-- Import the "General Utils" js script -->
     <script src="/js/general-utils.js"></script>

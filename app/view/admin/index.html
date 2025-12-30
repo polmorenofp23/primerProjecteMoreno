@@ -27,9 +27,24 @@
                     </ol>
                 </nav>
 
-                <div class="section-title d-flex flex-row justify-content-start align-items-center">
-                    <hr class="col-1 border-0 bg-primary-red py-1">
-                    <h1 class="font-sting-regular fs-48 text-primary-dark-red text-uppercase ms-4">Admin</h1>
+                <div class="section-title d-flex flex-row justify-content-between align-items-center">
+                    <div class="d-flex flex-row justify-content-start align-items-center w-100">
+                        <hr class="col-1 border-0 bg-primary-red py-1">
+                        <h1 class="font-sting-regular fs-48 text-primary-dark-red text-uppercase ms-4">Admin</h1>
+                    </div>
+                        <div id="global-currency" class="d-flex flex-row align-items-center gap-3 d-none me-5">
+                        <span class="font-sting-light fs-20 text-primary-red">Currency</span>
+                        <div class="dropdown">
+                            <button id="global-currency-display" class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="global-currency-icon" class="text-primary-red ms-2" aria-hidden="true"><i data-lucide="euro"></i></span>
+                            </button>
+                            <ul id="global-currency-options" class="dropdown-menu dropdown-menu-end">
+                                <li><button class="dropdown-item currency-btn text-primary-red active" data-currency="EUR" type="button"><i data-lucide="euro" class="me-2"></i> EUR</button></li>
+                                <li><button class="dropdown-item currency-btn text-primary-red" data-currency="GBP" type="button"><i data-lucide="pound-sterling" class="me-2"></i> GBP</button></li>
+                                <li><button class="dropdown-item currency-btn text-primary-red" data-currency="USD" type="button"><i data-lucide="dollar-sign" class="me-2"></i> USD</button></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
         </div>
         <section id="admin" class="content-section active-section">
@@ -85,4 +100,5 @@
 </body>
 </html>
 
+<script src="/js/general-utils.js"></script>
 <script src="/admin/js/main.js" type="module"></script>

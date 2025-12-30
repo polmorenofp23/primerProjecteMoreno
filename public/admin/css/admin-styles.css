@@ -5,3 +5,37 @@
 .content-section.active-section {
     display: block;
 }
+
+/* Inputs styles */
+.input-group input{
+    background: var(--primary-white);
+	color: var(--primary-black);
+	font-family: var(--font-Sting);
+	font-weight: var(--fw-light);
+	font-size: 14px;
+    border: 1px solid var(--secondary-white);
+	border-radius: 0;
+	outline: none;
+    appearance: auto;
+}
+
+.input-group input::placeholder{
+    color: var(--secondary-white);
+}
+
+.input-group select,
+.input-group select option {
+	background: var(--secondary-white);
+	color: var(--primary-black);
+	font-family: var(--font-Sting);
+	font-weight: var(--fw-light);
+	font-size: 14px;
+	border: 0;
+	border-radius: 0;
+	outline: none;
+    appearance: auto;
+}
+
+.input-group select option:disabled{
+    color: var(--secondary-grey);
+}

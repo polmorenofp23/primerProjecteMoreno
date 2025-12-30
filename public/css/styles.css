@@ -270,6 +270,9 @@ legend{
 .border-primary-white {
     border-color: var(--primary-white) !important;
 }
+.border-secondary-white {
+    border-color: var(--secondary-white) !important;
+}
 .border-primary-grey {
     border-color: var(--primary-grey) !important;
 }
