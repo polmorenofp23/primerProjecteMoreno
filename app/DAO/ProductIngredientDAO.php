@@ -120,11 +120,9 @@ class ProductIngredientDAO
      */
     public function addIngredientToProduct(ProductIngredient $pi): bool
     {
-        // Directly use getters from ProductIngredient model
         $productId = (int)$pi->getProductId();
         $ingredientId = (int)$pi->getIngredientId();
 
-        // Check if already exists
         if ($this->hasIngredientInProduct($productId, $ingredientId)) {
             return false;
         }
@@ -160,22 +158,17 @@ class ProductIngredientDAO
      */
     public function addMultipleIngredientsToProduct(int $productId, array $ingredients): int
     {
-        // Expecting an array of ProductIngredient instances. For convenience,
-        // if the caller supplies arrays we'll try to convert them to models.
         $count = 0;
         foreach ($ingredients as $ingredient) {
             if ($ingredient instanceof ProductIngredient) {
-                // ensure product id is set on the object
-                // ensure product id is set on the object (use setter)
+
                 if (!$ingredient->getProductId()) $ingredient->setProductId($productId);
                 $success = $this->addIngredientToProduct($ingredient);
             } elseif (is_array($ingredient)) {
-                // Convert array into ProductIngredient model
                 $pi = new ProductIngredient($ingredient);
                 if (!$pi->getProductId()) $pi->setProductId($productId);
                 $success = $this->addIngredientToProduct($pi);
             } else {
-                // unsupported type
                 $success = false;
             }
             if ($success) $count++;
@@ -197,13 +190,12 @@ class ProductIngredientDAO
         $fields = [];
         $params = [':product_id' => $productId, ':ingredient_id' => $ingredientId];
 
-        // Read values directly from getters and update those fields.
         $valIsDefault = $pi->getIsDefault();
         $valPortionPrice = $pi->getPortionPrice();
         $valGrams = $pi->getGramsPerPortion();
 
         $fields[] = "is_default = :is_default";
-        $params[':is_default'] = (bool)$valIsDefault;
+        $params[':is_default'] = (int)$valIsDefault;
 
         $fields[] = "portion_price = :portion_price";
         $params[':portion_price'] = (float)$valPortionPrice;

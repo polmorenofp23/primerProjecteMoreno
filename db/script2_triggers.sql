@@ -77,38 +77,42 @@ END$$
 
 -- -------------------------------------------------------------
 -- AFTER UPDATE: quan es modifica una línia (grams, ingredient...),
---               recalcula el price del producte.
+--               el precio del producto NO se recalcula.
+--               El usuario puede definir manualmente el precio.
+-- NOTA: Trigger DESACTIVADO - solo se calcula el precio al crear el producto
 -- -------------------------------------------------------------
-CREATE TRIGGER au_product_ingredient_minprice
-AFTER UPDATE ON product_ingredient
-FOR EACH ROW
-BEGIN
-  UPDATE product p
-  SET p.price = (
-    SELECT IFNULL(SUM(pi.portion_price), 0)
-    FROM product_ingredient pi
-    WHERE pi.id_product = NEW.id_product
-  )
-  WHERE p.id_product = NEW.id_product;
-END$$
+-- CREATE TRIGGER au_product_ingredient_minprice
+-- AFTER UPDATE ON product_ingredient
+-- FOR EACH ROW
+-- BEGIN
+--   UPDATE product p
+--   SET p.price = (
+--     SELECT IFNULL(SUM(pi.portion_price), 0)
+--     FROM product_ingredient pi
+--     WHERE pi.id_product = NEW.id_product
+--   )
+--   WHERE p.id_product = NEW.id_product;
+-- END$$
 
 
 -- -------------------------------------------------------------
 -- AFTER DELETE: quan s'elimina una línia d'ingredient d'un producte,
---               recalcula el price del producte.
+--               el precio del producto NO se recalcula.
+--               El usuario puede definir manualmente el precio.
+-- NOTA: Trigger DESACTIVADO - solo se calcula el precio al crear el producto
 -- -------------------------------------------------------------
-CREATE TRIGGER ad_product_ingredient_minprice
-AFTER DELETE ON product_ingredient
-FOR EACH ROW
-BEGIN
-  UPDATE product p
-  SET p.price = (
-    SELECT IFNULL(SUM(pi.portion_price), 0)
-    FROM product_ingredient pi
-    WHERE pi.id_product = OLD.id_product
-  )
-  WHERE p.id_product = OLD.id_product;
-END$$
+-- CREATE TRIGGER ad_product_ingredient_minprice
+-- AFTER DELETE ON product_ingredient
+-- FOR EACH ROW
+-- BEGIN
+--   UPDATE product p
+--   SET p.price = (
+--     SELECT IFNULL(SUM(pi.portion_price), 0)
+--     FROM product_ingredient pi
+--     WHERE pi.id_product = OLD.id_product
+--   )
+--   WHERE p.id_product = OLD.id_product;
+-- END$$
 
 -- =====================================================================
 -- Triggers: log CRUD operations into `bc_logs`

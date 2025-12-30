@@ -129,8 +129,12 @@ class APIProductController
 			$addedCount = $piDao->addMultipleIngredientsToProduct((int)$createdId, $normalized);
 		}
 		
-		$created = $pDao->getProductsByFilter(['id' => $createdId]);
-		$response = JsonUtils::serializeItem($created, 'serializeProduct', $this);
+		$createdProd = $pDao->getProductsByFilter(['id' => $createdId]);
+		$product = $createdProd[0] ?? null;
+		if (!$product) {
+			return JsonUtils::jsonError('Failed to retrieve created product', ['data' => null], 500);
+		}
+		$response = JsonUtils::serializeItem($product, 'serializeProduct', $this);
 		$response['ingredient_changes'] = ['added' => $addedCount];
 		return JsonUtils::jsonResponse($response, 201);
 	}
@@ -176,7 +180,7 @@ class APIProductController
 						$product->setImgDir($data['img_dir']);
 						break;
 					case 'available':
-						$product->setAvailable((bool)$data['available']);
+						$product->setAvailable((int)$data['available']);
 						break;
 				}
 			}
@@ -196,7 +200,7 @@ class APIProductController
 					'id_ingredient' => $ingredientId,
 					'grams_per_portion' => (float)$ing['gramsPerPortion'],
 					'portion_price' => (float)$ing['portionPrice'],
-					'is_default' => (bool)$ing['isDefault'],
+					'is_default' => (int)$ing['isDefault'],
 				];
 				$pi = new ProductIngredient($piData);
 				if ($action === 'add') {

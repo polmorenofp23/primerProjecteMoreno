@@ -271,7 +271,7 @@ class ProductDAO{
         $params[':img_dir'] = json_encode($product->getImgDir());
 
         $fields[] = "available = :available";
-        $params[':available'] = (bool)$product->getAvailable();
+        $params[':available'] = (int)$product->getAvailable();
 
         $query = "UPDATE product SET " . implode(", ", $fields) . " WHERE id_product = :product_id";
         $stmt = $this->conn->prepare($query);

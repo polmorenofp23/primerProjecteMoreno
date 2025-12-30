@@ -24,7 +24,9 @@
 }
 
 .input-group select,
-.input-group select option {
+#ingredientsList select,
+.input-group select option
+#ingredientsList select option {
 	background: var(--secondary-white);
 	color: var(--primary-black);
 	font-family: var(--font-Sting);
@@ -36,6 +38,17 @@
     appearance: auto;
 }
 
-.input-group select option:disabled{
+.input-group select option:disabled,
+#ingredientsList select option:disabled {
     color: var(--secondary-grey);
+}
+
+#ingredientsInfo {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+#ingredientsList {
+    max-height: 200px;
+    overflow-y: auto;
 }

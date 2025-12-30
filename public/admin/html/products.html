@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="d-flex justify-content-end align-items-center w-100 px-5 mb-4">
-        <button type="button" class="btn-red p-3 px-4 gap-4" data-bs-toggle="modal" data-bs-target="#createProductModal">
+        <button type="button" class="btn-red p-3 px-4 gap-4" data-bs-toggle="modal" data-bs-target="#productInfoModal">
             CREATE NEW PRODUCT <i data-lucide="plus"></i>
         </button>
     </div>
@@ -29,71 +29,82 @@
         </table>
     </div>
 
-    <!-- Modal CREATE PRODUCT -->
-    <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="flase">  <!--aria-hidden="true"-->
+    <!-- Modal CREATE/MODIFY PRODUCT -->
+    <div class="modal fade" id="productInfoModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="flase">  <!--aria-hidden="true"-->
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <form id="createProductForm" class="needs-validation" novalidate>
+                <form id="productInfoForm" class="needs-validation" novalidate>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createProductModalLabel">Create Product</h5>
+                        <div class="d-flex flex-row justify-content-start align-items-center w-100">
+                            <hr class="col-1 border-0 bg-primary-red py-1">
+                            <h5 class="modal-title font-sting-regular fs-40 text-primary-dark-red text-uppercase ms-4" id="productModalLabel">Info Product</h5>
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-primary-black">
                         <div class="container-fluid px-5 py-3">
                             <div class="row font-sting-regular fs-20 align-items-center mb-4 ">
-                                <div class="product-name col-md-9 px-3">
+                                <div class="product-name col-md-8 px-3">
                                     <div class="input-group">
                                         <input type="text" class="form-control fs-20" id="productName" placeholder="Product name" required>
                                     </div>
                                 </div>
-                                <div class="product-price row align-items-center col-md-2 px-3">
+                                <div class="product-price row justify-content-end align-items-center col-md-2 px-3">
                                     <div class="input-group w-75">
                                         <input type="number" class="form-control fs-20" id="productPrice" step="0.01" min="0" placeholder="0.00">
                                     </div>
                                     <span class="w-25">€</span>
                                 </div>
-                                <div class="product-id col-md-1 d-flex justify-content-end px-3">
+                                <div class="product-id col-md-2 d-flex justify-content-end px-3">
                                     <span class="font-sting-regular fs-20">Id: <span id="productIdLabel">—</span></span>
                                 </div>
                             </div>
-                            <div class="row font-sting-light fs-14 align-items-start">
-                                <div class="col-md-3 text-center">
-                                    <div class="">
-                                        <!--<img id="productPreview" src="/assets/img-placeholder.png" alt="Preview" class="img-fluid rounded mb-2" style="max-height:200px;">-->
-                                        <div>
-                                            <input class="form-control form-control-sm" type="file" id="productImage" accept="image/*" dissabled>
-                                        </div>
+                            <div id="ingredientsInfo" class="row font-sting-light fs-14 align-items-stretch">
+                                <div class="col-md-2 text-center">
+                                    <div class="d-flex flex-column align-items-center justify-content-center border border-dashed rounded p-4 bg-secondary-white opacity-50">
+                                        <input class="d-none" type="file" id="productImage" accept="image/*" disabled>
+                                        <i data-lucide="plus" class="icon-32 icon-grey mb-2"></i>
+                                        <span class="font-sting-light fs-14 text-primary-grey">Upload New Image</span>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 d-flex flex-column justify-content-start align-items-center">
-                                    <div class="ingredients-list d-flex flex-column justify-content-start align-items-center w-100 mb-3">
-                                        <label for="productIngredients" class="form-label font-sting-regular m-0">Ingredients</label>
-                                        <div id="productIngredients" class="d-flex flex-wrap gap-2 border-1 rounded-0 border-secondary-white p-2" style="min-height: 100px; max-height: 150px; overflow-y: auto;">
-                                            <!-- Ingredients tags will be added here -->
-                                        </div>
-                                        <div class="input-group mt-2">
-                                            <input type="text" id="ingredientInput" class="form-control" placeholder="Add ingredient">
-                                            <button type="button" id="addIngredientBtn" class="btn btn-secondary">Add</button>
-                                        </div>
+                                <div class="col-md-8 d-flex flex-column justify-content-start align-items-center">
 
+                                    <div class="d-flex justify-content-start align-items-center w-100 gap-1 mb-2">
+                                        <label for="productIngredients" class="form-label font-sting-regular">Ingredients</label>
+                                        <label id="dishTypeMaxGr" class="form-label">(Max gr for dish type)</label>
                                     </div>
-                                    <textarea id="productDescription" class="form-control" rows="3" placeholder="Description..."></textarea>
+                                    <div id="ingredientsList" class="d-flex flex-column justify-content-start align-items-center font-sting-light fs-14 w-100 mb-3">
+                                        <div id="productIngredients" class="d-flex flex-column w-100">
+                                            <!-- Ingredient cards will be added here -->
+                                        </div>
+                                        <div id="ingredientsContainer" class="border border-1 border-secondary-white rounded-0 p-3 w-100">
+                                            <select id="ingredientSelect" class="form-select p-2" disabled>
+                                                <option value="" disabled selected>Select dish type first...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <textarea id="productDescription" class="form-control font-sting-light fs-14 border border-1 rounded-0 border-secondary-white" 
+                                        rows="2" placeholder="Description..."></textarea>
                                 </div>
-                                
-                                <div class="col-md-3 d-flex flex-column justify-content-between align-items-center">
-                                    <div class="row d-flex justify-content-between align-items-center">
-                                        <label for="productDishType" class="form-label font-sting-regular m-0">Dish Type</label>
-                                        <select id="productDishType" class="form-select font-sting-light fs-14" required>
-                                            <option value="" disabled selected>Select type</option>
-                                            <option value="appetiser">Appetiser</option>
-                                            <option value="main">Main Plate</option>
-                                            <option value="dessert">Dessert</option>
-                                            <option value="drink">Drink</option>
-                                        </select>
+
+                                <div class="col-md-2 h-100 d-flex flex-column justify-content-between align-items-center">
+                                    <div class="d-flex flex-column align-items-start gx-2 w-100">
+                                        <div class="w-100">
+                                            <label for="productDishType" class="form-label font-sting-regular">Dish Type</label>
+                                        </div>
+                                        <div class="border border-1 rounded-0 border-secondary-white py-2 w-100 mt-2">
+                                            <select id="productDishType" class="form-select border-0 font-sting-light fs-14" required>
+                                                <option value="" disabled selected>Select type</option>
+                                                <option value="appetiser">Appetiser</option>
+                                                <option value="main">Main Plate</option>
+                                                <option value="dessert">Dessert</option>
+                                                <option value="drink">Drink</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="form-check border-1 rounded-0 border-secondary-white py-2 w-100">
-                                        <input class="form-check-input rounded-0 p-2 me-5" type="checkbox" id="productAvailable">
+                                    <div class="form-check border border-1 rounded-0 border-secondary-white py-3 w-100 mt-3">
+                                        <input class="form-check-input rounded-0 p-2 mx-2" type="checkbox" id="productAvailable">
                                         <label class="form-check-label" for="productAvailable">Available</label>
                                     </div>
                                 </div>
@@ -101,7 +112,7 @@
                         </div>
                     </div>
                     <div class="modal-footer py-3 align-items-center justify-content-center">
-                        <button type="submit" class="btn-red w-25 py-3 text-uppercase" id="createProductBtn">CREATE PRODUCT</button>
+                        <button type="submit" class="btn-red w-25 py-3 text-uppercase" id="productInfoBtn">Save</button>
                     </div>
                 </form>
             </div>
