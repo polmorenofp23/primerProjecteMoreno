@@ -184,11 +184,9 @@ class APIProductController
 
 		$ok = $pDao->updateProduct($product);
 		
-		// Process ingredient modifications if provided. Accepts array of ingredient objects.
-		// Each ingredient may include an optional 'action' field: 'add', 'update', 'delete'.
+		// Process ingredient modifications (if provided)
 		$piDao = new ProductIngredientDAO();
 		$ingredientResults = ['added' => 0, 'updated' => 0, 'deleted' => 0];
-		// Expect exactly `productIngredients` array with camelCase fields from frontend
 		if (isset($data['productIngredients']) && is_array($data['productIngredients'])) {
 			foreach ($data['productIngredients'] as $ing) {
 				$ingredientId = (int)$ing['ingredientId'];
@@ -209,7 +207,6 @@ class APIProductController
 					if ($piDao->deleteIngredientFromProduct((int)$id, $ingredientId)) $ingredientResults['deleted']++;
 					continue;
 				}
-				// default to update if no explicit 'add' or 'delete'
 				if ($piDao->updateIngredientFromProduct($pi)) $ingredientResults['updated']++;
 			}
 		}
