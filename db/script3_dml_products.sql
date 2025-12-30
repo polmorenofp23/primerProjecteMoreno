@@ -625,7 +625,7 @@ INSERT INTO ingredient_macronutrient (id_ingredient, id_macronutrient, grams_per
 -- PRODUCTS/PLATES (id_product, name, description, dish_type, price, img_dir, available)
 INSERT INTO product (id_product, name, description, dish_type, price, img_dir, available)
 VALUES
-  (1, 'Zucchini and Avocado Carpaccio (nuts)', 'Thinly sliced zucchini and avocado carpaccio with toasted almonds, lemon and thyme.', 'appetiser', 0.00, JSON_OBJECT(), 1),
+  (1, 'Zucchini and Avocado Carpaccio', 'Thinly sliced zucchini and avocado carpaccio with toasted almonds, lemon and thyme.', 'appetiser', 0.00, JSON_OBJECT(), 1),
   (2, 'Grilled Asparagus with Natural Mustard', 'Grilled asparagus with natural mustard sauce, rosemary and olive oil.', 'appetiser', 0.00, JSON_OBJECT(), 1),
   (3, 'Sea Bass Ceviche with Mango', 'Fresh sea bass ceviche with mango, onion, parsley, lemon and olive oil.', 'appetiser', 0.00, JSON_OBJECT(), 1),
   (4, 'Salmon Tartare with Avocado and Pistachio', 'Fresh salmon tartare with avocado, crushed pistachios, black pepper and olive oil.', 'appetiser', 0.00, JSON_OBJECT(), 1),
@@ -724,7 +724,7 @@ SET SQL_SAFE_UPDATES = 1;
 INSERT INTO product_ingredient (id_product, id_ingredient, grams_per_portion, portion_price, is_default)
 VALUES
   -- Appetisers
-  -- Appetiser 1: Zucchini and Avocado Carpaccio (nuts)
+  -- Appetiser 1: Zucchini and Avocado Carpaccio
   (1, 5, 110.00, 0.00, 1),  -- Zucchini (id 5)
   (1, 21, 80.00, 0.00, 1),  -- Avocado (id 21)
   (1, 66, 20.00, 0.00, 1),  -- Almond (id 66)
