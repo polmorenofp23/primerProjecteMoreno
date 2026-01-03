@@ -289,6 +289,43 @@ legend{
     border-color: var(--secondary-dark-red) !important;
 }
 
+/* IMAGES STYLES */
+.img-40 {
+    width: 40px; 
+    height: 40px; 
+    object-fit: cover;
+}
+.img-60 {
+    width: 60px; 
+    height: 60px; 
+    object-fit: cover;
+}
+.img-80 {
+    width: 80px; 
+    height: 80px; 
+    object-fit: cover;
+}
+.img-120 {
+    width: 120px; 
+    height: 120px; 
+    object-fit: cover;
+}
+.img-200 {
+    width: 200px; 
+    height: 200px; 
+    object-fit: cover;
+}
+.img-400 {
+    width: 400px; 
+    height: 400px; 
+    object-fit: cover;
+}
+.img-600 {
+    width: 600px; 
+    height: 600px; 
+    object-fit: cover;
+}
+
 /* BUTTON STYLES */
 .btn-red,
 .btn-white {

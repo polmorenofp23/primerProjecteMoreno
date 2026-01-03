@@ -12,7 +12,8 @@ INSERT INTO user_type (name, description) VALUES
 ('basic', 'Basic customer without special benefits'),
 ('membership', 'Premium member with exclusive discounts'),
 ('brentford_player', 'Brentford FC player with VIP benefits'),
-('brentford_staff', 'Brentford FC staff member with special privileges');
+('brentford_staff', 'Brentford FC staff member with special privileges'),
+('vip', 'User with VIP benefits');
 
 -- =====================================================================
 -- DISCOUNTS FOR USER TYPES (excluding 'basic')
@@ -23,7 +24,9 @@ INSERT INTO discount (name, description, percentage, status, type, id_user_type)
 ('Brentford Player VIP', 'VIP 100% discount for Brentford FC players', 100, 'active', 'user_type', 
     (SELECT id_user_type FROM user_type WHERE name = 'brentford_player')),
 ('Brentford Staff Discount', 'Special 50% discount for Brentford FC staff', 50, 'active', 'user_type', 
-    (SELECT id_user_type FROM user_type WHERE name = 'brentford_staff'));
+    (SELECT id_user_type FROM user_type WHERE name = 'brentford_staff')),
+('VIP Discount', 'Premium 75% discount for VIP users', 75, 'active', 'user_type', 
+    (SELECT id_user_type FROM user_type WHERE name = 'vip'));
 
 -- =====================================================================
 -- USERS (password: 1234 hashed with bcrypt)
@@ -32,7 +35,7 @@ INSERT INTO discount (name, description, percentage, status, type, id_user_type)
 
 -- Admin user: Pol Moreno Queraltó (force id_user = 6)
 INSERT INTO user (id_user, id_user_type, username, role, email, password_hash, first_name, last_name, phone, address, birth_date) VALUES
-(6, (SELECT id_user_type FROM user_type WHERE name = 'basic'), 
+(6, (SELECT id_user_type FROM user_type WHERE name = 'vip'), 
     'polmoreno', 'admin', 'pol.moreno@beescavern.com', 
     '$2y$10$Mu41XUGr0ep9x5CODkb25ORlufnm2PvPQFGyI4aqSqqmKNQLQkARi', 
     'Pol', 'Moreno Queraltó', '+34 600 000 006', 
@@ -110,12 +113,13 @@ INSERT INTO user (id_user_type, username, role, email, password_hash, first_name
 -- =====================================================================
 -- Summary
 -- =====================================================================
--- User Types: 4 (basic, membership, brentford_player, brentford_staff)
--- Discounts: 3 (for membership, brentford_player, brentford_staff)
+-- User Types: 5 (basic, membership, brentford_player, brentford_staff, vip)
+-- Discounts: 4 (for membership, brentford_player, brentford_staff, vip)
 -- Users: 10 total
---   - 3 basic (2 clients + 1 admin)
+--   - 2 basic
 --   - 2 membership
 --   - 3 brentford_player
 --   - 2 brentford_staff
+--   - 1 vip (admin)
 -- All passwords: 1234
 -- =====================================================================

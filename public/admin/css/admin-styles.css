@@ -6,6 +6,11 @@
     display: block;
 }
 
+.btn-transparent:disabled {
+	border:0;
+	background:transparent;
+}
+
 /* Inputs styles */
 .input-group input{
     background: var(--primary-white);
@@ -43,11 +48,11 @@
     color: var(--secondary-grey);
 }
 
+/* Modal scrollable sizes */
 #ingredientsInfo {
     max-height: 350px;
     overflow-y: auto;
 }
-
 #ingredientsList {
     max-height: 200px;
     overflow-y: auto;

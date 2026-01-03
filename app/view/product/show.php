@@ -72,7 +72,7 @@
 
                         <div class="d-flex justify-content-end align-items-center">
                             <div class="d-flex justify-content-center align-items-center gap-2">
-                                <div class="stars" style="font-size:35px;" aria-hidden="true">
+                                <div class="stars fs-40" aria-hidden="true">
                                     <?php
                                         $rounded = (int)round($productRating);
                                         for ($i = 1; $i <= 5; $i++) {
@@ -98,16 +98,6 @@
                     <span class="font-sting-regular fs-20 text-primary-black"><?= number_format($product->getPrice(), 2) ?> €</span>
                 </div>
 
-                <!-- Options donenness NOT IMPLEMENTED
-                <div class="product-options mt-3">
-                    <label class="option-label">Doneness</label>
-                    <div class="doneness-options d-flex">
-                        <label class="doneness-option"><input type="radio" name="doneness" value="rare"> Rare</label>
-                        <label class="doneness-option"><input type="radio" name="doneness" value="medium-rare" checked> Medium-rare</label>
-                        <label class="doneness-option"><input type="radio" name="doneness" value="medium-well"> Medium-well</label>
-                        <label class="doneness-option"><input type="radio" name="doneness" value="overcooked"> Overcooked</label>
-                    </div>
-                </div>-->
                 <div class="my-5"></div>
 
                 <button class="btn-white bg-secondary-white w-100 py-3" disabled> <!-- text-primary-grey -->
@@ -117,11 +107,16 @@
 
                 <div class="d-flex align-items-center gap-2">
                     <?php if (method_exists($product, 'getAvailable') ? $product->getAvailable() : false): ?>
-                        <form class="add-to-cart-form d-flex align-items-center gap-2 w-100" data-product-id="<?= $product->getId() ?>">
+                        <form action="?controller=Order&action=addToCart" method="POST" class="d-flex align-items-center gap-2 w-100">
+                            <input type="hidden" name="product_id" value="<?= $product->getId() ?>">
                             <div class="input-group w-25">
-                                <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" class="w-100 py-3 text-center">
+                                <input type="number" name="quantity" value="1" min="1" max="10" class="w-100 py-3 text-center">
                             </div>
-                            <button type="submit" class="btn-red w-100 py-3">ADD TO ORDER</button>
+                            <?php if (SessionUtils::isLogged()): ?>
+                                <button type="submit" class="btn-red w-100 py-3">ADD TO ORDER</button>
+                            <?php else: ?>
+                                <a href="?controller=Auth&action=showLogin" class="btn-red w-100 py-3">ADD TO ORDER</a>
+                            <?php endif; ?>
                         </form>
                         <button class="btn-white p-3" disabled title="Add to favourites (not implemented)">
                             <i data-lucide="heart" class=""></i>
@@ -171,7 +166,7 @@
         <div class="d-flex flex-column justify-content-center align-items-center col-12">
             <div class="red-bg d-flex flex-column justify-content-center align-items-center col-12 p-5">
                 <div class="d-flex flex-row justify-content-center align-items-center col-10">
-                    <span class="font-sting-light fs-48 text-primary-white text-start text-nowrap text-uppercase">
+                    <span class="font-sting-light fs-60 text-primary-white text-start text-nowrap text-uppercase">
                         <?= htmlspecialchars($product->getName()) ?>
                     </span>
                     <hr class="flex-fill border-1 border-white mt-4 mx-3 opacity-75">
@@ -181,7 +176,7 @@
 
                 <div class="d-flex flex-row justify-content-center align-items-center col-10 mb-5">
                     <hr class="flex-fill border-1 border-primary-white opacity-75 mx-3 mt-4">
-                    <span class="font-sting-light fs-60 text-primary-white text-end text-nowrap">
+                    <span class="font-sting-light fs-100 text-primary-white text-end text-nowrap">
                         <?= number_format($product->getPrice(), 2) ?> €
                     </span>
                 </div>

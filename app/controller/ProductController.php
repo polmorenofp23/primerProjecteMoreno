@@ -144,7 +144,7 @@ class ProductController
             }
         }
 
-        $filters['available'] = true; // Always filter only for the available products
+        $filters['available'] = true; // Always filtr only for the available products
         $orderBy = $_POST['order_by'] ?? null;
         $products = $productDAO->getProductsByFilter($filters, $orderBy);
         include_once VIEW_PATH . 'main.php';

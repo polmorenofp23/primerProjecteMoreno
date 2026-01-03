@@ -20,22 +20,22 @@ class Discount
     /** ENUM('promocode','user_type') NOT NULL */
     private string $type;
     
-    /** VARCHAR(64) NULL */
+    /** VARCHAR(64) NULL for promocode */
     private ?string $discount_code = null;
     
-    /** DATETIME NULL */
+    /** DATETIME NULL for promocode */
     private ?string $start_datetime = null;
     
-    /** DATETIME NULL */
+    /** DATETIME NULL for promocode */
     private ?string $end_datetime = null;
     
-    /** TINYINT(2) UNSIGNED NULL */
+    /** TINYINT(2) UNSIGNED NULL for promocode */
     private ?int $num_reuses = null;
     
-    /** JSON NULL - can be string (JSON) or array (decoded) */
+    /** JSON NULL - can be string (JSON) or array (decoded) for promocode */
     private ?array $img_dir = null;
     
-    /** BIGINT UNSIGNED NULL */
+    /** BIGINT UNSIGNED NULL for user_type*/
     private ?int $id_user_type = null;
 
     public function __construct($data = null)

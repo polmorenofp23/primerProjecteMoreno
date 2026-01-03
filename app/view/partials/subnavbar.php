@@ -14,10 +14,10 @@
                 <?php if ($viewSection === 'user'): ?>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link mx-4" href="?controller=User&action=index">Favourite Products</a>
+                            <a class="nav-link mx-4" href="?controller=Product&action=indexFavouriteProducts">Favourite Products</a>
                         </li>
                         <li class="nav-item mx-4">
-                            <a class="nav-link" href="?controller=User&action=index">Order Historial</a>
+                            <a class="nav-link" href="?controller=Order&action=index">Order History</a>
                         </li>
                         <li class="nav-item mx-4">
                             <a class="nav-link" href="?controller=User&action=edit">Profile</a>
@@ -49,16 +49,18 @@
                     </ul>
                 <?php else: ?>
                     <ul class="navbar-nav">
+                        <?php if (SessionUtils::isLogged()): ?>    
                         <li class="nav-item">
                             <a class="nav-link mx-2" href="?controller=User&action=showFavouriteProducts">
                                 <i data-lucide="heart" class="icon-white"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mx-2" href="?controller=Product&action=index">
+                            <a class="nav-link mx-2" href="?controller=Order&action=showCart">
                                 <i data-lucide="shopping-cart" class="icon-white"></i>
                             </a>
                         </li>
+                        <?php endif; ?>
                         <li class="nav-item dropdown">
                             <?php if (SessionUtils::isLogged()): ?>
                                 <div class="btn-group p-0">
@@ -76,8 +78,8 @@
                                         <li>
                                             <hr class="dropdown-divider bg-white">
                                         </li>
-                                        <li><a class="dropdown-item" href="?controller=User&action=showFavouriteProducts"><i data-lucide="heart" class="icon-white mx-2"></i>Favourite Products</a></li>
-                                        <li><a class="dropdown-item" href="?controller=User&action=showOrderHistory"><i data-lucide="clipboard-clock" class="icon-white mx-2"></i>Order History</a></li>
+                                        <li><a class="dropdown-item" href="?controller=Product&action=indexFavouriteProducts"><i data-lucide="heart" class="icon-white mx-2"></i>Favourite Products</a></li>
+                                        <li><a class="dropdown-item" href="?controller=Order&action=index"><i data-lucide="clipboard-clock" class="icon-white mx-2"></i>Order History</a></li>
                                         <li><a class="dropdown-item" href="?controller=User&action=edit"><i data-lucide="circle-user-round" class="icon-white mx-2"></i>Profile</a></li>
                                         <li>
                                             <hr class="dropdown-divider bg-white">
