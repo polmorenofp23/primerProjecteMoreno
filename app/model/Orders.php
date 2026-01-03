@@ -32,6 +32,9 @@ class Orders
     /** DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE */
     private string $updated_at;
 
+    /** Array of OrderLine objects (not persisted in DB, only used for API serialization) */
+    public ?array $_orderLines = null;
+
     public function __construct($data = null)
     {
         if ($data) {
@@ -146,6 +149,16 @@ class Orders
     public function setUpdatedAt($v)
     {
         $this->updated_at = $v;
+        return $this;
+    }
+
+    public function getOrderLines()
+    {
+        return $this->_orderLines;
+    }
+    public function setOrderLines($lines)
+    {
+        $this->_orderLines = $lines;
         return $this;
     }
 }

@@ -61,7 +61,7 @@ class Ingredient {
 }
 
 class Orders {
-    constructor(id, userId, discountId, totalAmount, discountAmount, tableId, orderStatus, paymentStatus, createdAt, updatedAt) {
+    constructor(id, userId, discountId, totalAmount, discountAmount, tableId, orderStatus, paymentStatus, createdAt, updatedAt, orderLines = []) {
         this.id = id;
         this.userId = userId;
         this.discountId = discountId;
@@ -72,21 +72,49 @@ class Orders {
         this.paymentStatus = paymentStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.orderLines = orderLines.map(line => {
+            if (line instanceof OrderLine) return line;
+            return new OrderLine(
+                line.lineId,
+                line.orderId,
+                line.productId,
+                line.quantity,
+                line.unitPrice,
+                line.ingredients || []
+            );
+        });
     }
 }
 
 class OrderLine {
-    constructor(id, orderId, productId, quantity, unitPrice) {
+    constructor(id, orderId, productId, quantity, unitPrice, ingredients = []) {
         this.id = id;
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.ingredients = ingredients.map(ing => {
+            if (ing instanceof OrderLineIngredient) return ing;
+            return new OrderLineIngredient(
+                ing.lineId,
+                ing.ingredientId,
+                ing.numPortions,
+                ing.ingredientPrice,
+                ing.grams,
+                ing.kcalComponent,
+                ing.proteinG,
+                ing.carbsG,
+                ing.fatG,
+                ing.origin,
+                ing.doneness
+            );
+        });
     }
 }
 
 class OrderLineIngredient {
-    constructor(lineId, ingredientId, numPortions, ingredientPrice, grams, kcalComponent, proteinG, carbsG, fatG, origin, doneness) {
+    constructor(lineId, ingredientId, numPortions, ingredientPrice, grams, kcalComponent, proteinG, carbsG, fatG, origin, doneness, lineIngredientId) {
+        this.lineIngredientId = lineIngredientId;
         this.lineId = lineId;
         this.ingredientId = ingredientId;
         this.numPortions = numPortions;
