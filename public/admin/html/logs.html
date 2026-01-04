@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Logs</title>
+</head>
+<body>
+    <div class="logs-filter d-flex justify-content-end align-items-center w-100 px-5 mb-4">
+        <div class="input-group filter-inputs w-auto gap-3">
+            <select id="filterTableName" class="form-select font-sting-light fs-14">
+                <option value="">All Tables</option>
+            </select>
+            <button type="button" class="btn btn-white p-2" id="refreshLogsBtn">
+                <i data-lucide="refresh-cw"></i> Refresh
+            </button>
+        </div>
+    </div>
+    <div class="col-10 logs-container p-3">
+        <table id="logs-table" class="table w-100 font-sting-light fs-14 text-primary-black">
+            <thead>
+                <tr>
+                    <th class="text-start align-middle">Log ID</th>
+                    <th class="text-center align-middle">Operation</th>
+                    <th class="text-center align-middle">Table Name</th>
+                    <th class="text-center align-middle">Row IDs Affected</th>
+                    <th class="text-center align-middle">Performed At</th>
+                    <th class="text-end align-middle">Details</th>
+                </tr>
+            </thead>
+            <tbody id="logs-table-body" class="align-items-center">
+                <!-- Data will be loaded via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/admin/js/objClasses.js" type="module"></script>
+    <script src="/admin/js/logs.js" type="module"></script>
+</body>
+</html>

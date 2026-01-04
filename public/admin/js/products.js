@@ -68,8 +68,7 @@ async function renderArrayProducts() {
         tbody.appendChild(tr);
     }
     
-    // Initialize Lucide icons after rendering
-    setTimeout(() => window.initLucideIcons?.(), 0);
+    setTimeout(() => window.initLucideIcons?.(), 0);        // Initialize Lucide icons after rendering
 }
 
 function loadProducts() {

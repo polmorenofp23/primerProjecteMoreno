@@ -164,6 +164,17 @@ class UserType {
     }
 }
 
+class BCLogs {
+    constructor(id, operation, tableName, rowIds, performedAt, details) {
+        this.id = id;
+        this.operation = operation;
+        this.tableName = tableName;
+        this.rowIds = rowIds;
+        this.performedAt = performedAt;
+        this.details = details;
+    }
+}
+
 export {
     User,
     Product,
@@ -174,5 +185,6 @@ export {
     OrderLineIngredient,
     Discount,
     HttpResponse,
-    UserType
+    UserType,
+    BCLogs
 };

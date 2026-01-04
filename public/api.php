@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $resource    = ucfirst($_GET['resource'] ?? 'User'); 
 $httpMethod  = $_SERVER['REQUEST_METHOD'];
 $id          = $_GET['id'] ?? null;
+$action      = $_GET['action'] ?? null;
 
 // Map HTTP verb to controller method
 switch ($httpMethod) {
@@ -39,6 +40,10 @@ switch ($httpMethod) {
     default:
         http_response_code(405);
         die(json_encode(['error' => 'HTTP method not allowed']));
+}
+
+if (!empty($action)) {
+    $method = $action;
 }
 
 // Build API controller class name and file path

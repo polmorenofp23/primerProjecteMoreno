@@ -30,8 +30,11 @@
 
 .input-group select,
 #ingredientsList select,
-.input-group select option
-#ingredientsList select option {
+.filter-inputs select,
+.filter-inputs input,
+.input-group select option,
+#ingredientsList select option,
+.filter-inputs select option {
 	background: var(--secondary-white);
 	color: var(--primary-black);
 	font-family: var(--font-Sting);
@@ -44,7 +47,8 @@
 }
 
 .input-group select option:disabled,
-#ingredientsList select option:disabled {
+#ingredientsList select option:disabled,
+.filter-inputs input::placeholder{
     color: var(--secondary-grey);
 }
 
