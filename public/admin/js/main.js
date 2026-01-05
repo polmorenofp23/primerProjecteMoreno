@@ -129,16 +129,14 @@ function initGlobalCurrencySelector() {
     if (eurBtn) activate(eurBtn, false);
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initGlobalCurrencySelector);
-else initGlobalCurrencySelector();
-
 /**
  * Initialize admin page - load last active section from localStorage
  */
 function initAdminPage() {
+    initGlobalCurrencySelector();
     const lastSection = LocalStorageUtils.getLastAdminSection();
     const sectionExists = document.getElementById(lastSection);
-    const targetSection = sectionExists ? lastSection : 'dashboard';
+    const targetSection = sectionExists ? lastSection : 'admin';
     setActiveSection(targetSection);
 }
 
