@@ -90,13 +90,14 @@ class ShopCartUtils
 
     /* ADD */
     /**
-     * Add a product to the user's cart (pending order)
+     * Add a product to a specific order
      * Converts Product with ProductIngredients to OrderLine with OrderLineIngredients
+     * If $orderId is provided, adds to that specific order; otherwise finds or creates a pending one for that userId
      */
-    public static function addProductToCart(int $userId, Product $product, int $quantity = 1)
+    public static function addProductToOrder(int $userId, Product $product, int $quantity = 1, ?int $orderId = null)
     {
         try {
-            $orderId = self::getOrCreatePendingOrder($userId);
+            $orderId = $orderId ?? self::getOrCreatePendingOrder($userId);           // Use provided orderId, or get/create pending order if not provided
             $orderLine = new OrderLine([
                 'id_order' => $orderId,
                 'id_product' => $product->getId(),
@@ -170,6 +171,14 @@ class ShopCartUtils
             error_log("Error adding product to cart: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Add a product to the user's shopping cart (its last pending order)
+     */
+    public static function addProductToCart(int $userId, Product $product, int $quantity = 1)
+    {
+        return self::addProductToOrder($userId, $product, $quantity);
     }
 
     /* UPDATE */
