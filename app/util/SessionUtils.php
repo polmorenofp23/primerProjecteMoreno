@@ -88,9 +88,10 @@ class SessionUtils
 	/**
 	 * Require the current user to be an admin
 	 */
-	public static function requireAdmin(string $redirect = '?controller=Error&action=show&code=403&message=Forbidden,+only+admins'): void
+	public static function requireAdmin(string $redirect = '?controller=product&action=index'): void
 	{
 		if (!self::isAdmin()) {
+			self::setFlashHttpResponse(403, 'Forbidden access, it\'s only for administrators.');
 			header('Location: ' . $redirect);
 			exit;
 		}

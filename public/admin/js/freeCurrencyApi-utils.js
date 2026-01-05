@@ -1,24 +1,18 @@
 let API_KEY = 'fca_live_MoXPprwiQiMtUJ9YHz4w1r5M1elZ34v7QIyML8L9';
-const _fx_cache = { rates: {}, ts: 0 };
+const currencyRatesCache = { rates: {}, ts: 0 };
 
 /**
  * Exchange an amount from one currency to another using "FreeCurrencyAPI.com"
-
  */
 export async function exchangeCoinTo(amount, fromCurrency, toCurrency) {
-    const amt = Number(amount) || 0;
-    if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) return amt;
+    const newValue = Number(amount) || 0;
+    if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) return newValue;
 
     const now = Date.now();
     const cacheKey = fromCurrency + '_' + toCurrency;
-    if (_fx_cache.rates[cacheKey] && (now - _fx_cache.ts) < 10 * 60 * 1000) {
-        const rate = _fx_cache.rates[cacheKey];
-        return amt * rate;
-    }
-
-    if (!API_KEY) {
-        console.warn('freeCurrencyApi-utils: API key not set — returning original amount');
-        return amt;
+    if (currencyRatesCache.rates[cacheKey] && (now - currencyRatesCache.ts) < 10 * 60 * 1000) {
+        const rate = currencyRatesCache.rates[cacheKey];
+        return newValue * rate;
     }
 
     try {
@@ -28,13 +22,22 @@ export async function exchangeCoinTo(amount, fromCurrency, toCurrency) {
         const data = json.data ?? json.rates ?? json;
         const rate = (data && (data[toCurrency] || (data.rates && data.rates[toCurrency]))) ? Number(data[toCurrency] || data.rates[toCurrency]) : null;
         if (rate) {
-            _fx_cache.rates[cacheKey] = rate;
-            _fx_cache.ts = now;
-            return amt * rate;
+            currencyRatesCache.rates[cacheKey] = rate;
+            currencyRatesCache.ts = now;
+            return newValue * rate;
         }
     } catch (e) {
         console.warn('freeCurrencyApi-utils: exchange fetch failed', e);
     }
 
-    return amt;
+    return newValue;
+}
+
+/**
+ * Format an amount to a currency string with exchange conversion
+ */
+export async function formatCurrency(amount, fromCurrency = 'EUR') {
+    const targetCurrency = (typeof window !== 'undefined' && window.currentCurrency) ? window.currentCurrency : 'EUR';
+    const converted = await exchangeCoinTo(amount, fromCurrency, targetCurrency);
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency: targetCurrency }).format(converted);
 }

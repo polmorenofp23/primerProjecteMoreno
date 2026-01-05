@@ -1,24 +1,27 @@
 import * as Object from './objClasses.js';
-
-const breadcrumb = document.querySelector('.breadcrumb');           // Obtain the breadcrumb element
-const sectionTitle = document.querySelector('.section-title h1');   // Obtain the section title element
-const botonesMenu = document.querySelectorAll('.menu-btn');        // Obtenin botons del menu
-const sections = document.querySelectorAll('.content-section');     // Obtenin seccions
-const globalCurrencySelector = document.getElementById('global-currency'); // obtenain currency selector element
+import * as LocalStorageUtils from './localStorage-utils.js';
 
 window.currentCurrency = window.currentCurrency || 'EUR'; // Global currency (default EUR)
 
-botonesMenu.forEach( button => {
+const breadcrumb = document.querySelector('.breadcrumb');           // Obtain the breadcrumb element
+const sectionTitle = document.querySelector('.section-title h1');   // Obtain the section title element
+const btnsMenu = document.querySelectorAll('.menu-btn');            // Obtenin menu buttons
+const sections = document.querySelectorAll('.content-section');     // Obtenin seccions
+const globalCurrencySelector = document.getElementById('global-currency'); // obtenain currency selector element
+
+btnsMenu.forEach( button => {
     button.addEventListener('click', () => {
         const target= button.getAttribute('data-target');
         setActiveSection(target);
     });
 });
 
-// Funcio per establir seccio activa, changin title and breadcrumb content
+/*
+* Set the active section, changin title, breadcrumb content and loaiding the placeholder content
+*/
 function setActiveSection(targetId) {
     let sectionName = null
-    botonesMenu.forEach(button => {
+    btnsMenu.forEach(button => {
         button.classList.remove('active'); 
         if (button.getAttribute('data-target') === targetId) {
             button.classList.add('active');
@@ -49,6 +52,8 @@ function setActiveSection(targetId) {
         if (targetId === 'products' || targetId === 'orders') globalCurrencySelector.classList.remove('d-none');
         else globalCurrencySelector.classList.add('d-none');
     }
+
+    LocalStorageUtils.setLastAdminSection(targetId);
 }
 
 /**
@@ -79,7 +84,9 @@ async function loadHtmlInto(targetId) {
     return container;
 }
 
-// Update currency icons across the admin UI
+/**
+ * Update currency icons across the admin UI
+ */
 function setCurrencyIcon() {
     const ids = ['currency-icon', 'currency-display-icon', 'global-currency-icon'];
     const cur = (typeof window !== 'undefined' && window.currentCurrency) ? window.currentCurrency : 'EUR';
@@ -97,7 +104,9 @@ function setCurrencyIcon() {
     }
 }
 
-// Initialize global currency selector wiring
+/** 
+* Initialize global currency selector wiring 
+*/
 function initGlobalCurrencySelector() {
     const currOptions = document.getElementById('global-currency-options');
     if (!currOptions) return;
@@ -122,3 +131,19 @@ function initGlobalCurrencySelector() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initGlobalCurrencySelector);
 else initGlobalCurrencySelector();
+
+/**
+ * Initialize admin page - load last active section from localStorage
+ */
+function initAdminPage() {
+    const lastSection = LocalStorageUtils.getLastAdminSection();
+    const sectionExists = document.getElementById(lastSection);
+    const targetSection = sectionExists ? lastSection : 'dashboard';
+    setActiveSection(targetSection);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdminPage);
+} else {
+    initAdminPage();
+}

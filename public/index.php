@@ -29,8 +29,10 @@ if (isset($_GET['controller'])) {
 
     } elseif ($controllerName == "admin"){                                                         // Admin section reqest
 
+        SessionUtils::requireLogin();                                                             // Require user logged
+        SessionUtils::requireAdmin();                                                              // Require admin role
         $action = $_GET['action'] ?? 'index';
-        if ($action == 'index') {                                                          // Check admin session
+        if ($action == 'index') {                                                               // Check admin session
             $view = 'admin/index.html';
         }
         include_once VIEW_PATH . 'main.php';
