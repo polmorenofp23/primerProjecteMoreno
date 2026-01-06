@@ -79,7 +79,7 @@ async function loadHtmlInto(targetId) {
         old.remove();
     });
     
-    window.lucide?.createIcons?.();
+    setTimeout(() => window.initLucideIcons?.(), 0);
 
     return container;
 }
@@ -98,10 +98,7 @@ function setCurrencyIcon() {
         i.setAttribute('data-lucide', cur === 'EUR' ? 'euro' : (cur === 'GBP' ? 'pound-sterling' : 'dollar-sign'));
         iconSpan.appendChild(i);
     });
-    if (typeof window !== 'undefined' && window.lucide) {
-        if (typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
-        else if (typeof window.lucide.replace === 'function') window.lucide.replace();
-    }
+    setTimeout(() => window.initLucideIcons?.(), 0);
 }
 
 /** 

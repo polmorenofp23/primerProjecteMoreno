@@ -5,7 +5,7 @@
 // Global function to reinitialize icons (for dynamic content)
 window.initLucideIcons = function() {
   if (window.lucide && typeof window.lucide.createIcons === 'function') {
-    window.lucide.createIcons();
+    setTimeout(() => window.lucide.createIcons(), 0);
   }
 };
 

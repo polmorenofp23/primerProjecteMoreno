@@ -1,8 +1,11 @@
 import * as Object from './objClasses.js';
-import { exchangeCoinTo } from './freeCurrencyApi-utils.js';
+import { formatCurrency } from './freeCurrencyApi-utils.js';
 
 const arrayProducts = [];
 
+/**
+ * Render products table from arrayProducts
+ */
 async function renderArrayProducts() {
     const tbody = document.getElementById('products-table-body');
     if (!tbody) return;
@@ -23,9 +26,8 @@ async function renderArrayProducts() {
 
         const tdPrice = document.createElement('td');
         tdPrice.classList.add('align-middle', 'text-end');
-        const targetCurrency = (typeof window !== 'undefined' && window.currentCurrency) ? window.currentCurrency : 'EUR';
-        const priceConverted = await exchangeCoinTo(Number(prod.price || 0), 'EUR', targetCurrency);
-        tdPrice.textContent = new Intl.NumberFormat(undefined, { style: 'currency', currency: targetCurrency }).format(priceConverted);
+        const priceFormatted = await formatCurrency(Number(prod.price || 0), 'EUR');
+        tdPrice.textContent = priceFormatted;
 
         const tdActions = document.createElement('td');
         tdActions.classList.add('align-middle', 'text-center', 'd-flex', 'justify-content-end', 'gap-3', 'pe-3');
@@ -71,6 +73,9 @@ async function renderArrayProducts() {
     setTimeout(() => window.initLucideIcons?.(), 0);        // Initialize Lucide icons after rendering
 }
 
+/**
+ * Load products from API
+ */
 function loadProducts() {
     return fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product')
         .then(r => r.json())
@@ -262,7 +267,7 @@ function renderSelectedIngredients() {
         });
     });
 
-    window.initLucideIcons?.();
+    setTimeout(() => window.initLucideIcons?.(), 0);
 }
 
 function setupIngredientsUI() {

@@ -20,7 +20,7 @@ function renderLogsTable() {
         tbody.appendChild(row);
     });
 
-    if (typeof lucide !== 'undefined') { lucide.createIcons(); }    // Initialize Lucide icons
+    setTimeout(() => window.initLucideIcons?.(), 0);
 }
 
 /**
@@ -149,9 +149,7 @@ function showNoDataMessage(message = 'No logs found') {
         </tr>
     `;
 
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    setTimeout(() => window.initLucideIcons?.(), 0);
 }
 
 /**
@@ -212,7 +210,7 @@ async function initializePage() {
             clearInterval(checkElements);
             filterElement.addEventListener('change', handleFilterChange);      
             refreshButton.addEventListener('click', handleRefreshClick);
-            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+            setTimeout(() => window.initLucideIcons?.(), 0);
         }
     }, 100);
 

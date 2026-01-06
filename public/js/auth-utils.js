@@ -17,13 +17,7 @@ function togglePassword(fieldId, btn) {
 					const current = icon.getAttribute('data-lucide') || '';
 					const next = current === 'eye' ? 'eye-off' : 'eye';
 					icon.setAttribute('data-lucide', next);
-					if (window.lucide && typeof window.lucide.createIcons === 'function') {
-						try {
-							window.lucide.createIcons({ root: btn });
-						} catch (err) {
-							console.error('lucide.createIcons error', err);
-						}
-					}
+					setTimeout(() => window.initLucideIcons?.(), 0);
 				}
 			}
 		}
