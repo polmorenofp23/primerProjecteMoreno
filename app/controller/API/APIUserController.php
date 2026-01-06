@@ -14,26 +14,7 @@ class APIUserController
     public function index()
     {
         $uDao = new UserDAO();
-        $filters = [];
-
-        if (isset($_GET['username']) && $_GET['username'] !== '') {
-            $filters['username'] = trim($_GET['username']);
-        }
-        if (isset($_GET['email']) && $_GET['email'] !== '') {
-            $filters['email'] = trim($_GET['email']);
-        }
-        if (isset($_GET['role']) && $_GET['role'] !== '') {
-            $filters['role'] = trim($_GET['role']);
-        }
-        if (isset($_GET['user_type_id']) && $_GET['user_type_id'] !== '') {
-            $filters['id_user_type'] = (int)$_GET['user_type_id'];
-        }
-        if (isset($_GET['ids']) && $_GET['ids'] !== '') {
-            $filters['id'] = array_map('intval', array_map('trim', explode(',', $_GET['ids'])));
-        }
-
-        $orderBy = $_GET['order_by'] ?? null;
-        $users = $uDao->getUsersByFilter($filters, $orderBy);
+        $users = $uDao->getAllUsers();
         JsonUtils::jsonResponse(JsonUtils::serializeArray($users, 'serializeUser', $this));
     }
 
@@ -158,7 +139,7 @@ class APIUserController
         return JsonUtils::jsonResponse($response, 201);
     }
 
-    // ---------- Helpers ----------
+    /* HELPERS */
     public function serializeUser($user)
     {
         if (!$user) return null;

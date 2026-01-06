@@ -41,6 +41,14 @@ class UserDAO
     }
 
     /**
+     * Get all users
+     */
+    public function getAllUsers()
+    {
+        return $this->getUsersByFilter([]);
+    }
+
+    /**
      * Generic filter for users. Supported filters:
      *  - id (int or array)
      *  - username (string)

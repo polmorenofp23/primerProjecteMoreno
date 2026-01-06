@@ -25,21 +25,37 @@ class DiscountDAO
     /**
      * Get discount by promo code
      */
-    public function getDiscountByCode(string $code): ?Discount
-    {
-        $discounts = $this->getDiscountsByFilter(['code' => $code, 'type' => 'promocode', 'status' => 'active']);
-        return !empty($discounts) ? $discounts[0] : null;
-    }
+    // public function getDiscountByCode(string $code): ?Discount
+    // {
+    //     $discounts = $this->getDiscountsByFilter(['code' => $code, 'type' => 'promocode', 'status' => 'active']);
+    //     return !empty($discounts) ? $discounts[0] : null;
+    // }
 
     /**
      * Get discount by user type ID
-     * Returns the discount associated with a specific user type
      */
     public function getDiscountByUserType(int $userTypeId): ?Discount
     {
         $discounts = $this->getDiscountsByFilter(['user_type_id' => $userTypeId, 'type' => 'user_type', 'status' => 'active']);
         return !empty($discounts) ? $discounts[0] : null;
     }
+
+    /**
+     * Get discounts by type
+     */
+    public function getDiscountsByType(string $type): array
+    {
+        return $this->getDiscountsByFilter(['type' => $type], 'name ASC');
+    }
+
+    /**
+     * Get all discounts
+     */
+    public function getAllDiscounts(): array
+    {
+        return $this->getDiscountsByFilter([], 'name ASC');
+    }
+
 
     /**
      * Generic filter for discounts. Supported filters:
@@ -62,10 +78,10 @@ class DiscountDAO
             $params[':id'] = (int)$filters['id'];
         }
 
-        if (isset($filters['code'])) {
-            $wheres[] = 'discount_code = :code';
-            $params[':code'] = $filters['code'];
-        }
+        // if (isset($filters['code'])) {
+        //     $wheres[] = 'discount_code = :code';
+        //     $params[':code'] = $filters['code'];
+        // }
 
         if (isset($filters['type'])) {
             $wheres[] = 'type = :type';
@@ -105,22 +121,6 @@ class DiscountDAO
         }
 
         return $discountsList;
-    }
-
-    /**
-     * Get all discounts
-     */
-    public function getAllDiscounts(): array
-    {
-        return $this->getDiscountsByFilter([], 'name ASC');
-    }
-
-    /**
-     * Get discounts by type
-     */
-    public function getDiscountsByType(string $type): array
-    {
-        return $this->getDiscountsByFilter(['type' => $type], 'name ASC');
     }
 
     /** CREATE */
@@ -216,32 +216,6 @@ class DiscountDAO
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $result = $stmt->execute();
-
-        $this->db->disconnect();
-
-        return $result;
-    }
-
-    /** HELPERS */
-    /**
-     * Check if a promo code is valid and not expired
-     */
-    public function isPromoCodeValid(string $code): bool
-    {
-        $this->conn = $this->db->connect();
-
-        $query = "SELECT * FROM discount 
-                 WHERE discount_code = :code 
-                 AND type = 'promocode' 
-                 AND status = 'active'
-                 AND (start_datetime IS NULL OR start_datetime <= NOW())
-                 AND (end_datetime IS NULL OR end_datetime >= NOW())
-                 LIMIT 1";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindValue(':code', $code, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->rowCount() > 0;
 
         $this->db->disconnect();
 

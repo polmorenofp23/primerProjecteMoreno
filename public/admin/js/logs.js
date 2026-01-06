@@ -98,61 +98,6 @@ function createLogRow(log) {
 }
 
 /**
- * Format row_ids JSON object into readable string
- */
-function formatRowIds(rowIds) {
-    if (!rowIds || typeof rowIds !== 'object') {
-        return '—';
-    }
-
-    const entries = Object.entries(rowIds);
-    if (entries.length === 0) {
-        return '—';
-    }
-
-    return entries
-        .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-        .join('<br>');
-}
-
-/**
- * Format datetime string
- */
-function formatDateTime(datetime) {
-    if (!datetime) return '—';
-
-    const date = new Date(datetime);
-    const dateStr = date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-    const timeStr = date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-
-    return `${dateStr}<br><small class="fs-12 text-muted">${timeStr}</small>`;
-}
-
-/**
- * Show no data message
- */
-function showNoDataMessage(message = 'No logs found') {
-    const tbody = document.getElementById('logs-table-body');
-    tbody.innerHTML = `
-        <tr>
-            <td colspan="6" class="text-center py-5 text-muted">
-                <i data-lucide="inbox" class="icon-40 mb-3"></i>
-                <p class="fs-18">${message}</p>
-            </td>
-        </tr>
-    `;
-
-    setTimeout(() => window.initLucideIcons?.(), 0);
-}
-
-/**
  * Populate the table name filter dropdown
  */
 function populateTableNameFilter() {
@@ -163,6 +108,7 @@ function populateTableNameFilter() {
     select.innerHTML = '<option value="">All Tables</option>';
     tableNames.forEach(tableName => {
         const option = document.createElement('option');
+        option.className = 'text-uppercase fs-16';
         option.value = tableName;
         option.textContent = tableName.toUpperCase();
         select.appendChild(option);
@@ -194,6 +140,62 @@ function handleFilterChange() {
 function handleRefreshClick() {
     const tableName = document.getElementById('filterTableName').value;
     loadLogs(tableName || null);
+}
+
+/* HELPERS */
+/**
+ * Format datetime to show date and time
+ */
+function formatDateTime(datetime) {
+    if (!datetime) return '—';
+
+    const date = new Date(datetime);
+    const dateStr = date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    const timeStr = date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    return `${dateStr}<br><small class="fs-12 text-muted">${timeStr}</small>`;
+}
+
+/**
+ * Format row_ids JSON object into readable string
+ */
+function formatRowIds(rowIds) {
+    if (!rowIds || typeof rowIds !== 'object') {
+        return '—';
+    }
+
+    const entries = Object.entries(rowIds);
+    if (entries.length === 0) {
+        return '—';
+    }
+
+    return entries
+        .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+        .join('<br>');
+}
+
+/**
+ * Show no data message
+ */
+function showNoDataMessage(message = 'No logs found') {
+    const tbody = document.getElementById('logs-table-body');
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center py-5 text-muted">
+                <i data-lucide="inbox" class="icon-40 mb-3"></i>
+                <p class="fs-18">${message}</p>
+            </td>
+        </tr>
+    `;
+
+    setTimeout(() => window.initLucideIcons?.(), 0);
 }
 
 /**

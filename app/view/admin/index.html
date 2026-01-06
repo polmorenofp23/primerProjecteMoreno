@@ -10,11 +10,11 @@
 <body>        
     <nav class="sub-navbar navbar navbar-dark bg-black font-sting-regular fs-18 text-primary-white text-capitalize">
         <div class="d-flex flex-row justify-content-start gap-3 w-100 ps-5">
-            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="users" disabled>Users</button>
             <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="orders">Orders</button>
             <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="products">Products</button>
             <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="ingredients" disabled>Ingredients</button>
-            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="offers" disabled>Offers</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="users">Users</button>
+            <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="discounts">Discounts</button>
             <button class="menu-btn btn btn-transparent text-primary-white px-3" data-target="logs">Logs</button>
         </div>
     </nav>
@@ -54,26 +54,6 @@
             </div>
         </section>
         <section id="users" class="content-section">
-            <p>Users management section</p>
-            <table id="users-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>User Type</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone</th>
-                        <th>Registered At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="users-table-body">
-                    <!-- Data will be loaded via JavaScript -->
-                </tbody>
-            </table>
             <div id="users-placeholder" class="d-flex flex-column justify-content-center align-items-center w-100"></div>
         </section>
         
@@ -90,8 +70,8 @@
             <div id="ingredients-placeholder" class="d-flex flex-column justify-content-center align-items-center w-100"></div>
         </section>
         
-        <section id="offers" class="content-section">
-            <div id="offers-placeholder" class="d-flex flex-column justify-content-center align-items-center w-100"></div>
+        <section id="discounts" class="content-section">
+            <div id="discounts-placeholder" class="d-flex flex-column justify-content-center align-items-center w-100"></div>
         </section>
         
         <section id="logs" class="content-section">

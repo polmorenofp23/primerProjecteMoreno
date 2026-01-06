@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - users</title>
+</head>
+<body>
+    <div class="users-filter d-flex justify-content-end align-items-center w-100 px-5 mb-4">
+        <div class="input-group filter-inputs w-auto gap-3">
+            <select id="filterUserType" class="form-select font-sting-light fs-14 w-auto">
+                <option value="">All User Types</option>
+            </select>
+            <select id="filterRole" class="form-select font-sting-light fs-14 w-auto">
+                <option value="">All Roles</option>
+                <option value="client" class="text-uppercase fs-16">Client</option>
+                <option value="admin" class="text-uppercase fs-16">Admin</option>
+            </select>
+            <div class="d-flex gap-3 ms-4">
+                <button type="button" class="btn btn-white p-2" id="refreshUsersBtn">
+                    <i data-lucide="refresh-cw"></i> Refresh
+                </button>
+                <button type="button" class="btn btn-white p-2" id="clearUsersFiltersBtn">
+                    <i data-lucide="eraser"></i> Clear
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-10 users-container p-3">
+        <table id="users-table" class="table w-100 font-sting-light fs-14 text-primary-black">
+            <thead>
+                <tr>
+                    <th class="text-start align-middle">User ID</th>
+                    <th class="text-center align-middle">Username</th>                    
+                    <th class="text-center align-middle">Name</th>
+                    <th class="text-center align-middle">Email</th>                    
+                    <th class="text-center align-middle">Phone</th>
+                    <th class="text-center align-middle">Role</th>
+                    <th class="text-center align-middle">User Type</th>
+                    <th class="text-center align-middle">Registered At</th>
+                    <th class="text-end align-middle">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="users-table-body" class="align-items-center">
+                <!-- Data will be loaded via js there -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/admin/js/objClasses.js" type="module"></script>
+    <script src="/admin/js/users.js" type="module"></script>
+</body>
+</html>
