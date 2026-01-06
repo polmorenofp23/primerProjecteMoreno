@@ -75,7 +75,7 @@ INSERT INTO user (id_user_type, username, role, email, password_hash, first_name
 
 -- Brentford Players
 ((SELECT id_user_type FROM user_type WHERE name = 'brentford_player'), 
-    'ivantoneyfc', 'client', 'ivan.toney@brentfordfc.com', 
+    'ivantoney', 'client', 'ivan.toney@brentfordfc.com', 
     '$2y$10$3gUfX2.nQ1tQAmETObIRaO3ZFLhO4qkMdJKZMVRoJK.iraK9qFQIu', 
     'Ivan', 'Toney', '+44 20 1234 5606', 
     '{"street": "1 Jersey Road", "city": "Brentford", "postcode": "TW8 0NT", "country": "UK"}', 
