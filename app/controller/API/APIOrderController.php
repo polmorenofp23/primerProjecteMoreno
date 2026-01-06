@@ -3,7 +3,11 @@
 require_once DAO_PATH . 'OrdersDAO.php';
 require_once DAO_PATH . 'OrderLineDAO.php';
 require_once DAO_PATH . 'OrderLineIngredientDAO.php';
+require_once DAO_PATH . 'ProductDAO.php';
+require_once DAO_PATH . 'UserDAO.php';
+require_once DAO_PATH . 'DiscountDAO.php';
 require_once UTIL_PATH . 'JsonUtils.php';
+require_once UTIL_PATH . 'ShopCartUtils.php';
 
 class APIOrderController
 {
@@ -82,10 +86,8 @@ class APIOrderController
 		$userId = isset($data['userId']) ? (int)$data['userId'] : null;
 		$orderStatus = trim($data['orderStatus'] ?? 'pending');
 		$paymentStatus = trim($data['paymentStatus'] ?? 'pending');
-		$totalAmount = isset($data['totalAmount']) ? (float)$data['totalAmount'] : 0.0;
-		$discountAmount = isset($data['discountAmount']) ? (float)$data['discountAmount'] : 0.0;
-		$idDiscount = isset($data['idDiscount']) ? (int)$data['idDiscount'] : null;
 		$tableId = isset($data['tableId']) ? (int)$data['tableId'] : 1;
+		$products = isset($data['products']) && is_array($data['products']) ? $data['products'] : [];
 
 		$errors = [];
 		if (!$userId) $errors[] = 'userId is required';
@@ -96,13 +98,22 @@ class APIOrderController
 			return JsonUtils::jsonError('Validation error', ['errors' => $errors], 422);
 		}
 
+		$userDao = new UserDAO();
+		$user = $userDao->getUserById($userId);
+
+		if (!$user) {
+			return JsonUtils::jsonError('User not found', ['data' => null], 404);
+		}
+
+		$discountId = $this->resolveDiscountIdForUser($user);
+
 		$orderData = [
 			'id_user' => $userId,
 			'order_status' => $orderStatus,
 			'payment_status' => $paymentStatus,
-			'total_amount' => $totalAmount,
-			'discount_amount' => $discountAmount,
-			'id_discount' => $idDiscount,
+			'total_amount' => 0.0,
+			'discount_amount' => 0.0,
+			'id_discount' => $discountId,
 			'table_id' => $tableId,
 		];
 
@@ -114,7 +125,28 @@ class APIOrderController
 			return JsonUtils::jsonError('Failed to create order', ['data' => null], 500);
 		}
 
+		if (!empty($products)) {
+			$productDao = new ProductDAO();
+			foreach ($products as $product) {
+				$productId = isset($product['productId']) ? (int)$product['productId'] : null;
+				$quantity = isset($product['quantity']) ? (int)$product['quantity'] : 1;
+				if (!$productId || $quantity <= 0) {
+					continue;
+				}
+
+				$productObj = $productDao->getProductById($productId);
+				if ($productObj) {
+					ShopCartUtils::addProductToOrder($userId, $productObj, $quantity, $createdId, false);
+				}
+			}
+			ShopCartUtils::updateOrderAmounts($createdId);
+		}
+
 		$createdOrder = $oDao->getOrderById((int)$createdId);
+		$olDao = new OrderLineDAO();
+		$orderLines = $olDao->getOrderLinesByOrderId((int)$createdId);
+		$createdOrder->_orderLines = $orderLines;
+
 		$response = JsonUtils::serializeItem($createdOrder, 'serializeOrder', $this);
 		return JsonUtils::jsonResponse($response, 201);
 	}
@@ -137,89 +169,67 @@ class APIOrderController
 			return JsonUtils::jsonError('Invalid JSON body', ['data' => null], 400);
 		}
 
-		$allowed = ['orderStatus', 'paymentStatus', 'totalAmount', 'discountAmount', 'idDiscount', 'tableId'];
-		$changed = false;
+		$updateData = [];
+		if (isset($data['userId'])) $updateData['userId'] = $data['userId'];
+		if (isset($data['orderStatus'])) $updateData['orderStatus'] = $data['orderStatus'];
+		if (isset($data['paymentStatus'])) $updateData['paymentStatus'] = $data['paymentStatus'];
+		if (isset($data['tableId'])) $updateData['tableId'] = $data['tableId'];
 
-		foreach ($allowed as $field) {
-			if (array_key_exists($field, $data)) {
-				switch ($field) {
-					case 'orderStatus':
-						$order->setOrderStatus($data['orderStatus']);
-						$changed = true;
-						break;
-					case 'paymentStatus':
-						$order->setPaymentStatus($data['paymentStatus']);
-						$changed = true;
-						break;
-					case 'totalAmount':
-						$order->setTotalAmount((float)$data['totalAmount']);
-						$changed = true;
-						break;
-					case 'discountAmount':
-						$order->setDiscountAmount((float)$data['discountAmount']);
-						$changed = true;
-						break;
-					case 'idDiscount':
-						$order->setDiscountId(isset($data['idDiscount']) ? (int)$data['idDiscount'] : null);
-						$changed = true;
-						break;
-					case 'tableId':
-						$order->setTableId(isset($data['tableId']) ? (int)$data['tableId'] : null);
-						$changed = true;
-						break;
-				}
-			}
-		}
-
-		if (!$changed) {
+		if (empty($updateData) && !isset($data['orderLines'])) {
 			return JsonUtils::jsonError('No changes provided', ['data' => null], 400);
 		}
 
-		$ok = $oDao->updateOrder($order);
-		if (!$ok) {
-			return JsonUtils::jsonError('Failed to update order', ['data' => null], 500);
-		}
-
-		$olDao = new OrderLineDAO();
-		$lineResults = ['added' => 0, 'updated' => 0, 'deleted' => 0];
+		$lineResults = ['added' => 0, 'updated' => 0, 'deleted' => 0, 'errors' => []];
 		
 		if (isset($data['orderLines']) && is_array($data['orderLines'])) {
+			$productDao = new ProductDAO();
 			foreach ($data['orderLines'] as $line) {
 				$action = strtolower(trim($line['action'] ?? 'update'));
 				$lineId = isset($line['lineId']) ? (int)$line['lineId'] : null;
 				$productId = isset($line['productId']) ? (int)$line['productId'] : null;
 				$quantity = isset($line['quantity']) ? (int)$line['quantity'] : 1;
-				$unitPrice = isset($line['unitPrice']) ? (float)$line['unitPrice'] : 0.0;
 
 				if ($action === 'delete' && $lineId) {
-					if ($olDao->deleteOrderLine($lineId)) $lineResults['deleted']++;
-					continue;
-				}
-
-				if ($action === 'add') {
-					$newLine = new OrderLine([
-						'id_order' => (int)$id,
-						'id_product' => $productId,
-						'quantity' => $quantity,
-						'unit_price' => $unitPrice
-					]);
-					$createdLineId = $olDao->createOrderLine($newLine);
-					if ($createdLineId) $lineResults['added']++;
-					continue;
-				}
-
-				if ($lineId) {
-					$existingLine = $olDao->getOrderLineById($lineId);
-					if ($existingLine) {
-						$existingLine->setQuantity($quantity);
-						$existingLine->setUnitPrice($unitPrice);
-						if ($olDao->updateOrderLine($existingLine)) $lineResults['updated']++;
+					if (ShopCartUtils::removeOrderLine($lineId, (int)$id)) {
+						$lineResults['deleted']++;
+					} else {
+						$lineResults['errors'][] = "Failed to delete line {$lineId}";
 					}
+					continue;
+				}
+
+				if ($action === 'add' && $productId && $quantity > 0) {
+					$productObj = $productDao->getProductById($productId);
+					if ($productObj) {
+						$newLineId = ShopCartUtils::addProductToOrder($order->getUserId(), $productObj, $quantity, (int)$id);
+						if ($newLineId) {
+							$lineResults['added']++;
+						} else {
+							$lineResults['errors'][] = "Failed to add product {$productId}";
+						}
+					}
+					continue;
+				}
+
+				if ($action === 'update' && $lineId) {
+					if (ShopCartUtils::updateOrderLineQuantity($lineId, $quantity, (int)$id)) {
+						$lineResults['updated']++;
+					} else {
+						$lineResults['errors'][] = "Failed to update line {$lineId}";
+					}
+					continue;
 				}
 			}
 		}
 
+		if (!empty($updateData)) {
+			if (!ShopCartUtils::updateOrderFields((int)$id, $updateData)) {
+				return JsonUtils::jsonError('Failed to update order fields', ['data' => null], 500);
+			}
+		}
+		
 		$updated = $oDao->getOrderById((int)$id);
+		$olDao = new OrderLineDAO();
 		$olList = $olDao->getOrderLinesByOrderId((int)$id);
 		$updated->_orderLines = $olList;
 
@@ -250,6 +260,22 @@ class APIOrderController
 			return JsonUtils::jsonError('Order not found', ['data' => null], 404);
 		}
 		return JsonUtils::jsonResponse(['deleted' => true]);
+	}
+
+	private function resolveDiscountIdForUser(User $user): ?int
+	{
+		$userTypeId = $user->getUserTypeId();
+		if (!$userTypeId) {
+			return null;
+		}
+
+		$discountDao = new DiscountDAO();
+		$discount = $discountDao->getDiscountByUserType($userTypeId);
+		if ($discount && $discount->getStatus() === 'active') {
+			return $discount->getId();
+		}
+
+		return null;
 	}
 
 	// ---------- HELPERS ----------

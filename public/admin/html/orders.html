@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Orders</title>
+</head>
+<body>
+    <div class="d-flex justify-content-between align-items-center w-100 px-5 mb-4 gap-4">
+        <div class="orders-filter input-group filter-inputs gap-3 w-75">
+            <select id="filterUser" class="form-select font-sting-light fs-14">
+                <option value="">All Users</option>
+            </select>
+            <input type="date" id="filterDate" class="form-control font-sting-light fs-14" aria-label="Filter by date">
+            <input type="number" step="0.01" min="0" id="filterMinPrice" class="form-control font-sting-light fs-14" placeholder="Min €" aria-label="Min price">
+            <input type="number" step="0.01" min="0" id="filterMaxPrice" class="form-control font-sting-light fs-14" placeholder="Max €" aria-label="Max price">
+            <select id="filterSort" class="form-select font-sting-light fs-14" aria-label="Sort orders">
+                <option value="">Sort by...</option>
+                <option value="date-asc">Date Asc</option>
+                <option value="date-desc">Date Desc</option> <!--<i data-lucide="arrow-down-narrow-wide" class="icon-black"></i>-->
+                <option value="price-asc">Price Asc</option>
+                <option value="price-desc">Price Desc</option>
+            </select>
+            <div class="d-flex gap-3 px-5">
+                <button type="button" class="btn btn-white p-2" id="refreshOrdersBtn">
+                    <i data-lucide="refresh-cw"></i> Refresh
+                </button>
+                <button type="button" class="btn btn-white p-2" id="clearOrdersFiltersBtn">
+                    <i data-lucide="eraser"></i> Clear
+                </button>
+            </div>
+        </div>
+        <button type="button" class="btn-red text-nowrap p-3 px-4 gap-4" data-bs-toggle="modal" data-bs-target="#orderInfoModal">
+            CREATE NEW ORDER <i data-lucide="plus"></i>
+        </button>
+    </div>
+    <div class="col-10 orders-container p-3">
+        <table id="orders-table" class="table w-100 font-sting-light fs-14 text-primary-black text-capitalize">
+            <thead>
+                <tr>
+                    <th class="text-start align-middle">Order ID</th>
+                    <th class="text-center align-middle">User</th>
+                    <th class="text-center align-middle">Time</th>
+                    <th class="text-center align-middle">Date</th>
+                    <th class="text-center align-middle">Order Status</th>
+                    <th class="text-center align-middle">Payment Status</th>
+                    <th class="text-center align-middle">Table</th>
+                    <th class="text-end align-middle">Discount</th>
+                    <th class="text-end align-middle">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="orders-table-body" class="align-items-center">
+                <!-- Data will be loaded via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal CREATE/MODIFY ORDER -->
+    <div class="modal fade" id="orderInfoModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <form id="orderInfoForm" class="needs-validation" novalidate>
+                    <div class="modal-header">
+                        <div class="d-flex flex-row justify-content-start align-items-center w-100">
+                            <hr class="col-1 border-0 bg-primary-red py-1">
+                            <h5 class="modal-title font-sting-regular fs-40 text-primary-dark-red text-uppercase ms-4" id="orderModalLabel">Info Order</h5>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-primary-black">
+                        <div class="container-fluid px-5 py-3">
+                            <!-- Order ID and Date -->
+                            <div class="row font-sting-regular fs-20 align-items-center mb-4">
+                                <div class="col-md-6 px-3">
+                                    <label for="orderIdLabel" class="form-label font-sting-regular">Order ID</label>
+                                    <div class="input-group">
+                                        <span class="form-control fs-20 rounded-0" id="orderIdLabel">—</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-3">
+                                    <label for="orderDateLabel" class="form-label font-sting-regular">Created At</label>
+                                    <div class="input-group">
+                                        <span class="form-control font-sting-light fs-16 rounded-0" id="orderDateLabel">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- User ID and Table -->
+                            <div class="row font-sting-regular fs-20 align-items-center mb-4">
+                                <div class="col-md-6 px-3">
+                                    <label for="orderUserId" class="form-label font-sting-regular">User</label>
+                                    <div class="border border-1 rounded-0 border-secondary-white py-2">
+                                        <select id="orderUserId" class="form-select border-0 font-sting-light fs-16" required>
+                                            <option value="" disabled selected>Select user...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-3">
+                                    <label for="orderTableId" class="form-label font-sting-regular">Table ID</label>
+                                    <div class="border border-1 rounded-0 border-secondary-white py-2">
+                                        <select id="orderTableId" class="form-select border-0 font-sting-light fs-16">
+                                            <option value="">-</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Status and Payment Status -->
+                            <div class="row font-sting-regular fs-20 align-items-center mb-4">
+                                <div class="col-md-6 px-3">
+                                    <label for="orderStatus" class="form-label font-sting-regular">Order Status</label>
+                                    <div class="border border-1 rounded-0 border-secondary-white py-2">
+                                        <select id="orderStatus" class="form-select border-0 font-sting-regular fs-16 text-uppercase" required>
+                                            <option value="" disabled selected>Select status</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="in-preparation">In Preparation</option>
+                                            <option value="served">Served</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-3">
+                                    <label for="paymentStatus" class="form-label font-sting-regular">Payment Status</label>
+                                    <div class="border border-1 rounded-0 border-secondary-white py-2">
+                                        <select id="paymentStatus" class="form-select border-0 font-sting-regular fs-16 text-uppercase" required>
+                                            <option value="" disabled selected>Select status</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="paid">Paid</option>
+                                            <option value="rejected">Rejected</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Amounts -->
+                            <div class="row font-sting-regular fs-20 align-items-center mb-4">
+                                <div class="col-md-6 px-3">
+                                    <label for="orderTotalAmount" class="form-label font-sting-regular">Total Amount</label>
+                                    <div class="input-group align-items-center">
+                                        <input type="number" class="form-control fs-20" id="orderTotalAmount" placeholder="0.00" step="0.01" min="0" disabled>
+                                        <span class="ms-2">€</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-3">
+                                    <label for="orderDiscountAmount" class="form-label font-sting-regular">Discount Amount</label>
+                                    <div class="input-group align-items-center">
+                                        <input type="number" class="form-control fs-20" id="orderDiscountAmount" placeholder="0.00" step="0.01" min="0" disabled>
+                                        <span class="ms-2">€</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Lines Section -->
+                            <div class="row font-sting-regular fs-20 align-items-start mb-4">
+                                <div class="col-12 px-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <label class="form-label font-sting-regular">Order Lines</label>
+                                        <button type="button" class="btn btn-sm btn-white p-3 text-uppercase" id="addOrderLineBtn">
+                                            Add Line <i data-lucide="plus" class="icon-20"></i>
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive p-3">
+                                        <table class="table table-sm align-middle mb-0" id="orderLinesTable">
+                                            <thead class="font-sting-regular fs-16">
+                                                <tr>
+                                                    <th class="text-start">Line ID</th>
+                                                    <th class="text-start">Product</th>
+                                                    <th class="text-center">Quantity</th>
+                                                    <th class="text-center">Unit Price</th>
+                                                    <th class="text-end">Total</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orderLinesTableBody" class="font-sting-light fs-14">
+                                                <!-- Order lines will be added here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer py-3 align-items-center justify-content-center">
+                        <button type="submit" class="btn-red py-3 px-5 text-uppercase" id="orderInfoBtn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VIEW ORDER DETAILS -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex flex-row justify-content-start align-items-center w-100">
+                        <hr class="col-1 border-0 bg-primary-red py-1">
+                        <h5 class="modal-title font-sting-regular fs-40 text-primary-dark-red text-uppercase ms-4" id="orderDetailsModalLabel">Order Details</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-primary-black">
+                    <div class="container-fluid px-5 py-3">
+                        <div id="orderDetailsContent">
+                            <!-- Order ID and Date -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Order ID</label>
+                                    <p class="form-control-plaintext" data-field="id"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Created At</label>
+                                    <p class="form-control-plaintext" data-field="createdAt"></p>
+                                </div>
+                            </div>
+
+                            <!-- User and Table -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">User</label>
+                                    <p class="form-control-plaintext" data-field="user"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Table ID</label>
+                                    <p class="form-control-plaintext" data-field="tableId"></p>
+                                </div>
+                            </div>
+
+                            <!-- Order Status and Payment Status -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Order Status</label>
+                                    <p class="form-control-plaintext text-uppercase" data-field="orderStatus"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Payment Status</label>
+                                    <p class="form-control-plaintext text-uppercase" data-field="paymentStatus"></p>
+                                </div>
+                            </div>
+
+                            <!-- Amounts -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Total Amount</label>
+                                    <p class="form-control-plaintext" data-field="totalAmount"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label font-sting-regular">Discount Amount</label>
+                                    <p class="form-control-plaintext" data-field="discountAmount"></p>
+                                </div>
+                            </div>
+
+                            <!-- Order Lines -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label class="form-label font-sting-regular">Order Lines</label>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-start">Line ID</th>
+                                                    <th class="text-start">Product</th>
+                                                    <th class="text-center">Quantity</th>
+                                                    <th class="text-center">Unit Price</th>
+                                                    <th class="text-end">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orderDetailsLines">
+                                                <!-- Order lines will be populated here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/js/objClasses.js" type="module"></script>
+    <script src="/admin/js/orders.js" type="module"></script>
+</body>
+</html>

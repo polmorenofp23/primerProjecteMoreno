@@ -28,7 +28,7 @@
                     <input type="hidden" name="order_id" value="<?= $cartPendingOrder->getId() ?>">
                     <div class="d-flex justify-content-end align-items-center gap-2">
                         <label for="table_id" class="fs-20 text-capitalize">Table Id</label>
-                        <select name="table_id" class="form-select form-select-sm w-auto fs-20 border-0 px-4" onchange="this.form.submit()">
+                        <select name="table_id" class="form-select form-select-sm w-auto fs-20 border-0 w-auto" onchange="this.form.submit()">
                             <?php for ($i = 1; $i <= 16; $i++): ?>
                                 <option value="<?= $i ?>" <?= $cartPendingOrder->getTableId() == $i ? 'selected' : '' ?>>
                                     <?= $i ?>

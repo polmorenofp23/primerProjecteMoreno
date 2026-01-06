@@ -15,7 +15,6 @@ class ShopCartUtils
 {
     /**
      * Get or create a pending order for the user
-     * If creating a new order, applies user type discount if available
      */
     public static function getOrCreatePendingOrder(int $userId): int
     {
@@ -65,7 +64,6 @@ class ShopCartUtils
 
     /**
      * Get the current cart (pending order) for a user
-     * Returns Orders object with order lines populated, or null if no cart exists
      */
     public static function getUserCart(int $userId): ?Orders
     {
@@ -92,9 +90,9 @@ class ShopCartUtils
     /**
      * Add a product to a specific order
      * Converts Product with ProductIngredients to OrderLine with OrderLineIngredients
-     * If $orderId is provided, adds to that specific order; otherwise finds or creates a pending one for that userId
+     * If $orderId is provided, adds to that specific order, otherwise finds or creates a pending one for that userId
      */
-    public static function addProductToOrder(int $userId, Product $product, int $quantity = 1, ?int $orderId = null)
+    public static function addProductToOrder(int $userId, Product $product, int $quantity = 1, ?int $orderId = null, bool $updateAmounts = true)
     {
         try {
             $orderId = $orderId ?? self::getOrCreatePendingOrder($userId);           // Use provided orderId, or get/create pending order if not provided
@@ -163,7 +161,9 @@ class ShopCartUtils
                 $orderLineIngredientDAO->addIngredientToOrderLine($oli);
             }
             
-            self::updateOrderAmounts($orderId);
+            if ($updateAmounts) {
+                self::updateOrderAmounts($orderId);
+            }
             
             return $lineId;
             
@@ -183,13 +183,14 @@ class ShopCartUtils
 
     /* UPDATE */
     /**
-     * Update quantity of an order line in cart
+     * Update quantity of an order line
+     * If $orderId is provided, uses it directly, otherwise retrieves it from order line
      */
-    public static function updateCartQuantity(int $lineId, int $quantity): bool
+    public static function updateOrderLineQuantity(int $lineId, int $quantity, ?int $orderId = null): bool
     {
         try {
             if ($quantity <= 0) {
-                return self::removeFromCart($lineId);
+                return self::removeOrderLine($lineId, $orderId);
             }
             
             $orderLineDAO = new OrderLineDAO();
@@ -198,7 +199,7 @@ class ShopCartUtils
                 return false;
             }
             
-            $orderId = $orderLine->getOrderId();
+            $orderId = $orderId ?? $orderLine->getOrderId();
             
             $success = $orderLineDAO->updateQuantity($lineId, $quantity);
             if ($success) {
@@ -208,9 +209,17 @@ class ShopCartUtils
             return $success;
             
         } catch (Exception $e) {
-            error_log("Error updating cart quantity: " . $e->getMessage());
+            error_log("Error updating order line quantity: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Update quantity of an order line in cart (HELPER)
+     */
+    public static function updateCartQuantity(int $lineId, int $quantity): bool
+    {
+        return self::updateOrderLineQuantity($lineId, $quantity);
     }
 
     /**
@@ -241,9 +250,10 @@ class ShopCartUtils
 
     /* REMOVE */
     /**
-     * Remove an order line from cart and update order total
+     * Remove an order line and update order total
+     * If $orderId is provided, uses it directly, otherwise retrieves it from order line
      */
-    public static function removeFromCart(int $lineId): bool
+    public static function removeOrderLine(int $lineId, ?int $orderId = null): bool
     {
         try {
             $orderLineDAO = new OrderLineDAO();
@@ -252,7 +262,7 @@ class ShopCartUtils
                 return false;
             }
             
-            $orderId = $orderLine->getOrderId();
+            $orderId = $orderId ?? $orderLine->getOrderId();
             $success = $orderLineDAO->deleteOrderLine($lineId); 
             if ($success) {
                 self::updateOrderAmounts($orderId);
@@ -260,9 +270,17 @@ class ShopCartUtils
             return $success;
             
         } catch (Exception $e) {
-            error_log("Error removing from cart: " . $e->getMessage());
+            error_log("Error removing order line: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Remove an order line from cart (HELPER)
+     */
+    public static function removeFromCart(int $lineId): bool
+    {
+        return self::removeOrderLine($lineId);
     }
 
     /* HELPERS */
@@ -295,12 +313,6 @@ class ShopCartUtils
 
     /**
      * Calculate all order totals including subtotal, IVA, discount amount, and final total
-     * Returns an array with:
-     *  - subtotal: sum of all products (without IVA or discount)
-     *  - iva_amount: 21% of subtotal
-     *  - discount_amount: (subtotal + iva) * discount_percentage / 100
-     *  - total_amount: final amount to be saved in DB (subtotal + iva - discount)
-     *  - discount_percentage: percentage applied (0 if no discount)
      */
     public static function calculateOrderTotals(int $orderId): array
     {
@@ -310,7 +322,8 @@ class ShopCartUtils
             $discountDAO = new DiscountDAO();
             
             $orderLines = $orderLineDAO->getOrderLinesByOrderId($orderId);
-            $subtotal = 0.0;
+            
+            $subtotalWithIva = 0.0;
             foreach ($orderLines as $line) {
                 $lineTotal = $line->getUnitPrice() * $line->getQuantity();
                 $extraIngredients = $line->getExtraIngredients();
@@ -321,11 +334,11 @@ class ShopCartUtils
                         $lineTotal += ($ing['ingredient_price'] ?? 0.0) * ($ing['num_portions'] ?? 1);
                     }
                 }
-                $subtotal += $lineTotal;
+                $subtotalWithIva += $lineTotal;
             }
             
-            $ivaAmount = $subtotal * 0.21;
-            $subtotalWithIva = $subtotal + $ivaAmount;
+            $ivaAmount = $subtotalWithIva * (0.21 / 1.21);
+            $subtotal = $subtotalWithIva - $ivaAmount;
 
             $order = $ordersDAO->getOrderById($orderId);
             if (!$order) {
@@ -368,6 +381,58 @@ class ShopCartUtils
                 'total_amount' => 0.0,
                 'discount_percentage' => 0
             ];
+        }
+    }
+
+
+    /**
+     * Update order fields (userId,orderStatus, paymentStatus, tableId)
+     */
+    public static function updateOrderFields(int $orderId, array $fields): bool
+    {
+        try {
+            $ordersDAO = new OrdersDAO();
+            $order = $ordersDAO->getOrderById($orderId);
+            
+            if (!$order) {
+                error_log("updateOrderFields: Order not found with ID {$orderId}");
+                return false;
+            }
+
+            $changed = false;
+
+            if (isset($fields['userId'])) {
+                $order->setUserId($fields['userId']);
+                $changed = true;
+            }
+
+            if (isset($fields['orderStatus'])) {
+                $order->setOrderStatus($fields['orderStatus']);
+                $changed = true;
+            }
+
+            if (isset($fields['paymentStatus'])) {
+                $order->setPaymentStatus($fields['paymentStatus']);
+                $changed = true;
+            }
+
+            if (array_key_exists('tableId', $fields)) {
+                $order->setTableId($fields['tableId']);
+                $changed = true;
+            }
+
+            if (!$changed) {
+                return true;
+            }
+
+            $ordersDAO->updateOrder($order);
+            self::updateOrderAmounts($orderId);
+            
+            return true;
+
+        } catch (Exception $e) {
+            error_log("Error updating order fields: " . $e->getMessage());
+            return false;
         }
     }
 }

@@ -41,9 +41,9 @@ class OrderController
         foreach ($orderLines as $line) {
             $productId = $line->getProductId();
             if (!isset($products[$productId])) {
-                $productList = $productDAO->getProductsByFilter(['id' => $productId]);
-                if (!empty($productList)) {
-                    $products[$productId] = $productList[0];
+                $product = $productDAO->getProductById($productId);
+                if ($product !== null) {
+                    $products[$productId] = $product;
                 }
             }
         }
@@ -87,9 +87,9 @@ class OrderController
             foreach ($orderLines as $orderLine) {
                 $productId = $orderLine->getProductId();
                 if (!isset($products[$productId])) {
-                    $productList = $productDAO->getProductsByFilter(['id' => $productId]);
-                    if (!empty($productList)) {
-                        $products[$productId] = $productList[0];
+                    $product = $productDAO->getProductById($productId);
+                    if ($product !== null) {
+                        $products[$productId] = $product;
                     }
                 }
             }
@@ -138,14 +138,12 @@ class OrderController
         }
 
         $productDAO = new ProductDAO();
-        $products = $productDAO->getProductsByFilter(['id' => $productId]);
+        $product = $productDAO->getProductById($productId);
         
-        if (empty($products)) {
+        if ($product === null) {
             header('Location: ?controller=Error&action=show&code=404&message=Product+not+found');
             exit;
         }
-
-        $product = $products[0];
 
         if (!$product->getAvailable()) {
             header('Location: ?controller=Product&action=show&id=' . $productId . '&error=unavailable');

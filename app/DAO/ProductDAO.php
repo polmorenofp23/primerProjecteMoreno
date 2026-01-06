@@ -14,6 +14,15 @@ class ProductDAO{
     }
 
     /**
+     * It returns a product by its id
+     */
+    public function getProductById(int $productId)
+    {
+        $products = $this->getProductsByFilter(['id' => $productId]);
+        return !empty($products) ? $products[0] : null;
+    }
+
+    /**
      * It returns all products from the database
      */
     public function getAllProducts()

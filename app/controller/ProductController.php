@@ -26,7 +26,7 @@ class ProductController
         
         $productId = intval($_GET["id"]);
         $productDAO = new ProductDAO();
-        $product = $productDAO->getProductsByFilter(['id' => $productId])[0] ?? null;
+        $product = $productDAO->getProductById($productId);
 
         if ($product) {
             $piDao = new ProductIngredientDAO();

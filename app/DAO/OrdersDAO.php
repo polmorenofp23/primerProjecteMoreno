@@ -200,7 +200,6 @@ class OrdersDAO
     // ----------------- UPDATE METHODS -----------------
     /**
      * Update an order's fields
-     * Returns true if updated, false otherwise
      */
     public function updateOrder(Orders $order): bool
     {
@@ -274,7 +273,6 @@ class OrdersDAO
     // ----------------- DELETE METHODS -----------------
     /**
      * Delete an order by id
-     * Note: This should also delete all related order_line entries (cascade)
      */
     public function deleteOrder(int $orderId): bool
     {
