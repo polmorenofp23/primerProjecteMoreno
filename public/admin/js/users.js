@@ -297,6 +297,65 @@ function clearUsersFilters() {
     renderUsersTable();
 }
 
+/**
+ * Create user type via API
+ */
+async function createUserType({ name, description }) {
+    try {
+        const normalizedName = normalizeUserTypeName(name);
+        
+        const payload = { 
+            name: normalizedName, 
+            description: description || null 
+        };
+        
+        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&action=createUserType', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const json = await res.json();
+        if (!res.ok) {
+            window.showResponseToast?.(json.message || 'Failed to create user type', { level: 'danger', title: 'Error', delay: 3000 });
+            return null;
+        }
+        
+        window.showResponseToast?.('User type created', { level: 'success', title: 'Success', delay: 2000 });
+        return json.data ?? json;
+    } catch (err) {
+        console.error('Failed to create user type', err);
+        window.showResponseToast?.('Failed to create user type: ' + err.message, { level: 'danger', title: 'Error', delay: 3000 });
+        return null;
+    }
+}
+
+/**
+ * Handle user type creation and reload
+ */
+async function handleCreateUserType() {
+    const utName = document.getElementById('utName');
+    const utDesc = document.getElementById('utDescription');
+    
+    const name = utName?.value.trim() || '';
+    const description = utDesc?.value.trim() || '';
+    
+    if (!name) {
+        window.showResponseToast?.('Name is required', { level: 'warning', title: 'Validation', delay: 2000 });
+        return;
+    }
+    
+    const result = await createUserType({ name, description });
+    
+    if (result) {
+        clearUserTypeForm();
+        const modal = document.getElementById('userTypeModal');
+        const bootstrapModal = window.bootstrap?.Modal.getInstance(modal);
+        if (bootstrapModal) bootstrapModal.hide();
+        await loadUserTypes();
+    }
+}
+
 /* HELPERS */
 /**
  * Format datetime to show date and time
@@ -318,6 +377,23 @@ function formatDateTime(datetime) {
     return `${dateStr}<br><small class="fs-12 text-muted">${timeStr}</small>`;
 }
 
+/**
+ * Normalize user type name
+ */
+function normalizeUserTypeName(name) {
+    return name.trim().toLowerCase().replace(/\s+/g, '_');
+}
+
+/**
+ * Clear user type modal form
+ */
+function clearUserTypeForm() {
+    const utName = document.getElementById('utName');
+    const utDesc = document.getElementById('utDescription');
+    if (utName) utName.value = '';
+    if (utDesc) utDesc.value = '';
+}
+
 if (typeof window !== 'undefined') {
     window.loadUsers = loadUsers;
 
@@ -330,6 +406,7 @@ if (typeof window !== 'undefined') {
             const filterRole = document.getElementById('filterRole');
             const refreshBtn = document.getElementById('refreshUsersBtn');
             const clearFiltersBtn = document.getElementById('clearUsersFiltersBtn');
+            const createUserTypeBtn = document.getElementById('createUserTypeBtn');
 
             filterUserType?.addEventListener('change', applyUsersFilters);
             filterRole?.addEventListener('change', applyUsersFilters);
@@ -337,6 +414,7 @@ if (typeof window !== 'undefined') {
                 await loadUsers();
             });
             clearFiltersBtn?.addEventListener('click', clearUsersFilters);
+            createUserTypeBtn?.addEventListener('click', handleCreateUserType);
         }
     }
 
