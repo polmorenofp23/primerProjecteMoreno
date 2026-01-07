@@ -18,8 +18,8 @@ class GeneralController
         
         $productDAO = new ProductDAO();
         $products = $productDAO->getAllProducts();
-        $topRatedProducts = $productDAO->getTopRatedProducts(5);
-        $newestProducts = $productDAO->getNewestProducts(5);
+        $newestProducts = $productDAO->getNewestProducts(8);
+        $topRatedProducts = $productDAO->getTopRatedProducts(16);
         
         include_once VIEW_PATH . 'main.php';
     }

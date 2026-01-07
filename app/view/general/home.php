@@ -136,10 +136,9 @@
         </div>
     </section>
 
-    <section class="best-sellers-section py-5 bg-white">
-        <div class="d-flex flex-column justify-content-center align-items-center col-11">
-            <?php renderBCPageTitle(['Best Sellers' => null], false); ?>
-
+    <section class="best-sellers-section bg-white d-flex flex-column justify-content-center align-items-center py-5">
+        <?php renderBCPageTitle(['Best Sellers' => null], false); ?>
+        <div class="col-11">
             <?php if (isset($topRatedProducts) && !empty($topRatedProducts)): ?>
                 <?php renderBCProductsCarousel($topRatedProducts, 'bestSellersCarousel'); ?>
             <?php else: ?>
