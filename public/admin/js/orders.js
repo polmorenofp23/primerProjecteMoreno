@@ -1,5 +1,6 @@
 import * as Object from './objClasses.js';
 import { formatCurrency } from './freeCurrencyApi-utils.js';
+import { $projectDomain } from './config.js';
 
 const arrayOrders = [];
 let filteredOrders = [];
@@ -26,7 +27,7 @@ function formatProductLabel(productId, productName) {
 */
 async function loadUsers() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User`);
         const json = await res.json();
         allUsers = (json.data ?? json) || [];
         populateUserSelects();
@@ -82,7 +83,7 @@ function populateProductSelect(selectElement) {
  */
 async function loadProducts() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Product`);
         const json = await res.json();
         allProducts = (json.data ?? json) || [];
         return allProducts;
@@ -196,7 +197,7 @@ async function renderArrayOrders() {
             if (!id) return;
             if (!confirm('Are you sure you want to delete this order?')) return;
             try {
-                const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+                const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Order&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
                 if (!res.ok) {
                     const j = await res.json().catch(() => null);
                     window.showResponseToast(j?.message || (`Failed to delete order: ${res.statusText}`), { level: 'danger', title: 'Delete failed', delay: 5000 });
@@ -235,7 +236,7 @@ async function renderArrayOrders() {
  * Load orders from API
  */    
 function loadOrders() {
-    return fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order')
+    return fetch(`${$projectDomain}/public/?controller=api&resource=Order`)
         .then(r => r.json())
         .then(json => {
             const items = json.data ?? json;
@@ -408,7 +409,7 @@ async function openViewModal(orderId) {
         if (allProducts.length === 0) {
             await loadProducts();
         }
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order&id=${encodeURIComponent(orderId)}`);
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Order&id=${encodeURIComponent(orderId)}`);
         const json = await res.json();
         const order = json.data;
 
@@ -482,7 +483,7 @@ async function openViewModal(orderId) {
  */
 async function openEditModal(orderId) {
     try {
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order&id=${encodeURIComponent(orderId)}`);
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Order&id=${encodeURIComponent(orderId)}`);
         const json = await res.json();
         const order = json.data;
 
@@ -757,8 +758,8 @@ function setupOrdersUI() {
                 console.log('Order data to send:', orderData);
                 const method = editingOrderId ? 'PUT' : 'POST';
                 const url = editingOrderId 
-                    ? `http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order&id=${encodeURIComponent(editingOrderId)}`
-                    : 'http://localhost/primerProjecteMoreno/public/?controller=api&resource=Order';
+                    ? `${$projectDomain}/public/?controller=api&resource=Order&id=${encodeURIComponent(editingOrderId)}`
+                    : `${$projectDomain}/public/?controller=api&resource=Order`;
 
                 const res = await fetch(url, {
                     method: method,

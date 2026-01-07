@@ -1,4 +1,5 @@
 import * as Object from './objClasses.js';
+import { $projectDomain } from './config.js';
 
 const arrayDiscounts = [];
 let filteredDiscounts = [];
@@ -10,7 +11,7 @@ let isCreatingNewDiscount = false;
  */
 async function loadDiscounts() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Discount');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Discount`);
         const json = await res.json();
         const items = json.data ?? json;
 
@@ -48,7 +49,7 @@ async function loadDiscounts() {
  */
 async function loadUserTypes() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&action=getUserTypes');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User&action=getUserTypes`);
         const json = await res.json();
         const items = json.data ?? json;
 
@@ -189,7 +190,7 @@ async function updateDiscount(discountId, { percentage, status, userTypeId }) {
         if (status !== undefined) payload.status = status;
         if (userTypeId !== undefined) payload.userTypeId = userTypeId;
 
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Discount&id=${encodeURIComponent(discountId)}`, {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Discount&id=${encodeURIComponent(discountId)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -221,7 +222,7 @@ async function updateDiscount(discountId, { percentage, status, userTypeId }) {
 async function createDiscount({ name, description, percentage, status = 'active', userTypeId }) {
     try {
         const payload = { name, description, percentage: Number(percentage), status, userTypeId: Number(userTypeId) };
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Discount', {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Discount`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -246,7 +247,7 @@ async function createDiscount({ name, description, percentage, status = 'active'
  */
 async function deleteDiscount(discountId) {
     try {
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Discount&id=${encodeURIComponent(discountId)}`, {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Discount&id=${encodeURIComponent(discountId)}`, {
             method: 'DELETE'
         });
         const json = await res.json();

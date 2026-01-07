@@ -1,4 +1,5 @@
 import * as Object from './objClasses.js';
+import { $projectDomain } from './config.js';
 
 const arrayUsers = [];
 let filteredUsers = [];
@@ -9,7 +10,7 @@ let allUserTypes = [];
  */
 async function loadUsers() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User`);
         const json = await res.json();
         const items = json.data ?? json;
         
@@ -44,7 +45,7 @@ async function loadUsers() {
  */
 async function loadUserTypes() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&action=getUserTypes');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User&action=getUserTypes`);
         const json = await res.json();
         const items = json.data ?? json;
         
@@ -209,7 +210,7 @@ async function updateUser(userId, role, userTypeId) {
             userTypeId: userTypeId ? parseInt(userTypeId) : null
         };
 
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&id=${encodeURIComponent(userId)}`, {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User&id=${encodeURIComponent(userId)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -240,7 +241,7 @@ async function updateUser(userId, role, userTypeId) {
  */
 async function deleteUser(userId) {
     try {
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&id=${encodeURIComponent(userId)}`, {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User&id=${encodeURIComponent(userId)}`, {
             method: 'DELETE'
         });
 
@@ -309,7 +310,7 @@ async function createUserType({ name, description }) {
             description: description || null 
         };
         
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=User&action=createUserType', {
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=User&action=createUserType`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

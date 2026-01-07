@@ -1,5 +1,6 @@
 import * as Object from './objClasses.js';
 import { formatCurrency } from './freeCurrencyApi-utils.js';
+import { $projectDomain } from './config.js';
 
 const arrayProducts = [];
 
@@ -44,7 +45,7 @@ async function renderArrayProducts() {
             if (!id) return;
             if (!confirm('Are you sure you want to delete this product? This will remove its ingredients as well.')) return;
             try {
-                const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product&id=' + encodeURIComponent(id), { method: 'DELETE' });
+                const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Product&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
                 if (!res.ok) {
                     const j = await res.json().catch(() => null);
                     window.showResponseToast(j?.message || ('Failed to delete product: ' + res.statusText), { level: 'danger', title: 'Delete failed', delay: 5000 });
@@ -77,7 +78,7 @@ async function renderArrayProducts() {
  * Load products from API
  */
 function loadProducts() {
-    return fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product')
+    return fetch(`${$projectDomain}/public/?controller=api&resource=Product`)
         .then(r => r.json())
         .then(json => {
             const items = json.data ?? json;
@@ -138,7 +139,7 @@ let editingProductId = null; // Track if editing an existing product
 
 async function loadIngredientsFromAPI() {
     try {
-        const res = await fetch('http://localhost/primerProjecteMoreno/public/?controller=api&resource=Ingredient');
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Ingredient`);
         const data = await res.json();
         if (data.status && Array.isArray(data.data)) {
             allIngredients = data.data.filter(ing => ing.available);
@@ -156,7 +157,7 @@ function loadIngredientsAvailable(selectEl) {
 async function openEditModal(productId) {
 
     try {
-        const res = await fetch(`http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product&id=${encodeURIComponent(productId)}`);
+        const res = await fetch(`${$projectDomain}/public/?controller=api&resource=Product&id=${encodeURIComponent(productId)}`);
         const json = await res.json();
         const product = json.data;
 
@@ -361,8 +362,8 @@ function setupIngredientsUI() {
 
                 const method = editingProductId ? 'PUT' : 'POST';
                 const url = editingProductId 
-                    ? `http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product&id=${encodeURIComponent(editingProductId)}`
-                    : 'http://localhost/primerProjecteMoreno/public/?controller=api&resource=Product';
+                    ? `${$projectDomain}/public/?controller=api&resource=Product&id=${encodeURIComponent(editingProductId)}`
+                    : `${$projectDomain}/public/?controller=api&resource=Product`;
 
                 const res = await fetch(url, {
                     method: method,
