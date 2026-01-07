@@ -2,35 +2,35 @@
 /** Basic Backgrounds **/
 .white-bg {
     background: var(--secondary-white);
-    background-image: url('/assets/img/bg/bg-white.png');
+    background-image: url('/assets/img/bg/bg-white.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .red-bg {
     background: var(--secondary-red);
-    background-image: url('/assets/img/bg/bg-red.png');
+    background-image: url('/assets/img/bg/bg-red.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .red-2-bg {
     background: var(--secondary-red);
-    background-image: url('/assets/img/bg/bg-red-2.png');
+    background-image: url('/assets/img/bg/bg-red-2.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .dark-red-bg {
     background: var(--secondary-dark-red);
-    background-image: url('/assets/img/bg/bg-dark-red.png');
+    background-image: url('/assets/img/bg/bg-dark-red.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 .dark-red-2-bg {
     background: var(--secondary-dark-red);
-    background-image: url('/assets/img/bg/bg-dark-red-2.png');
+    background-image: url('/assets/img/bg/bg-dark-red-2.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
