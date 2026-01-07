@@ -602,6 +602,7 @@ This project is for educational purposes.
 
 **Developer:** Pol Moreno Queraltó  
 **Repository:** [GitHub](https://github.com/polmorenofp23/primerProjecteMoreno)
+**Trello:** Link to the Trello of the organitzation (https://trello.com/invite/b/690cb82bfc0f3cb3568572ed/ATTI699403a33c0e1f3237e639a01a298261158EDC0D/projecte-web-bees-cavern)
 
 For bug reports, feature requests, or questions, please open an issue on GitHub.
 
