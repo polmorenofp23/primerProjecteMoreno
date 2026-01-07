@@ -448,8 +448,18 @@ select:focus-visible {
     display: block;
 }
 
+/* Membership hero image */
+.membership-hero-img {
+    aspect-ratio: 21/9;
+    object-fit: cover;
+    width: 100%;
+    display: block;
+    margin: 0;
+}
+
 /* Promotional offer images */
-.promo-offer-img {
+.promo-offer-img,
+.membership-promo-img {
     aspect-ratio: 1/1;
     object-fit: cover;
     width: 100%;

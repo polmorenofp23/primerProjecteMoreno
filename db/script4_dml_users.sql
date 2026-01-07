@@ -19,7 +19,7 @@ INSERT INTO user_type (name, description) VALUES
 -- DISCOUNTS FOR USER TYPES (excluding 'basic')
 -- =====================================================================
 INSERT INTO discount (name, description, percentage, status, type, id_user_type) VALUES
-('Membership Discount', 'Exclusive 15% discount for premium members', 15, 'active', 'user_type', 
+('Membership Discount', 'Exclusive 20% discount for premium members', 20, 'active', 'user_type', 
     (SELECT id_user_type FROM user_type WHERE name = 'membership')),
 ('Brentford Player VIP', 'VIP 100% discount for Brentford FC players', 100, 'active', 'user_type', 
     (SELECT id_user_type FROM user_type WHERE name = 'brentford_player')),
