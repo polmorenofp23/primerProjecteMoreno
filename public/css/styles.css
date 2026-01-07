@@ -440,6 +440,40 @@ select:focus-visible {
 	border-radius: 0;
 }
 
+/* Hero carousel images */
+.hero-carousel-img {
+    aspect-ratio: 21/9;
+    object-fit: cover;
+    width: 100%;
+    display: block;
+}
+
+/* Promotional offer images */
+.promo-offer-img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Category filter cards styles */
+.category-filter-card {
+    min-height: 300px;
+    transition: transform 0.3s ease;
+}
+
+.category-filter-card:hover {
+    transform: scale(1.08);
+}
+
+.category-filter-img {
+    object-fit: cover;
+    opacity: 0.75;
+    max-width: 400px;
+    width: 100%;
+}
+
 /* Responsive scale-down for small screens */
 @media (max-width: 576px) {
     h1 { font-size: 48px; }

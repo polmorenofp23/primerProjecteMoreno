@@ -33,6 +33,10 @@
 
         $parts = explode('/', $view, 2);    // Determine group by the prefix before the first '/'
         $viewSection = strtolower($parts[0] ?? '');
+        if ($viewSection === 'general' && isset($parts[1])) {
+            $filename = basename($parts[1], '.php');
+            $viewSection = strtolower($filename);
+        }
 
         switch ($viewSection) {
             case 'auth':    // Authentication views

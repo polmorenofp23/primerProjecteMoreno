@@ -1,6 +1,5 @@
 <header>
-    <div class="main-header"> 
-
+    <div class="<?php if ($viewSection == 'home'): ?> home-header <?php else: ?> main-header <?php endif; ?>">
         <?php if (!SessionUtils::isLogged()): ?>
             <div class="auth-user-links bg-black d-flex flex-row justify-content-end align-items-center py-2 z-1">
                 <a href="?controller=Auth&action=showLogin" class="me-2">SIGN IN</a>

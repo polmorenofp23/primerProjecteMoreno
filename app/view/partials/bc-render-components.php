@@ -1,8 +1,10 @@
 <?php
 
-    
 require_once DAO_PATH . 'ProductRatingDAO.php';
 
+    /** 
+     * Render a Bootstrap toast based on an HttpResponse object.
+     */
     function showHttpResponseToast(?\HttpResponse $response = null, string $bgClass = '', string $textClass = '', int $delay = 3000) {
         if (!$response) return;
         $code = $response->getCode();
@@ -47,7 +49,10 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
         <?php
     }
 
-    function renderBCPageTitle(array $breadcrumbs = []){
+    /**
+     * Render a page title with optional breadcrumbs.
+     */
+    function renderBCPageTitle(array $breadcrumbs = [], bool $showBreadcrumbs = true){
         $items = [];    
         if (!empty($breadcrumbs)) { // Normalize the list of breadcrumnb content ['label'=>..,'url'=>..]
             $first = reset($breadcrumbs);
@@ -57,7 +62,7 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
                 }
             } else {
                 foreach ($breadcrumbs as $label => $url) {
-                    $items[] = ['label' => (string)$label, 'url' => $url ?? null];
+                    $items[] = ['label' => (string)$label, 'url' => (is_string($url) ? $url : null)];
                 }
             }
         }
@@ -75,7 +80,7 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
 
         ?>
         <div class="bc-page-title w-100 py-3">
-            <?php if (!empty($items)) : ?>
+            <?php if ($showBreadcrumbs && !empty($items)) : ?>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent font-sting-light fs-12 ms-5 mb-2">
                         <?php foreach ($items as $i => $it):
@@ -104,6 +109,9 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
         <?php
     }
 
+    /**
+     * Render a Bootstrap card for a product.
+     */
     function renderBCProductCard(Product $product) {
         $id = $product->getId() ?? null;
         $name = $product->getName() ?? '';
@@ -146,9 +154,14 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
                             <?php if ($dishType !== ''): ?>
                                 <small class="text-muted font-karla-regular text-uppercase"><?php echo htmlspecialchars($dishType); ?></small>
                             <?php endif; ?>
-                            <button type="button" class="btn btn-transparent p-0" id="openEditProductModal" aria-label="Open edit product modal" data-product-id="<?php echo htmlspecialchars((string)$id); ?>">
-                                <i data-lucide="eye" class="icon-black"></i>
-                            </button>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-transparent p-0" id="openEditProductModal" aria-label="Open edit product modal" data-product-id="<?php echo htmlspecialchars((string)$id); ?>">
+                                    <i data-lucide="eye" class="icon-black"></i>
+                                </button>
+                                <a href="?controller=Order&action=addToCart&product_id=<?php echo htmlspecialchars((string)$id); ?>" class="btn btn-white border-0 rounded-0 p-0" aria-label="Add product to cart">
+                                    <i data-lucide="plus" class="icon-red"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -174,6 +187,47 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
                     </div>
                 </div>
             </a>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render a Bootstrap carousel of product cards.
+     */
+    function renderBCProductsCarousel(array $products, string $carouselId = 'bcProductsCarousel', int $chunkSize = 4) {
+        if (empty($products)) return;
+
+        $carouselId = $carouselId !== '' ? $carouselId : ('bcProductsCarousel_' . uniqid());
+        $chunks = array_chunk($products, max(1, $chunkSize));
+
+        ?>
+        <div id="<?php echo htmlspecialchars($carouselId); ?>" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner">
+                <?php foreach ($chunks as $idx => $chunk): ?>
+                    <div class="carousel-item <?php echo $idx === 0 ? 'active' : ''; ?>">
+                        <div class="row g-3 justify-content-center">
+                            <?php foreach ($chunk as $product): ?>
+                                <div class="col-6 col-md-3">
+                                    <?php renderBCProductCard($product); ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <?php if (count($chunks) > 1): ?>
+                <button class="bc-carousel-control bc-carousel-control-prev"
+                    type="button" data-bs-target="#<?php echo htmlspecialchars($carouselId); ?>" data-bs-slide="prev"
+                    aria-label="Previous slide">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="bc-carousel-control bc-carousel-control-next"
+                    type="button" data-bs-target="#<?php echo htmlspecialchars($carouselId); ?>" data-bs-slide="next"
+                    aria-label="Next slide">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+            <?php endif; ?>
         </div>
         <?php
     }

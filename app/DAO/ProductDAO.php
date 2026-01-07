@@ -192,7 +192,6 @@ class ProductDAO{
 
         $sql .= $orderByQuery;
 
-        // bind all params
         $stmt = $this->conn->prepare($sql);
         foreach ($params as $k => $v) {
             if (is_int($v)) {
@@ -200,7 +199,7 @@ class ProductDAO{
             } elseif (is_bool($v)) {
                 $stmt->bindValue($k, $v, PDO::PARAM_BOOL);
             } elseif (is_float($v)) {
-                $stmt->bindValue($k, (string)$v);   // bind as string becose PDO has no native float param type
+                $stmt->bindValue($k, (string)$v);
             } else {
                 $stmt->bindValue($k, $v, PDO::PARAM_STR);
             }
@@ -213,7 +212,7 @@ class ProductDAO{
         $piDao = new ProductIngredientDAO();
         foreach ($results as $result) {
             $product = new Product($result);
-            $ingredients = $piDao->getIngredientsByProduct((int)$product->getId()); // Load and assign ProductIngredient list into the Product model
+            $ingredients = $piDao->getIngredientsByProduct((int)$product->getId());
             $product->setIngredients($ingredients);
             $productsList[] = $product;
         }
@@ -221,6 +220,64 @@ class ProductDAO{
         $this->db->disconnect();
 
         return $productsList;
+    }
+
+    /**
+     * Get the "X" top rated products
+     */
+    public function getTopRatedProducts(int $productsQuantity = 10): array
+    {
+        $this->conn = $this->db->connect();
+
+        $sql = 'SELECT p.*, AVG(pr.rating) AS avg_rating 
+                FROM product p 
+                INNER JOIN product_rating pr ON p.id_product = pr.id_product 
+                GROUP BY p.id_product 
+                ORDER BY avg_rating DESC 
+                LIMIT :limit';
+        
+        $stmt = $this->conn->prepare($sql);        
+        $stmt->bindValue(':limit', $productsQuantity, PDO::PARAM_INT);       
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->db->disconnect();
+
+        $products = [];
+        foreach ($rows as $row) {
+            $product = new Product($row);
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
+    /**
+     * Get the "X" newest products ordered by creation date
+     */ 
+    public function getNewestProducts(int $productsQuantity = 5): array
+    {
+        $this->conn = $this->db->connect();
+
+        $sql = 'SELECT p.* 
+                FROM product p 
+                ORDER BY p.created_at DESC 
+                LIMIT :limit';
+        
+        $stmt = $this->conn->prepare($sql);        
+        $stmt->bindValue(':limit', $productsQuantity, PDO::PARAM_INT);       
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->db->disconnect();
+
+        $products = [];
+        foreach ($rows as $row) {
+            $product = new Product($row);
+            $products[] = $product;
+        }
+
+        return $products;
     }
 
     // ----------------- CREATE METHODS -----------------

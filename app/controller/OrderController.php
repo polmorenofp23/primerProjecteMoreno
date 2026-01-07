@@ -129,7 +129,7 @@ class OrderController
         SessionUtils::requireLogin('?controller=Auth&action=login');
 
         $userId = SessionUtils::getUserId();
-        $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+        $productId = isset($_REQUEST['product_id']) ? (int)$_REQUEST['product_id'] : 0;
         $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
 
         if ($productId <= 0 || $quantity <= 0) {

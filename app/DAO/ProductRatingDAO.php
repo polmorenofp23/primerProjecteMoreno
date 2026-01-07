@@ -33,6 +33,5 @@ class ProductRatingDAO {
         return null;
     }
 
-    // falta implementar las funciones pasandole un modelo de ProductRating de getProductRatingById, createProductRatingById, updateProductRatingById
-
+    // it stills left to implement  sending the user id and the product id all the other functions with a model of ProductRating ( getProductRatingById, createProductRatingById, updateProductRatingById )
 }
