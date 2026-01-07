@@ -92,10 +92,8 @@
         </section>
     </div>
 
-    <!-- Promotional Banners Section -->
     <section class="promotional-section">
         <div class="container-fluid mx-0 px-0">
-            <!-- Halloween Promo -->
             <div class="row g-0">
                 <div class="col-12 col-md-6">
                     <img src="/assets/img/extra/offer-halloween.webp" class="promo-offer-img" alt="Halloween Promo">
@@ -146,6 +144,5 @@
             <?php endif; ?>
         </div>
     </section>
-
 </body>
 </html>
