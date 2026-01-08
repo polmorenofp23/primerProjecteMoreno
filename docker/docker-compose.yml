@@ -1,0 +1,46 @@
+version: "3.8" # 3.9
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: web-app
+    ports:
+      - "80:80"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=beescavern_db
+      - DB_USER=polmq
+      - DB_PASSWORD=Asdqwe!23
+    volumes:
+      - ../:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - bc-network
+
+  db:
+    image: mysql:8.0  # 8.4
+    container_name: db-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Asdqwe!23"
+      MYSQL_USER: polmq
+      MYSQL_PASSWORD: "Asdqwe!23"
+      MYSQL_DATABASE: beescavern_db
+    volumes:
+      - db-data:/var/lib/mysql
+      # Ejecutar scripts SQL en ordre al inicializar
+      - ../db/script1_creation_db_cavern_bees_v.3.0.sql:/docker-entrypoint-initdb.d/1_creation_db.sql
+      - ../db/script2_triggers.sql:/docker-entrypoint-initdb.d/2_triggers.sql
+      - ../db/script3_dml_products.sql:/docker-entrypoint-initdb.d/3_dml_products.sql
+      - ../db/script4_dml_users.sql:/docker-entrypoint-initdb.d/4_dml_users.sql
+    networks:
+      - bc-network
+
+volumes:
+  db-data:
+
+networks:
+  bc-network:

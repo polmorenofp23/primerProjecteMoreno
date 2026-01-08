@@ -13,7 +13,7 @@ class DatabasePDO{
     public function __construct()
     {
         // IMPORTANT: same variables values that contains the docker-compose.yml
-        $this->host     = getenv('DB_HOST')     ?: 'db';              // service name in docker-compose
+        $this->host     = getenv('DB_HOST')     ?: 'db';              // service name in docker-compose 
         $this->dbname   = getenv('DB_NAME')     ?: 'bees_cavern_db';
         $this->user     = getenv('DB_USER')     ?: 'polmq';
         $this->password = getenv('DB_PASSWORD') ?: 'Asdqwe!23';
