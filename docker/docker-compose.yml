@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   web:
@@ -25,9 +25,9 @@ services:
     container_name: db-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "Asdqwe!23"
+      MYSQL_ROOT_PASSWORD: 'Asdqwe!23'
       MYSQL_USER: polmq
-      MYSQL_PASSWORD: "Asdqwe!23"
+      MYSQL_PASSWORD: 'Asdqwe!23'
       MYSQL_DATABASE: beescavern_db
     volumes:
       - db-data:/var/lib/mysql
