@@ -43,11 +43,11 @@
                     </div>
                 </div>
 
-                <button class="carousel-control-prev h-50" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev h-75 mt-5" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next h-50" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <button class="carousel-control-next h-75 mt-5" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
