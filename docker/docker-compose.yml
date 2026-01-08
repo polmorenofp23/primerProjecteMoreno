@@ -10,7 +10,7 @@ services:
       - "80:80"
     environment:
       - DB_HOST=db
-      - DB_NAME=beescavern_db
+      - DB_NAME=bees_cavern_db
       - DB_USER=polmq
       - DB_PASSWORD=Asdqwe!23
     volumes:
@@ -28,7 +28,7 @@ services:
       MYSQL_ROOT_PASSWORD: 'Asdqwe!23'
       MYSQL_USER: polmq
       MYSQL_PASSWORD: 'Asdqwe!23'
-      MYSQL_DATABASE: beescavern_db
+      MYSQL_DATABASE: bees_cavern_db
     volumes:
       - db-data:/var/lib/mysql
       # Ejecutar scripts SQL en ordre al inicializar
