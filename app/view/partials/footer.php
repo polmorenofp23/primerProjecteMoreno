@@ -61,7 +61,7 @@
                         <h6 class="mb-4">Restaurant</h6>
                         <ul class="list-unstyled">
                             <li><a href="#" class="d-block py-2 text-decoration-none">Our Values</a></li>
-                            <li><a href="#" class="d-block py-2 text-decoration-none">Be Membership</a></li>
+                            <li><a href="?controller=General&action=membership" class="d-block py-2 text-decoration-none">Be Membership</a></li>
                             <li><a href="#" class="d-block py-2 text-decoration-none">History</a></li>
                         </ul>
                     </div>

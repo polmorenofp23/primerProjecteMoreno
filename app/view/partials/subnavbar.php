@@ -14,7 +14,7 @@
                 <?php if ($viewSection === 'user'): ?>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link mx-4" href="?controller=Product&action=indexFavouriteProducts">Favourite Products</a>
+                            <a class="nav-link mx-4" href="#">Favourite Products</a>
                         </li>
                         <li class="nav-item mx-4">
                             <a class="nav-link" href="?controller=Order&action=index">Order History</a>
@@ -78,7 +78,7 @@
                                         <li>
                                             <hr class="dropdown-divider bg-white">
                                         </li>
-                                        <li><a class="dropdown-item" href="?controller=Product&action=indexFavouriteProducts"><i data-lucide="heart" class="icon-white mx-2"></i>Favourite Products</a></li>
+                                        <li><a class="dropdown-item" href="#"><i data-lucide="heart" class="icon-white mx-2"></i>Favourite Products</a></li>
                                         <li><a class="dropdown-item" href="?controller=Order&action=index"><i data-lucide="clipboard-clock" class="icon-white mx-2"></i>Order History</a></li>
                                         <li><a class="dropdown-item" href="?controller=User&action=edit"><i data-lucide="circle-user-round" class="icon-white mx-2"></i>Profile</a></li>
                                         <li>

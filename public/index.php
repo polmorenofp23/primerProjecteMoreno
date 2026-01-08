@@ -66,6 +66,6 @@ if (isset($_GET['controller'])) {
         }
     }
 } else {
-    header('Location: ?controller=Error&action=show&code=400&message=Controller+parameter+is+missing');
+    header('Location: ?controller=General&action=home');
     exit;
 }
