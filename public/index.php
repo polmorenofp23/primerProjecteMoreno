@@ -19,6 +19,9 @@ define('UTIL_PATH', APP_PATH . 'util/');
 include_once MODEL_PATH . 'AppError.php';           // Include AppError model globally
 include_once UTIL_PATH . 'SessionUtils.php';        // Include SessionUtils globally
 
+// Start session early to avoid "headers already sent" when views call SessionUtils
+SessionUtils::ensureStarted();
+
 if (isset($_GET['controller'])) {
 
     $controllerName = strtolower(trim($_GET['controller']));
