@@ -15,7 +15,7 @@ class DatabasePDO{
         // IMPORTANT: same variables values that contains the docker-compose.yml
         $this->host     = getenv('DB_HOST')     ?: 'db';              // service name in docker-compose 
         $this->dbname   = getenv('DB_NAME')     ?: 'bees_cavern_db';
-        $this->user     = getenv('DB_USER')     ?: 'polmq';
+        $this->user     = getenv('DB_USER')     ?: 'root';
         $this->password = getenv('DB_PASSWORD') ?: 'Asdqwe!23';
 
         $this->initializeConnection();

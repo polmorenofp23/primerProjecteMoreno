@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * AppError model to represent standardized error information.
@@ -92,5 +92,4 @@ class AppError
     {
         $this->message = $message;
     }
-
 }
