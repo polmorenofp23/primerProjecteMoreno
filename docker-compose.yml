@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: primerprojectemoreno-web
+    ports:
+      - "80:80"          # expone tu web en el puerto 80 del host
+    environment:
+      DB_HOST: db
+      DB_NAME: bees_cavern_db
+      DB_USER: polmq
+      DB_PASSWORD: "Asdqwe!23"
+    depends_on:
+      - db
+    # Opcional, si quieres ver logs en tiempo real en desarrollo
+    # y montar tu código local (hot-reload):
+    # volumes:
+    #   - .:/var/www/html
+
+  db:
+    image: mysql:8.4
+    container_name: mysql-bees-cavern
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Asdqwe!23"
+      MYSQL_USER: polmq
+      MYSQL_PASSWORD: "Asdqwe!23"
+      MYSQL_DATABASE: bees_cavern_db
+    volumes:
+      - db-data:/var/lib/mysql
+      # Ejecutar scripts SQL en orden al inicializar
+      - ./db/script1_creation_db_cavern_bees_v.3.0.sql:/docker-entrypoint-initdb.d/1_creation_db.sql
+      - ./db/script2_triggers.sql:/docker-entrypoint-initdb.d/2_triggers.sql
+      - ./db/script3_dml_products.sql:/docker-entrypoint-initdb.d/3_dml_products.sql
+      - ./db/script4_dml_users.sql:/docker-entrypoint-initdb.d/4_dml_users.sql
+    # NO es necesario mapear 3306 si solo la usa la app web
+    # pero si quieres conectarte desde tu PC (Workbench, etc.),
+    # puedes descomentar:
+    # ports:
+    #   - "3306:3306"
+
+volumes:
+  db-data:
+
+  # ------------
+  services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: bees_cavern_db
+      DB_USER: polmq
+      DB_PASSWORD: "Asdqwe!23"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: "Asdqwe!23"
+      MYSQL_USER: polmq
+      MYSQL_PASSWORD: "Asdqwe!23"
+      MYSQL_DATABASE: bees_cavern_db
