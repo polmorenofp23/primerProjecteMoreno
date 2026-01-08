@@ -158,9 +158,11 @@ require_once DAO_PATH . 'ProductRatingDAO.php';
                                 <button type="button" class="btn btn-transparent p-0" id="openEditProductModal" aria-label="Open edit product modal" data-product-id="<?php echo htmlspecialchars((string)$id); ?>">
                                     <i data-lucide="eye" class="icon-black"></i>
                                 </button>
-                                <a href="?controller=Order&action=addToCart&product_id=<?php echo htmlspecialchars((string)$id); ?>" class="btn btn-white border-0 rounded-0 p-0" aria-label="Add product to cart">
-                                    <i data-lucide="plus" class="icon-red"></i>
-                                </a>
+                                <?php if (SessionUtils::isLogged()): ?>
+                                    <a href="?controller=Order&action=addToCart&product_id=<?php echo htmlspecialchars((string)$id); ?>" class="btn btn-white border-0 rounded-0 p-0" aria-label="Add product to cart">
+                                        <i data-lucide="plus" class="icon-red"></i>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
