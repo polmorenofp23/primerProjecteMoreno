@@ -32,7 +32,6 @@ services:
     volumes:
       - db-data:/var/lib/mysql
       # Ejecutar scripts SQL en orden al inicializar
-      - ../db/script0_grant_permissions.sql:/docker-entrypoint-initdb.d/0_grant_permissions.sql
       - ../db/script1_creation_db_cavern_bees_v.3.0.sql:/docker-entrypoint-initdb.d/1_creation_db.sql
       - ../db/script2_triggers.sql:/docker-entrypoint-initdb.d/2_triggers.sql
       - ../db/script3_dml_products.sql:/docker-entrypoint-initdb.d/3_dml_products.sql
