@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * AppError model to represent standardized error information.
